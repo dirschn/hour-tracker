@@ -26,6 +26,10 @@ paths:
                     name:
                       type: string
                       example: Acme Corp
+                    description:
+                      type: string
+                      example: A technology company
+                      nullable: true
                     created_at:
                       type: string
                       format: date-time
@@ -55,6 +59,10 @@ paths:
                   name:
                     type: string
                     example: Acme Corp
+                  description:
+                    type: string
+                    example: A technology company
+                    nullable: true
                   created_at:
                     type: string
                     format: date-time
@@ -86,6 +94,10 @@ paths:
                     name:
                       type: string
                       example: Acme Corp
+                    description:
+                      type: string
+                      example: A technology company
+                      nullable: true
                   required:
                   - name
               required:
@@ -117,6 +129,10 @@ paths:
                   name:
                     type: string
                     example: Acme Corp
+                  description:
+                    type: string
+                    example: A technology company
+                    nullable: true
                   created_at:
                     type: string
                     format: date-time
@@ -153,6 +169,10 @@ paths:
                   name:
                     type: string
                     example: Updated Corp
+                  description:
+                    type: string
+                    example: An updated technology company
+                    nullable: true
                   created_at:
                     type: string
                     format: date-time
@@ -194,6 +214,10 @@ paths:
                     name:
                       type: string
                       example: Updated Corp
+                    description:
+                      type: string
+                      example: An updated technology company
+                      nullable: true
               required:
               - company
     put:
@@ -216,6 +240,10 @@ paths:
                   name:
                     type: string
                     example: Updated Corp
+                  description:
+                    type: string
+                    example: An updated technology company
+                    nullable: true
                   created_at:
                     type: string
                     format: date-time
@@ -234,6 +262,10 @@ paths:
                     name:
                       type: string
                       example: Updated Corp
+                    description:
+                      type: string
+                      example: An updated technology company
+                      nullable: true
               required:
               - company
     delete:

@@ -11,5 +11,6 @@
 
 export interface CompaniesPostRequestCompany { 
     name: string;
+    description?: string | null;
 }
 

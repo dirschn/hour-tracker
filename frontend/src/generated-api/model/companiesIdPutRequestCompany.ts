@@ -11,5 +11,6 @@
 
 export interface CompaniesIdPutRequestCompany { 
     name?: string;
+    description?: string | null;
 }
 

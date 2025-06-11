@@ -1,0 +1,31 @@
+<div class="container">
+  <app-page-header title="Edit Company" />
+
+  <!-- Loading State -->
+  <div *ngIf="loading && !company" class="text-center py-5">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-2">Loading company data...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !company" class="alert alert-danger" role="alert">
+    {{ error }}
+    <button class="btn btn-primary mt-2" (click)="loadCompany()">Retry</button>
+  </div>
+
+  <!-- Form -->
+  <div *ngIf="company" class="card">
+    <div class="card-body">
+      <app-company-form
+        [company]="company"
+        [loading]="loading"
+        [error]="error"
+        submitButtonText="Update Company"
+        (formSubmit)="onFormSubmit($event)"
+        (formCancel)="onFormCancel()"
+      ></app-company-form>
+    </div>
+  </div>
+</div>

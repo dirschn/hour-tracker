@@ -1,0 +1,15 @@
+<div class="container">
+  <app-page-header title="Create New Company" />
+
+  <div class="card">
+    <div class="card-body">
+      <app-company-form
+        [loading]="loading"
+        [error]="error"
+        submitButtonText="Create Company"
+        (formSubmit)="onFormSubmit($event)"
+        (formCancel)="onFormCancel()"
+      ></app-company-form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,54 @@
+<form [formGroup]="companyForm" (ngSubmit)="onSubmit()">
+  <!-- Error Message -->
+  <div *ngIf="error" class="alert alert-danger" role="alert">
+    {{ error }}
+  </div>
+
+  <!-- Name Field -->
+  <div class="mb-3">
+    <label for="name" class="form-label">Name *</label>
+    <input
+      type="text"
+      id="name"
+      formControlName="name"
+      class="form-control"
+      [class.is-invalid]="hasError('name', 'required') || hasError('name', 'minlength')"
+      placeholder="Enter company name"
+    />
+    <div *ngIf="hasError('name', 'required') || hasError('name', 'minlength')" class="invalid-feedback">
+      {{ getErrorMessage('name') }}
+    </div>
+  </div>
+
+  <!-- Description Field -->
+  <div class="mb-3">
+    <label for="description" class="form-label">Description</label>
+    <textarea
+      id="description"
+      formControlName="description"
+      class="form-control"
+      rows="3"
+      placeholder="Enter company description"
+    ></textarea>
+  </div>
+
+  <!-- Form Actions -->
+  <div class="d-flex justify-content-end gap-2">
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="onCancel()"
+      [disabled]="loading"
+    >
+      Cancel
+    </button>
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="loading || companyForm.invalid"
+    >
+      <span *ngIf="loading">{{ submitButtonText }}ing...</span>
+      <span *ngIf="!loading">{{ submitButtonText }}</span>
+    </button>
+  </div>
+</form>
