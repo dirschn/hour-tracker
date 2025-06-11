@@ -1,0 +1,15 @@
+#!/bin/bash
+# Generate OpenAPI documentation from rswag specs
+
+echo "Generating OpenAPI specifications..."
+bundle exec rails rswag:specs:swaggerize
+
+if [ $? -eq 0 ]; then
+    echo "✅ OpenAPI specs successfully generated at swagger/v1/swagger.yaml"
+    echo "📖 You can now update your frontend API client by running:"
+    echo "   cd ../frontend && npm run update-api-client"
+else
+    echo "❌ Failed to generate OpenAPI specs"
+    echo "   Check your rswag specs for errors and try again"
+    exit 1
+fi

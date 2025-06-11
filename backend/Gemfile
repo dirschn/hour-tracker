@@ -53,3 +53,5 @@ gem "money-rails", "~> 1.15"
 
 
 gem "faker", "~> 3.5"
+
+gem "rswag", "~> 2.16"
