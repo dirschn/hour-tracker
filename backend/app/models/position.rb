@@ -4,6 +4,5 @@ class Position < ApplicationRecord
   has_many :users, through: :user_positions
   has_many :time_entries, through: :user_positions
 
-  validates :name, presence: true
-  validates :name, uniqueness: { scope: :company_id }
+  validates :title, presence: true, uniqueness: { scope: :company_id }
 end

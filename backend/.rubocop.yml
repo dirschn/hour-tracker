@@ -22,3 +22,34 @@ Style/StringLiteralsInInterpolation:
   SupportedStyles:
     - single_quotes
     - double_quotes
+
+Layout/SpaceInsideArrayLiteralBrackets:
+  Description: 'No spaces inside array brackets'
+  Enabled: true
+  EnforcedStyle: no_space
+  SupportedStyles:
+    - space
+    - no_space
+
+Layout/MultilineAssignmentLayout:
+  Description: 'Align multiline assignments with the keyword, not the variable'
+  Enabled: true
+  EnforcedStyle: same_line
+
+Layout/CaseIndentation:
+  Description: 'Align case statements with the case keyword'
+  Enabled: true
+  EnforcedStyle: case
+  SupportedStyles:
+    - case
+    - end
+  IndentOneStep: false
+
+Layout/EndAlignment:
+  Description: 'Align end with the case/if keyword'
+  Enabled: true
+  EnforcedStyleAlignWith: keyword
+  SupportedStylesAlignWith:
+    - keyword
+    - variable
+    - start_of_line
