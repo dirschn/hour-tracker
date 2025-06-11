@@ -1,23 +1,15 @@
 <div class="container">
-  <div class="row">
-    <div class="col-md-8 offset-md-2">
-      <app-page-header title="Create New User">
-        <a routerLink="/users" class="btn btn-secondary">
-          ← Back to Users
-        </a>
-      </app-page-header>
+  <app-page-header title="Create New User" />
 
-      <div class="card">
-        <div class="card-body">
-          <app-user-form
-            [loading]="loading"
-            [error]="error"
-            submitButtonText="Create User"
-            (formSubmit)="onFormSubmit($event)"
-            (formCancel)="onFormCancel()"
-          ></app-user-form>
-        </div>
-      </div>
+  <div class="card">
+    <div class="card-body">
+      <app-user-form
+        [loading]="loading"
+        [error]="error"
+        submitButtonText="Create User"
+        (formSubmit)="onFormSubmit($event)"
+        (formCancel)="onFormCancel()"
+      ></app-user-form>
     </div>
   </div>
 </div>
