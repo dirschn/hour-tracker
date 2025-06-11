@@ -9,11 +9,13 @@ import { UsersPostRequest, UsersIdPutRequest } from '../../../generated-api/mode
 
 // Import the shared form component
 import { UserFormComponent } from '../components/user-form.component';
+// Import shared components
+import { PageHeaderComponent } from '../../shared/components/page-header.component';
 
 @Component({
   selector: 'app-users-new',
   standalone: true,
-  imports: [CommonModule, RouterModule, UserFormComponent],
+  imports: [CommonModule, RouterModule, UserFormComponent, PageHeaderComponent],
   templateUrl: './users-new.component.html',
   styleUrls: ['./users-new.component.scss']
 })

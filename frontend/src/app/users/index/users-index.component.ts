@@ -7,10 +7,13 @@ import { Observable, catchError, of } from 'rxjs';
 import { UsersService } from '../../../generated-api/api/users.service';
 import { UsersGet200ResponseInner, UsersPostRequest } from '../../../generated-api/model/models';
 
+// Import shared components
+import { PageHeaderComponent } from '../../shared/components/page-header.component';
+
 @Component({
   selector: 'app-users-index',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, PageHeaderComponent],
   templateUrl: './users-index.component.html',
   styleUrls: ['./users-index.component.scss']
 })

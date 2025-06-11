@@ -9,11 +9,13 @@ import { UsersGet200ResponseInner, UsersIdPutRequest } from '../../../generated-
 
 // Import the shared form component
 import { UserFormComponent } from '../components/user-form.component';
+// Import shared components
+import { PageHeaderComponent } from '../../shared/components/page-header.component';
 
 @Component({
   selector: 'app-users-edit',
   standalone: true,
-  imports: [CommonModule, RouterModule, UserFormComponent],
+  imports: [CommonModule, RouterModule, UserFormComponent, PageHeaderComponent],
   templateUrl: './users-edit.component.html',
   styleUrls: ['./users-edit.component.scss']
 })
