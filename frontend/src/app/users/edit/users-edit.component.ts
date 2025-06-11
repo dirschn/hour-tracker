@@ -5,7 +5,7 @@ import { catchError, of, switchMap } from 'rxjs';
 
 // Import the generated service and models
 import { UsersService } from '../../../generated-api/api/users.service';
-import { UsersGet200ResponseInner, UsersIdPutRequest } from '../../../generated-api/model/models';
+import { User, UsersIdPutRequest } from '../../../generated-api/model/models';
 
 // Import the shared form component
 import { UserFormComponent } from '../components/user-form.component';
@@ -29,7 +29,7 @@ export class UsersEditComponent implements OnInit {
   loading = false;
   error: string | null = null;
   userId: string | null = null;
-  user: UsersGet200ResponseInner | null = null;
+  user: User | null = null;
 
   ngOnInit(): void {
     this.loadUser();
@@ -59,7 +59,7 @@ export class UsersEditComponent implements OnInit {
     ).subscribe({
       next: (user) => {
         if (user) {
-          this.user = user as UsersGet200ResponseInner;
+          this.user = user as User;
         }
         this.loading = false;
       },

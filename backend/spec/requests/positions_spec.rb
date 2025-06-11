@@ -9,17 +9,7 @@ RSpec.describe 'positions', type: :request do
 
       response(200, 'successful') do
         schema type: :array,
-          items: {
-            type: :object,
-            properties: {
-              id: { type: :integer, example: 1 },
-              title: { type: :string, example: 'Software Developer' },
-              company_id: { type: :integer, example: 1 },
-              created_at: { type: :string, format: 'date-time' },
-              updated_at: { type: :string, format: 'date-time' }
-            },
-            required: ['id', 'title', 'company_id']
-          }
+          items: { '$ref': '#/components/schemas/Position' }
 
         run_test!
       end
@@ -47,14 +37,7 @@ RSpec.describe 'positions', type: :request do
       }
 
       response(201, 'position created') do
-        schema type: :object,
-          properties: {
-            id: { type: :integer, example: 1 },
-            title: { type: :string, example: 'Software Developer' },
-            company_id: { type: :integer, example: 1 },
-            created_at: { type: :string, format: 'date-time' },
-            updated_at: { type: :string, format: 'date-time' }
-          }
+        schema '$ref': '#/components/schemas/Position'
 
         let(:position) { { position: { title: 'Software Developer', company_id: 1 } } }
         run_test!
@@ -87,14 +70,7 @@ RSpec.describe 'positions', type: :request do
       produces 'application/json'
 
       response(200, 'successful') do
-        schema type: :object,
-          properties: {
-            id: { type: :integer, example: 1 },
-            title: { type: :string, example: 'Software Developer' },
-            company_id: { type: :integer, example: 1 },
-            created_at: { type: :string, format: 'date-time' },
-            updated_at: { type: :string, format: 'date-time' }
-          }
+        schema '$ref': '#/components/schemas/Position'
 
         let(:id) { '1' }
         run_test!
@@ -131,14 +107,7 @@ RSpec.describe 'positions', type: :request do
       }
 
       response(200, 'position updated') do
-        schema type: :object,
-          properties: {
-            id: { type: :integer, example: 1 },
-            title: { type: :string, example: 'Senior Software Developer' },
-            company_id: { type: :integer, example: 1 },
-            created_at: { type: :string, format: 'date-time' },
-            updated_at: { type: :string, format: 'date-time' }
-          }
+        schema '$ref': '#/components/schemas/Position'
 
         let(:id) { '1' }
         let(:position) { { position: { title: 'Senior Software Developer' } } }
@@ -194,14 +163,7 @@ RSpec.describe 'positions', type: :request do
       }
 
       response(200, 'position updated') do
-        schema type: :object,
-          properties: {
-            id: { type: :integer, example: 1 },
-            title: { type: :string, example: 'Senior Software Developer' },
-            company_id: { type: :integer, example: 1 },
-            created_at: { type: :string, format: 'date-time' },
-            updated_at: { type: :string, format: 'date-time' }
-          }
+        schema '$ref': '#/components/schemas/Position'
 
         let(:id) { '1' }
         let(:position) { { position: { title: 'Senior Software Developer' } } }

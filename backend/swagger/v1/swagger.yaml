@@ -18,27 +18,7 @@ paths:
               schema:
                 type: array
                 items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                      example: 1
-                    name:
-                      type: string
-                      example: Acme Corp
-                    description:
-                      type: string
-                      example: A technology company
-                      nullable: true
-                    created_at:
-                      type: string
-                      format: date-time
-                    updated_at:
-                      type: string
-                      format: date-time
-                  required:
-                  - id
-                  - name
+                  "$ref": "#/components/schemas/Company"
     post:
       summary: create company
       tags:
@@ -51,24 +31,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  name:
-                    type: string
-                    example: Acme Corp
-                  description:
-                    type: string
-                    example: A technology company
-                    nullable: true
-                  created_at:
-                    type: string
-                    format: date-time
-                  updated_at:
-                    type: string
-                    format: date-time
+                "$ref": "#/components/schemas/Company"
         '422':
           description: invalid request
           content:
@@ -121,24 +84,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  name:
-                    type: string
-                    example: Acme Corp
-                  description:
-                    type: string
-                    example: A technology company
-                    nullable: true
-                  created_at:
-                    type: string
-                    format: date-time
-                  updated_at:
-                    type: string
-                    format: date-time
+                "$ref": "#/components/schemas/Company"
         '404':
           description: company not found
           content:
@@ -161,24 +107,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  name:
-                    type: string
-                    example: Updated Corp
-                  description:
-                    type: string
-                    example: An updated technology company
-                    nullable: true
-                  created_at:
-                    type: string
-                    format: date-time
-                  updated_at:
-                    type: string
-                    format: date-time
+                "$ref": "#/components/schemas/Company"
         '422':
           description: invalid request
           content:
@@ -232,24 +161,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  name:
-                    type: string
-                    example: Updated Corp
-                  description:
-                    type: string
-                    example: An updated technology company
-                    nullable: true
-                  created_at:
-                    type: string
-                    format: date-time
-                  updated_at:
-                    type: string
-                    format: date-time
+                "$ref": "#/components/schemas/Company"
       requestBody:
         content:
           application/json:
@@ -865,27 +777,7 @@ paths:
               schema:
                 type: array
                 items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                      example: 1
-                    title:
-                      type: string
-                      example: Software Developer
-                    company_id:
-                      type: integer
-                      example: 1
-                    created_at:
-                      type: string
-                      format: date-time
-                    updated_at:
-                      type: string
-                      format: date-time
-                  required:
-                  - id
-                  - title
-                  - company_id
+                  "$ref": "#/components/schemas/Position"
     post:
       summary: create position
       tags:
@@ -898,23 +790,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  title:
-                    type: string
-                    example: Software Developer
-                  company_id:
-                    type: integer
-                    example: 1
-                  created_at:
-                    type: string
-                    format: date-time
-                  updated_at:
-                    type: string
-                    format: date-time
+                "$ref": "#/components/schemas/Position"
         '422':
           description: invalid request
           content:
@@ -967,23 +843,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  title:
-                    type: string
-                    example: Software Developer
-                  company_id:
-                    type: integer
-                    example: 1
-                  created_at:
-                    type: string
-                    format: date-time
-                  updated_at:
-                    type: string
-                    format: date-time
+                "$ref": "#/components/schemas/Position"
         '404':
           description: position not found
           content:
@@ -1006,23 +866,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  title:
-                    type: string
-                    example: Senior Software Developer
-                  company_id:
-                    type: integer
-                    example: 1
-                  created_at:
-                    type: string
-                    format: date-time
-                  updated_at:
-                    type: string
-                    format: date-time
+                "$ref": "#/components/schemas/Position"
         '422':
           description: invalid request
           content:
@@ -1072,23 +916,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  title:
-                    type: string
-                    example: Senior Software Developer
-                  company_id:
-                    type: integer
-                    example: 1
-                  created_at:
-                    type: string
-                    format: date-time
-                  updated_at:
-                    type: string
-                    format: date-time
+                "$ref": "#/components/schemas/Position"
       requestBody:
         content:
           application/json:
@@ -1829,38 +1657,7 @@ paths:
               schema:
                 type: array
                 items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                      example: 1
-                    first_name:
-                      type: string
-                      example: John
-                    last_name:
-                      type: string
-                      example: Doe
-                    name:
-                      type: string
-                      example: John Doe
-                    username:
-                      type: string
-                      example: johndoe
-                    email:
-                      type: string
-                      example: john.doe@example.com
-                    created_at:
-                      type: string
-                      format: date-time
-                    updated_at:
-                      type: string
-                      format: date-time
-                  required:
-                  - id
-                  - first_name
-                  - last_name
-                  - username
-                  - email
+                  "$ref": "#/components/schemas/User"
     post:
       summary: create user
       tags:
@@ -1873,38 +1670,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  first_name:
-                    type: string
-                    example: John
-                  last_name:
-                    type: string
-                    example: Doe
-                  name:
-                    type: string
-                    example: John Doe
-                  username:
-                    type: string
-                    example: johndoe
-                  email:
-                    type: string
-                    example: john.doe@example.com
-                  created_at:
-                    type: string
-                    format: date-time
-                  updated_at:
-                    type: string
-                    format: date-time
-                required:
-                - id
-                - first_name
-                - last_name
-                - username
-                - email
+                "$ref": "#/components/schemas/User"
         '422':
           description: invalid request
           content:
@@ -1965,38 +1731,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  first_name:
-                    type: string
-                    example: John
-                  last_name:
-                    type: string
-                    example: Doe
-                  name:
-                    type: string
-                    example: John Doe
-                  username:
-                    type: string
-                    example: johndoe
-                  email:
-                    type: string
-                    example: john.doe@example.com
-                  created_at:
-                    type: string
-                    format: date-time
-                  updated_at:
-                    type: string
-                    format: date-time
-                required:
-                - id
-                - first_name
-                - last_name
-                - username
-                - email
+                "$ref": "#/components/schemas/User"
         '404':
           description: user not found
           content:
@@ -2019,38 +1754,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  first_name:
-                    type: string
-                    example: John
-                  last_name:
-                    type: string
-                    example: Doe
-                  name:
-                    type: string
-                    example: John Doe
-                  username:
-                    type: string
-                    example: johndoe
-                  email:
-                    type: string
-                    example: john.doe@example.com
-                  created_at:
-                    type: string
-                    format: date-time
-                  updated_at:
-                    type: string
-                    format: date-time
-                required:
-                - id
-                - first_name
-                - last_name
-                - username
-                - email
+                "$ref": "#/components/schemas/User"
         '422':
           description: invalid request
           content:
@@ -2109,38 +1813,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  first_name:
-                    type: string
-                    example: John
-                  last_name:
-                    type: string
-                    example: Doe
-                  name:
-                    type: string
-                    example: John Doe
-                  username:
-                    type: string
-                    example: johndoe
-                  email:
-                    type: string
-                    example: john.doe@example.com
-                  created_at:
-                    type: string
-                    format: date-time
-                  updated_at:
-                    type: string
-                    format: date-time
-                required:
-                - id
-                - first_name
-                - last_name
-                - username
-                - email
+                "$ref": "#/components/schemas/User"
       requestBody:
         content:
           application/json:
@@ -2174,6 +1847,86 @@ paths:
           description: user deleted
         '404':
           description: user not found
+components:
+  schemas:
+    Company:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Tech Corp
+        description:
+          type: string
+          example: A technology company
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+      - id
+      - name
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        first_name:
+          type: string
+          example: John
+        last_name:
+          type: string
+          example: Doe
+        username:
+          type: string
+          example: johndoe
+        email:
+          type: string
+          example: john@example.com
+        name:
+          type: string
+          example: John Doe
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+      - id
+      - first_name
+      - last_name
+      - username
+      - email
+    Position:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Software Developer
+        company_id:
+          type: integer
+          example: 1
+        company:
+          "$ref": "#/components/schemas/Company"
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+      - id
+      - title
+      - company_id
 servers:
 - url: https://{defaultHost}
   variables:

@@ -7,12 +7,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Company } from './company';
 
 
-export interface PositionsGet200ResponseInner { 
+export interface Position { 
     id: number;
     title: string;
-    company?: object;
+    company_id: number;
+    company?: Company;
     created_at?: string;
     updated_at?: string;
 }

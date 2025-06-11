@@ -25,5 +25,17 @@ export const routes: Routes = [
   {
     path: 'companies/:id/edit',
     loadComponent: () => import('./companies/edit/companies-edit.component').then(m => m.CompaniesEditComponent)
+  },
+  {
+    path: 'positions',
+    loadComponent: () => import('./positions/index/positions-index.component').then(m => m.PositionsIndexComponent)
+  },
+  {
+    path: 'positions/new',
+    loadComponent: () => import('./positions/new/positions-new.component').then(m => m.PositionsNewComponent)
+  },
+  {
+    path: 'positions/:id/edit',
+    loadComponent: () => import('./positions/edit/positions-edit.component').then(m => m.PositionsEditComponent)
   }
 ];

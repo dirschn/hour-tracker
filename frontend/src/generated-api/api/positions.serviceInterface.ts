@@ -12,11 +12,9 @@ import { HttpHeaders }                                       from '@angular/comm
 import { Observable }                                        from 'rxjs';
 
 import { CompaniesPost422Response } from '../model/models';
-import { PositionsGet200ResponseInner } from '../model/models';
+import { Position } from '../model/models';
 import { PositionsIdGet404Response } from '../model/models';
-import { PositionsIdPut200Response } from '../model/models';
 import { PositionsIdPutRequest } from '../model/models';
-import { PositionsPost201Response } from '../model/models';
 import { PositionsPostRequest } from '../model/models';
 
 
@@ -32,7 +30,7 @@ export interface PositionsServiceInterface {
      * list positions
      * Retrieve all positions
      */
-    positionsGet(extraHttpRequestParams?: any): Observable<Array<PositionsGet200ResponseInner>>;
+    positionsGet(extraHttpRequestParams?: any): Observable<Array<Position>>;
 
     /**
      * delete position
@@ -46,7 +44,7 @@ export interface PositionsServiceInterface {
      * Retrieve a specific position
      * @param id position id
      */
-    positionsIdGet(id: string, extraHttpRequestParams?: any): Observable<PositionsPost201Response>;
+    positionsIdGet(id: string, extraHttpRequestParams?: any): Observable<Position>;
 
     /**
      * update position
@@ -54,7 +52,7 @@ export interface PositionsServiceInterface {
      * @param id position id
      * @param positionsIdPutRequest 
      */
-    positionsIdPatch(id: string, positionsIdPutRequest?: PositionsIdPutRequest, extraHttpRequestParams?: any): Observable<PositionsIdPut200Response>;
+    positionsIdPatch(id: string, positionsIdPutRequest?: PositionsIdPutRequest, extraHttpRequestParams?: any): Observable<Position>;
 
     /**
      * update position
@@ -62,13 +60,13 @@ export interface PositionsServiceInterface {
      * @param id position id
      * @param positionsIdPutRequest 
      */
-    positionsIdPut(id: string, positionsIdPutRequest?: PositionsIdPutRequest, extraHttpRequestParams?: any): Observable<PositionsIdPut200Response>;
+    positionsIdPut(id: string, positionsIdPutRequest?: PositionsIdPutRequest, extraHttpRequestParams?: any): Observable<Position>;
 
     /**
      * create position
      * Create a new position
      * @param positionsPostRequest 
      */
-    positionsPost(positionsPostRequest?: PositionsPostRequest, extraHttpRequestParams?: any): Observable<PositionsPost201Response>;
+    positionsPost(positionsPostRequest?: PositionsPostRequest, extraHttpRequestParams?: any): Observable<Position>;
 
 }

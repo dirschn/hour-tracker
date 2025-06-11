@@ -19,15 +19,11 @@ import { Observable }                                        from 'rxjs';
 // @ts-ignore
 import { CompaniesPost422Response } from '../model/companiesPost422Response';
 // @ts-ignore
-import { PositionsGet200ResponseInner } from '../model/positionsGet200ResponseInner';
+import { Position } from '../model/position';
 // @ts-ignore
 import { PositionsIdGet404Response } from '../model/positionsIdGet404Response';
 // @ts-ignore
-import { PositionsIdPut200Response } from '../model/positionsIdPut200Response';
-// @ts-ignore
 import { PositionsIdPutRequest } from '../model/positionsIdPutRequest';
-// @ts-ignore
-import { PositionsPost201Response } from '../model/positionsPost201Response';
 // @ts-ignore
 import { PositionsPostRequest } from '../model/positionsPostRequest';
 
@@ -56,9 +52,9 @@ export class PositionsService extends BaseService implements PositionsServiceInt
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public positionsGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<PositionsGet200ResponseInner>>;
-    public positionsGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<PositionsGet200ResponseInner>>>;
-    public positionsGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<PositionsGet200ResponseInner>>>;
+    public positionsGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<Position>>;
+    public positionsGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<Position>>>;
+    public positionsGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<Position>>>;
     public positionsGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -88,7 +84,7 @@ export class PositionsService extends BaseService implements PositionsServiceInt
 
         let localVarPath = `/positions`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<PositionsGet200ResponseInner>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<Position>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -162,9 +158,9 @@ export class PositionsService extends BaseService implements PositionsServiceInt
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public positionsIdGet(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PositionsPost201Response>;
-    public positionsIdGet(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PositionsPost201Response>>;
-    public positionsIdGet(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PositionsPost201Response>>;
+    public positionsIdGet(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Position>;
+    public positionsIdGet(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Position>>;
+    public positionsIdGet(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Position>>;
     public positionsIdGet(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling positionsIdGet.');
@@ -197,7 +193,7 @@ export class PositionsService extends BaseService implements PositionsServiceInt
 
         let localVarPath = `/positions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<PositionsPost201Response>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Position>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -218,9 +214,9 @@ export class PositionsService extends BaseService implements PositionsServiceInt
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public positionsIdPatch(id: string, positionsIdPutRequest?: PositionsIdPutRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PositionsIdPut200Response>;
-    public positionsIdPatch(id: string, positionsIdPutRequest?: PositionsIdPutRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PositionsIdPut200Response>>;
-    public positionsIdPatch(id: string, positionsIdPutRequest?: PositionsIdPutRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PositionsIdPut200Response>>;
+    public positionsIdPatch(id: string, positionsIdPutRequest?: PositionsIdPutRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Position>;
+    public positionsIdPatch(id: string, positionsIdPutRequest?: PositionsIdPutRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Position>>;
+    public positionsIdPatch(id: string, positionsIdPutRequest?: PositionsIdPutRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Position>>;
     public positionsIdPatch(id: string, positionsIdPutRequest?: PositionsIdPutRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling positionsIdPatch.');
@@ -262,7 +258,7 @@ export class PositionsService extends BaseService implements PositionsServiceInt
 
         let localVarPath = `/positions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<PositionsIdPut200Response>('patch', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Position>('patch', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: positionsIdPutRequest,
@@ -284,9 +280,9 @@ export class PositionsService extends BaseService implements PositionsServiceInt
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public positionsIdPut(id: string, positionsIdPutRequest?: PositionsIdPutRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PositionsIdPut200Response>;
-    public positionsIdPut(id: string, positionsIdPutRequest?: PositionsIdPutRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PositionsIdPut200Response>>;
-    public positionsIdPut(id: string, positionsIdPutRequest?: PositionsIdPutRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PositionsIdPut200Response>>;
+    public positionsIdPut(id: string, positionsIdPutRequest?: PositionsIdPutRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Position>;
+    public positionsIdPut(id: string, positionsIdPutRequest?: PositionsIdPutRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Position>>;
+    public positionsIdPut(id: string, positionsIdPutRequest?: PositionsIdPutRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Position>>;
     public positionsIdPut(id: string, positionsIdPutRequest?: PositionsIdPutRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling positionsIdPut.');
@@ -328,7 +324,7 @@ export class PositionsService extends BaseService implements PositionsServiceInt
 
         let localVarPath = `/positions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<PositionsIdPut200Response>('put', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Position>('put', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: positionsIdPutRequest,
@@ -349,9 +345,9 @@ export class PositionsService extends BaseService implements PositionsServiceInt
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public positionsPost(positionsPostRequest?: PositionsPostRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PositionsPost201Response>;
-    public positionsPost(positionsPostRequest?: PositionsPostRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PositionsPost201Response>>;
-    public positionsPost(positionsPostRequest?: PositionsPostRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PositionsPost201Response>>;
+    public positionsPost(positionsPostRequest?: PositionsPostRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Position>;
+    public positionsPost(positionsPostRequest?: PositionsPostRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Position>>;
+    public positionsPost(positionsPostRequest?: PositionsPostRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Position>>;
     public positionsPost(positionsPostRequest?: PositionsPostRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -390,7 +386,7 @@ export class PositionsService extends BaseService implements PositionsServiceInt
 
         let localVarPath = `/positions`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<PositionsPost201Response>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Position>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: positionsPostRequest,

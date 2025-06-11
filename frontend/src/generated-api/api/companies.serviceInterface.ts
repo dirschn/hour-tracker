@@ -11,13 +11,11 @@ import { HttpHeaders }                                       from '@angular/comm
 
 import { Observable }                                        from 'rxjs';
 
-import { CompaniesGet200ResponseInner } from '../model/models';
 import { CompaniesIdGet404Response } from '../model/models';
-import { CompaniesIdPut200Response } from '../model/models';
 import { CompaniesIdPutRequest } from '../model/models';
-import { CompaniesPost201Response } from '../model/models';
 import { CompaniesPost422Response } from '../model/models';
 import { CompaniesPostRequest } from '../model/models';
+import { Company } from '../model/models';
 
 
 import { Configuration }                                     from '../configuration';
@@ -32,7 +30,7 @@ export interface CompaniesServiceInterface {
      * list companies
      * Retrieve all companies
      */
-    companiesGet(extraHttpRequestParams?: any): Observable<Array<CompaniesGet200ResponseInner>>;
+    companiesGet(extraHttpRequestParams?: any): Observable<Array<Company>>;
 
     /**
      * delete company
@@ -46,7 +44,7 @@ export interface CompaniesServiceInterface {
      * Retrieve a specific company
      * @param id company id
      */
-    companiesIdGet(id: string, extraHttpRequestParams?: any): Observable<CompaniesPost201Response>;
+    companiesIdGet(id: string, extraHttpRequestParams?: any): Observable<Company>;
 
     /**
      * update company
@@ -54,7 +52,7 @@ export interface CompaniesServiceInterface {
      * @param id company id
      * @param companiesIdPutRequest 
      */
-    companiesIdPatch(id: string, companiesIdPutRequest?: CompaniesIdPutRequest, extraHttpRequestParams?: any): Observable<CompaniesIdPut200Response>;
+    companiesIdPatch(id: string, companiesIdPutRequest?: CompaniesIdPutRequest, extraHttpRequestParams?: any): Observable<Company>;
 
     /**
      * update company
@@ -62,13 +60,13 @@ export interface CompaniesServiceInterface {
      * @param id company id
      * @param companiesIdPutRequest 
      */
-    companiesIdPut(id: string, companiesIdPutRequest?: CompaniesIdPutRequest, extraHttpRequestParams?: any): Observable<CompaniesIdPut200Response>;
+    companiesIdPut(id: string, companiesIdPutRequest?: CompaniesIdPutRequest, extraHttpRequestParams?: any): Observable<Company>;
 
     /**
      * create company
      * Create a new company
      * @param companiesPostRequest 
      */
-    companiesPost(companiesPostRequest?: CompaniesPostRequest, extraHttpRequestParams?: any): Observable<CompaniesPost201Response>;
+    companiesPost(companiesPostRequest?: CompaniesPostRequest, extraHttpRequestParams?: any): Observable<Company>;
 
 }

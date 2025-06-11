@@ -21,15 +21,13 @@ configuration.ts
 encoder.ts
 git_push.sh
 index.ts
-model/companiesGet200ResponseInner.ts
 model/companiesIdGet404Response.ts
-model/companiesIdPut200Response.ts
 model/companiesIdPutRequest.ts
 model/companiesIdPutRequestCompany.ts
-model/companiesPost201Response.ts
 model/companiesPost422Response.ts
 model/companiesPostRequest.ts
 model/companiesPostRequestCompany.ts
+model/company.ts
 model/groupsGet200ResponseInner.ts
 model/groupsIdGet404Response.ts
 model/groupsIdPut200Response.ts
@@ -47,12 +45,10 @@ model/hourlyRatesPost201Response.ts
 model/hourlyRatesPostRequest.ts
 model/hourlyRatesPostRequestHourlyRate.ts
 model/models.ts
-model/positionsGet200ResponseInner.ts
+model/position.ts
 model/positionsIdGet404Response.ts
-model/positionsIdPut200Response.ts
 model/positionsIdPutRequest.ts
 model/positionsIdPutRequestPosition.ts
-model/positionsPost201Response.ts
 model/positionsPostRequest.ts
 model/positionsPostRequestPosition.ts
 model/timeEntriesGet200ResponseInner.ts
@@ -63,6 +59,7 @@ model/timeEntriesIdPutRequestTimeEntry.ts
 model/timeEntriesPost201Response.ts
 model/timeEntriesPostRequest.ts
 model/timeEntriesPostRequestTimeEntry.ts
+model/user.ts
 model/userPositionsGet200ResponseInner.ts
 model/userPositionsIdGet404Response.ts
 model/userPositionsIdPut200Response.ts
@@ -71,7 +68,6 @@ model/userPositionsIdPutRequestUserPosition.ts
 model/userPositionsPost201Response.ts
 model/userPositionsPostRequest.ts
 model/userPositionsPostRequestUserPosition.ts
-model/usersGet200ResponseInner.ts
 model/usersIdGet404Response.ts
 model/usersIdPutRequest.ts
 model/usersIdPutRequestUser.ts

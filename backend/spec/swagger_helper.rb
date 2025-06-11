@@ -22,6 +22,47 @@ RSpec.configure do |config|
         version: 'v1'
       },
       paths: {},
+      components: {
+        schemas: {
+          Company: {
+            type: :object,
+            properties: {
+              id: { type: :integer, example: 1 },
+              name: { type: :string, example: 'Tech Corp' },
+              description: { type: :string, example: 'A technology company' },
+              created_at: { type: :string, format: 'date-time' },
+              updated_at: { type: :string, format: 'date-time' }
+            },
+            required: ['id', 'name']
+          },
+          User: {
+            type: :object,
+            properties: {
+              id: { type: :integer, example: 1 },
+              first_name: { type: :string, example: 'John' },
+              last_name: { type: :string, example: 'Doe' },
+              username: { type: :string, example: 'johndoe' },
+              email: { type: :string, example: 'john@example.com' },
+              name: { type: :string, example: 'John Doe' },
+              created_at: { type: :string, format: 'date-time' },
+              updated_at: { type: :string, format: 'date-time' }
+            },
+            required: ['id', 'first_name', 'last_name', 'username', 'email']
+          },
+          Position: {
+            type: :object,
+            properties: {
+              id: { type: :integer, example: 1 },
+              title: { type: :string, example: 'Software Developer' },
+              company_id: { type: :integer, example: 1 },
+              company: { '$ref': '#/components/schemas/Company' },
+              created_at: { type: :string, format: 'date-time' },
+              updated_at: { type: :string, format: 'date-time' }
+            },
+            required: ['id', 'title', 'company_id']
+          }
+        }
+      },
       servers: [
         {
           url: 'https://{defaultHost}',

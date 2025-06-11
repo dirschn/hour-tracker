@@ -5,7 +5,7 @@ import { Observable, catchError, of } from 'rxjs';
 
 // Import the generated service and models
 import { UsersService } from '../../../generated-api/api/users.service';
-import { UsersGet200ResponseInner, UsersPostRequest } from '../../../generated-api/model/models';
+import { User, UsersPostRequest } from '../../../generated-api/model/models';
 
 // Import shared components
 import { PageHeaderComponent } from '../../shared/components/page-header.component';
@@ -23,7 +23,7 @@ export class UsersIndexComponent implements OnInit {
   private router = inject(Router);
 
   // Component state
-  users$: Observable<UsersGet200ResponseInner[]> = of([]);
+  users$: Observable<User[]> = of([]);
   loading = false;
   error: string | null = null;
 
@@ -91,7 +91,7 @@ export class UsersIndexComponent implements OnInit {
   /**
    * Track by function for ngFor performance
    */
-  trackByUserId(index: number, user: UsersGet200ResponseInner): any {
+  trackByUserId(index: number, user: User): any {
     return user.id || index;
   }
 }

@@ -9,10 +9,13 @@
  */
 
 
-export interface PositionsGet200ResponseInner { 
+export interface User { 
     id: number;
-    title: string;
-    company?: object;
+    first_name: string;
+    last_name: string;
+    username: string;
+    email: string;
+    name?: string;
     created_at?: string;
     updated_at?: string;
 }

@@ -4,7 +4,7 @@ class PositionsController < ApplicationController
   # GET /positions
   # GET /positions.json
   def index
-    @positions = Position.all
+    @positions = Position.includes(:company).all
   end
 
   # GET /positions/1
@@ -48,6 +48,6 @@ class PositionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def position_params
-      params.expect(position: [:name])
+      params.expect(position: [:title, :company_id])
     end
 end

@@ -17,19 +17,15 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
-import { CompaniesGet200ResponseInner } from '../model/companiesGet200ResponseInner';
-// @ts-ignore
 import { CompaniesIdGet404Response } from '../model/companiesIdGet404Response';
 // @ts-ignore
-import { CompaniesIdPut200Response } from '../model/companiesIdPut200Response';
-// @ts-ignore
 import { CompaniesIdPutRequest } from '../model/companiesIdPutRequest';
-// @ts-ignore
-import { CompaniesPost201Response } from '../model/companiesPost201Response';
 // @ts-ignore
 import { CompaniesPost422Response } from '../model/companiesPost422Response';
 // @ts-ignore
 import { CompaniesPostRequest } from '../model/companiesPostRequest';
+// @ts-ignore
+import { Company } from '../model/company';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -56,9 +52,9 @@ export class CompaniesService extends BaseService implements CompaniesServiceInt
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public companiesGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<CompaniesGet200ResponseInner>>;
-    public companiesGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<CompaniesGet200ResponseInner>>>;
-    public companiesGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<CompaniesGet200ResponseInner>>>;
+    public companiesGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<Company>>;
+    public companiesGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<Company>>>;
+    public companiesGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<Company>>>;
     public companiesGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -88,7 +84,7 @@ export class CompaniesService extends BaseService implements CompaniesServiceInt
 
         let localVarPath = `/companies`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<CompaniesGet200ResponseInner>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<Company>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -162,9 +158,9 @@ export class CompaniesService extends BaseService implements CompaniesServiceInt
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public companiesIdGet(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CompaniesPost201Response>;
-    public companiesIdGet(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CompaniesPost201Response>>;
-    public companiesIdGet(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CompaniesPost201Response>>;
+    public companiesIdGet(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Company>;
+    public companiesIdGet(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Company>>;
+    public companiesIdGet(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Company>>;
     public companiesIdGet(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling companiesIdGet.');
@@ -197,7 +193,7 @@ export class CompaniesService extends BaseService implements CompaniesServiceInt
 
         let localVarPath = `/companies/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<CompaniesPost201Response>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Company>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -218,9 +214,9 @@ export class CompaniesService extends BaseService implements CompaniesServiceInt
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public companiesIdPatch(id: string, companiesIdPutRequest?: CompaniesIdPutRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CompaniesIdPut200Response>;
-    public companiesIdPatch(id: string, companiesIdPutRequest?: CompaniesIdPutRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CompaniesIdPut200Response>>;
-    public companiesIdPatch(id: string, companiesIdPutRequest?: CompaniesIdPutRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CompaniesIdPut200Response>>;
+    public companiesIdPatch(id: string, companiesIdPutRequest?: CompaniesIdPutRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Company>;
+    public companiesIdPatch(id: string, companiesIdPutRequest?: CompaniesIdPutRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Company>>;
+    public companiesIdPatch(id: string, companiesIdPutRequest?: CompaniesIdPutRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Company>>;
     public companiesIdPatch(id: string, companiesIdPutRequest?: CompaniesIdPutRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling companiesIdPatch.');
@@ -262,7 +258,7 @@ export class CompaniesService extends BaseService implements CompaniesServiceInt
 
         let localVarPath = `/companies/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<CompaniesIdPut200Response>('patch', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Company>('patch', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: companiesIdPutRequest,
@@ -284,9 +280,9 @@ export class CompaniesService extends BaseService implements CompaniesServiceInt
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public companiesIdPut(id: string, companiesIdPutRequest?: CompaniesIdPutRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CompaniesIdPut200Response>;
-    public companiesIdPut(id: string, companiesIdPutRequest?: CompaniesIdPutRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CompaniesIdPut200Response>>;
-    public companiesIdPut(id: string, companiesIdPutRequest?: CompaniesIdPutRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CompaniesIdPut200Response>>;
+    public companiesIdPut(id: string, companiesIdPutRequest?: CompaniesIdPutRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Company>;
+    public companiesIdPut(id: string, companiesIdPutRequest?: CompaniesIdPutRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Company>>;
+    public companiesIdPut(id: string, companiesIdPutRequest?: CompaniesIdPutRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Company>>;
     public companiesIdPut(id: string, companiesIdPutRequest?: CompaniesIdPutRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling companiesIdPut.');
@@ -328,7 +324,7 @@ export class CompaniesService extends BaseService implements CompaniesServiceInt
 
         let localVarPath = `/companies/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<CompaniesIdPut200Response>('put', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Company>('put', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: companiesIdPutRequest,
@@ -349,9 +345,9 @@ export class CompaniesService extends BaseService implements CompaniesServiceInt
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public companiesPost(companiesPostRequest?: CompaniesPostRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CompaniesPost201Response>;
-    public companiesPost(companiesPostRequest?: CompaniesPostRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CompaniesPost201Response>>;
-    public companiesPost(companiesPostRequest?: CompaniesPostRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CompaniesPost201Response>>;
+    public companiesPost(companiesPostRequest?: CompaniesPostRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Company>;
+    public companiesPost(companiesPostRequest?: CompaniesPostRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Company>>;
+    public companiesPost(companiesPostRequest?: CompaniesPostRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Company>>;
     public companiesPost(companiesPostRequest?: CompaniesPostRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -390,7 +386,7 @@ export class CompaniesService extends BaseService implements CompaniesServiceInt
 
         let localVarPath = `/companies`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<CompaniesPost201Response>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Company>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: companiesPostRequest,

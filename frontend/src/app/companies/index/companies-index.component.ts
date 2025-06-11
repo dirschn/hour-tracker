@@ -5,7 +5,7 @@ import { Observable, catchError, of } from 'rxjs';
 
 // Import the generated service and models
 import { CompaniesService } from '../../../generated-api/api/companies.service';
-import { CompaniesGet200ResponseInner } from '../../../generated-api/model/models';
+import { Company } from '../../../generated-api/model/company';
 
 // Import shared components
 import { PageHeaderComponent } from '../../shared/components/page-header.component';
@@ -23,7 +23,7 @@ export class CompaniesIndexComponent implements OnInit {
   private router = inject(Router);
 
   // Component state
-  companies$: Observable<CompaniesGet200ResponseInner[]> = of([]);
+  companies$: Observable<Company[]> = of([]);
   loading = false;
   error: string | null = null;
 
@@ -91,7 +91,7 @@ export class CompaniesIndexComponent implements OnInit {
   /**
    * Track by function for ngFor performance
    */
-  trackByCompanyId(index: number, company: CompaniesGet200ResponseInner): any {
+  trackByCompanyId(index: number, company: Company): any {
     return company.id || index;
   }
 }

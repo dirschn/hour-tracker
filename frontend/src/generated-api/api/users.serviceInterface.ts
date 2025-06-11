@@ -12,7 +12,7 @@ import { HttpHeaders }                                       from '@angular/comm
 import { Observable }                                        from 'rxjs';
 
 import { CompaniesPost422Response } from '../model/models';
-import { UsersGet200ResponseInner } from '../model/models';
+import { User } from '../model/models';
 import { UsersIdGet404Response } from '../model/models';
 import { UsersIdPutRequest } from '../model/models';
 import { UsersPostRequest } from '../model/models';
@@ -30,7 +30,7 @@ export interface UsersServiceInterface {
      * list users
      * Retrieve all users
      */
-    usersGet(extraHttpRequestParams?: any): Observable<Array<UsersGet200ResponseInner>>;
+    usersGet(extraHttpRequestParams?: any): Observable<Array<User>>;
 
     /**
      * delete user
@@ -44,7 +44,7 @@ export interface UsersServiceInterface {
      * Retrieve a specific user
      * @param id user id
      */
-    usersIdGet(id: string, extraHttpRequestParams?: any): Observable<UsersGet200ResponseInner>;
+    usersIdGet(id: string, extraHttpRequestParams?: any): Observable<User>;
 
     /**
      * update user
@@ -52,7 +52,7 @@ export interface UsersServiceInterface {
      * @param id user id
      * @param usersIdPutRequest 
      */
-    usersIdPatch(id: string, usersIdPutRequest?: UsersIdPutRequest, extraHttpRequestParams?: any): Observable<UsersGet200ResponseInner>;
+    usersIdPatch(id: string, usersIdPutRequest?: UsersIdPutRequest, extraHttpRequestParams?: any): Observable<User>;
 
     /**
      * update user
@@ -60,13 +60,13 @@ export interface UsersServiceInterface {
      * @param id user id
      * @param usersIdPutRequest 
      */
-    usersIdPut(id: string, usersIdPutRequest?: UsersIdPutRequest, extraHttpRequestParams?: any): Observable<UsersGet200ResponseInner>;
+    usersIdPut(id: string, usersIdPutRequest?: UsersIdPutRequest, extraHttpRequestParams?: any): Observable<User>;
 
     /**
      * create user
      * Create a new user
      * @param usersPostRequest 
      */
-    usersPost(usersPostRequest?: UsersPostRequest, extraHttpRequestParams?: any): Observable<UsersGet200ResponseInner>;
+    usersPost(usersPostRequest?: UsersPostRequest, extraHttpRequestParams?: any): Observable<User>;
 
 }

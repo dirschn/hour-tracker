@@ -5,7 +5,8 @@ import { catchError, of, switchMap } from 'rxjs';
 
 // Import the generated service and models
 import { CompaniesService } from '../../../generated-api/api/companies.service';
-import { CompaniesGet200ResponseInner, CompaniesIdPutRequest } from '../../../generated-api/model/models';
+import { Company } from '../../../generated-api/model/company';
+import { CompaniesIdPutRequest } from '../../../generated-api/model/models';
 
 // Import the shared form component
 import { CompanyFormComponent } from '../components/company-form.component';
@@ -29,7 +30,7 @@ export class CompaniesEditComponent implements OnInit {
   loading = false;
   error: string | null = null;
   companyId: string | null = null;
-  company: CompaniesGet200ResponseInner | null = null;
+  company: Company | null = null;
 
   ngOnInit(): void {
     this.loadCompany();
@@ -59,7 +60,7 @@ export class CompaniesEditComponent implements OnInit {
     ).subscribe({
       next: (company) => {
         if (company) {
-          this.company = company as CompaniesGet200ResponseInner;
+          this.company = company as Company;
         }
         this.loading = false;
       },

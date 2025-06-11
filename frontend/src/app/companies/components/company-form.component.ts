@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 
 // Import the generated models
-import { CompaniesGet200ResponseInner, CompaniesPostRequest, CompaniesIdPutRequest } from '../../../generated-api/model/models';
+import { Company } from '../../../generated-api/model/company';
+import { CompaniesPostRequest, CompaniesIdPutRequest } from '../../../generated-api/model/models';
 
 @Component({
   selector: 'app-company-form',
@@ -15,7 +16,7 @@ import { CompaniesGet200ResponseInner, CompaniesPostRequest, CompaniesIdPutReque
 export class CompanyFormComponent implements OnInit {
   private fb = inject(FormBuilder);
 
-  @Input() company: CompaniesGet200ResponseInner | null = null;
+  @Input() company: Company | null = null;
   @Input() loading = false;
   @Input() error: string | null = null;
   @Input() submitButtonText = 'Submit';

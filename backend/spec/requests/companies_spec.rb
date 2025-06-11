@@ -1,19 +1,6 @@
 require 'swagger_helper'
 
 RSpec.describe 'companies', type: :request do
-  # Define shared schema as a constant
-  COMPANY_SCHEMA = {
-    type: :object,
-    properties: {
-      id: { type: :integer, example: 1 },
-      name: { type: :string, example: 'Acme Corp' },
-      description: { type: :string, example: 'A technology company', nullable: true },
-      created_at: { type: :string, format: 'date-time' },
-      updated_at: { type: :string, format: 'date-time' }
-    },
-    required: ['id', 'name']
-  }.freeze
-
   path '/companies' do
     get('list companies') do
       tags 'Companies'
@@ -21,7 +8,8 @@ RSpec.describe 'companies', type: :request do
       produces 'application/json'
 
       response(200, 'successful') do
-        schema type: :array, items: COMPANY_SCHEMA
+        schema type: :array,
+          items: { '$ref': '#/components/schemas/Company' }
 
         run_test!
       end
@@ -49,7 +37,7 @@ RSpec.describe 'companies', type: :request do
       }
 
       response(201, 'company created') do
-        schema COMPANY_SCHEMA
+        schema '$ref': '#/components/schemas/Company'
 
         let(:company) { { company: { name: 'Acme Corp' } } }
         run_test!
@@ -82,7 +70,7 @@ RSpec.describe 'companies', type: :request do
       produces 'application/json'
 
       response(200, 'successful') do
-        schema COMPANY_SCHEMA
+        schema '$ref': '#/components/schemas/Company'
 
         let(:id) { '1' }
         run_test!
@@ -120,7 +108,7 @@ RSpec.describe 'companies', type: :request do
       }
 
       response(200, 'company updated') do
-        schema COMPANY_SCHEMA
+        schema '$ref': '#/components/schemas/Company'
 
         let(:id) { '1' }
         let(:company) { { company: { name: 'Updated Corp' } } }
@@ -177,7 +165,7 @@ RSpec.describe 'companies', type: :request do
       }
 
       response(200, 'company updated') do
-        schema COMPANY_SCHEMA
+        schema '$ref': '#/components/schemas/Company'
 
         let(:id) { '1' }
         let(:company) { { company: { name: 'Updated Corp' } } }
