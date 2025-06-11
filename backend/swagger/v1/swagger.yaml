@@ -1808,6 +1808,9 @@ paths:
                     last_name:
                       type: string
                       example: Doe
+                    name:
+                      type: string
+                      example: John Doe
                     username:
                       type: string
                       example: johndoe
@@ -1849,6 +1852,9 @@ paths:
                   last_name:
                     type: string
                     example: Doe
+                  name:
+                    type: string
+                    example: John Doe
                   username:
                     type: string
                     example: johndoe
@@ -1861,6 +1867,12 @@ paths:
                   updated_at:
                     type: string
                     format: date-time
+                required:
+                - id
+                - first_name
+                - last_name
+                - username
+                - email
         '422':
           description: invalid request
           content:
@@ -1932,6 +1944,9 @@ paths:
                   last_name:
                     type: string
                     example: Doe
+                  name:
+                    type: string
+                    example: John Doe
                   username:
                     type: string
                     example: johndoe
@@ -1944,6 +1959,12 @@ paths:
                   updated_at:
                     type: string
                     format: date-time
+                required:
+                - id
+                - first_name
+                - last_name
+                - username
+                - email
         '404':
           description: user not found
           content:
@@ -1973,22 +1994,31 @@ paths:
                     example: 1
                   first_name:
                     type: string
-                    example: Jane
+                    example: John
                   last_name:
                     type: string
-                    example: Smith
+                    example: Doe
+                  name:
+                    type: string
+                    example: John Doe
                   username:
                     type: string
-                    example: janesmith
+                    example: johndoe
                   email:
                     type: string
-                    example: jane.smith@example.com
+                    example: john.doe@example.com
                   created_at:
                     type: string
                     format: date-time
                   updated_at:
                     type: string
                     format: date-time
+                required:
+                - id
+                - first_name
+                - last_name
+                - username
+                - email
         '422':
           description: invalid request
           content:
@@ -2054,22 +2084,31 @@ paths:
                     example: 1
                   first_name:
                     type: string
-                    example: Jane
+                    example: John
                   last_name:
                     type: string
-                    example: Smith
+                    example: Doe
+                  name:
+                    type: string
+                    example: John Doe
                   username:
                     type: string
-                    example: janesmith
+                    example: johndoe
                   email:
                     type: string
-                    example: jane.smith@example.com
+                    example: john.doe@example.com
                   created_at:
                     type: string
                     format: date-time
                   updated_at:
                     type: string
                     format: date-time
+                required:
+                - id
+                - first_name
+                - last_name
+                - username
+                - email
       requestBody:
         content:
           application/json:

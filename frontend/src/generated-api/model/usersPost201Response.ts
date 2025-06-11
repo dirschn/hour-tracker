@@ -13,6 +13,7 @@ export interface UsersPost201Response {
     id?: number;
     first_name?: string;
     last_name?: string;
+    name?: string;
     username?: string;
     email?: string;
     created_at?: string;

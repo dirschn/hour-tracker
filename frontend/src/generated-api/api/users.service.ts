@@ -23,11 +23,7 @@ import { UsersGet200ResponseInner } from '../model/usersGet200ResponseInner';
 // @ts-ignore
 import { UsersIdGet404Response } from '../model/usersIdGet404Response';
 // @ts-ignore
-import { UsersIdPut200Response } from '../model/usersIdPut200Response';
-// @ts-ignore
 import { UsersIdPutRequest } from '../model/usersIdPutRequest';
-// @ts-ignore
-import { UsersPost201Response } from '../model/usersPost201Response';
 // @ts-ignore
 import { UsersPostRequest } from '../model/usersPostRequest';
 
@@ -162,9 +158,9 @@ export class UsersService extends BaseService implements UsersServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public usersIdGet(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<UsersPost201Response>;
-    public usersIdGet(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UsersPost201Response>>;
-    public usersIdGet(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UsersPost201Response>>;
+    public usersIdGet(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<UsersGet200ResponseInner>;
+    public usersIdGet(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UsersGet200ResponseInner>>;
+    public usersIdGet(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UsersGet200ResponseInner>>;
     public usersIdGet(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling usersIdGet.');
@@ -197,7 +193,7 @@ export class UsersService extends BaseService implements UsersServiceInterface {
 
         let localVarPath = `/users/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<UsersPost201Response>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<UsersGet200ResponseInner>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -218,9 +214,9 @@ export class UsersService extends BaseService implements UsersServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public usersIdPatch(id: string, usersIdPutRequest?: UsersIdPutRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<UsersIdPut200Response>;
-    public usersIdPatch(id: string, usersIdPutRequest?: UsersIdPutRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UsersIdPut200Response>>;
-    public usersIdPatch(id: string, usersIdPutRequest?: UsersIdPutRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UsersIdPut200Response>>;
+    public usersIdPatch(id: string, usersIdPutRequest?: UsersIdPutRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<UsersGet200ResponseInner>;
+    public usersIdPatch(id: string, usersIdPutRequest?: UsersIdPutRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UsersGet200ResponseInner>>;
+    public usersIdPatch(id: string, usersIdPutRequest?: UsersIdPutRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UsersGet200ResponseInner>>;
     public usersIdPatch(id: string, usersIdPutRequest?: UsersIdPutRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling usersIdPatch.');
@@ -262,7 +258,7 @@ export class UsersService extends BaseService implements UsersServiceInterface {
 
         let localVarPath = `/users/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<UsersIdPut200Response>('patch', `${basePath}${localVarPath}`,
+        return this.httpClient.request<UsersGet200ResponseInner>('patch', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: usersIdPutRequest,
@@ -284,9 +280,9 @@ export class UsersService extends BaseService implements UsersServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public usersIdPut(id: string, usersIdPutRequest?: UsersIdPutRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<UsersIdPut200Response>;
-    public usersIdPut(id: string, usersIdPutRequest?: UsersIdPutRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UsersIdPut200Response>>;
-    public usersIdPut(id: string, usersIdPutRequest?: UsersIdPutRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UsersIdPut200Response>>;
+    public usersIdPut(id: string, usersIdPutRequest?: UsersIdPutRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<UsersGet200ResponseInner>;
+    public usersIdPut(id: string, usersIdPutRequest?: UsersIdPutRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UsersGet200ResponseInner>>;
+    public usersIdPut(id: string, usersIdPutRequest?: UsersIdPutRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UsersGet200ResponseInner>>;
     public usersIdPut(id: string, usersIdPutRequest?: UsersIdPutRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling usersIdPut.');
@@ -328,7 +324,7 @@ export class UsersService extends BaseService implements UsersServiceInterface {
 
         let localVarPath = `/users/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<UsersIdPut200Response>('put', `${basePath}${localVarPath}`,
+        return this.httpClient.request<UsersGet200ResponseInner>('put', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: usersIdPutRequest,
@@ -349,9 +345,9 @@ export class UsersService extends BaseService implements UsersServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public usersPost(usersPostRequest?: UsersPostRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<UsersPost201Response>;
-    public usersPost(usersPostRequest?: UsersPostRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UsersPost201Response>>;
-    public usersPost(usersPostRequest?: UsersPostRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UsersPost201Response>>;
+    public usersPost(usersPostRequest?: UsersPostRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<UsersGet200ResponseInner>;
+    public usersPost(usersPostRequest?: UsersPostRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UsersGet200ResponseInner>>;
+    public usersPost(usersPostRequest?: UsersPostRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UsersGet200ResponseInner>>;
     public usersPost(usersPostRequest?: UsersPostRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -390,7 +386,7 @@ export class UsersService extends BaseService implements UsersServiceInterface {
 
         let localVarPath = `/users`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<UsersPost201Response>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<UsersGet200ResponseInner>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: usersPostRequest,

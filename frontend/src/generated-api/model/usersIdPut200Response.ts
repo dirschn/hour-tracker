@@ -13,6 +13,7 @@ export interface UsersIdPut200Response {
     id?: number;
     first_name?: string;
     last_name?: string;
+    name?: string;
     username?: string;
     email?: string;
     created_at?: string;

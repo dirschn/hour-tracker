@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, catchError, of } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError, retry } from 'rxjs/operators';
 
 export interface Group {
   id: number;
@@ -10,71 +11,121 @@ export interface Group {
   updated_at: string;
 }
 
+export interface ApiError {
+  message: string;
+  status: number;
+  error?: any;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
   private baseUrl = 'http://localhost:3000';
+  private defaultHeaders = new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  });
 
   constructor(private http: HttpClient) {}
 
-  // Test backend health
-  testHealth(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/up`, {
-      headers: {
-        'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache',
-        'Expires': '0'
-      },
-      responseType: 'text' // Important: /up endpoint returns plain text, not JSON
-    }).pipe(
-      catchError((error: HttpErrorResponse) => {
-        console.log('Health check error details:', error);
-        console.log('Status:', error.status);
-        console.log('Status text:', error.statusText);
-        console.log('Error object:', error);
+  /**
+   * GET request
+   */
+  get<T>(endpoint: string, params?: HttpParams | { [key: string]: any }): Observable<T> {
+    const url = `${this.baseUrl}${endpoint}`;
+    const options = {
+      headers: this.defaultHeaders,
+      params: params
+    };
 
-        // If it's a 304, treat it as success since the endpoint is responding
-        if (error.status === 304) {
-          return of('Backend responding (304 - Not Modified)');
-        }
-
-        // For other errors, re-throw
-        throw error;
-      })
+    return this.http.get<T>(url, options).pipe(
+      retry(1),
+      catchError(this.handleError)
     );
   }
 
-  // Get all groups
-  getGroups(): Observable<Group[]> {
-    return this.http.get<Group[]>(`${this.baseUrl}/groups`, {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache'
-      }
-    }).pipe(
-      catchError((error: HttpErrorResponse) => {
-        console.log('Groups fetch error:', error);
+  /**
+   * POST request
+   */
+  post<T>(endpoint: string, data: any, headers?: HttpHeaders): Observable<T> {
+    const url = `${this.baseUrl}${endpoint}`;
+    const requestHeaders = headers ? headers : this.defaultHeaders;
 
-        // If it's a 304, return empty array as the cached data should be fine
-        if (error.status === 304) {
-          return of([]);
-        }
-
-        throw error;
-      })
+    return this.http.post<T>(url, data, { headers: requestHeaders }).pipe(
+      catchError(this.handleError)
     );
   }
 
-  // Create a new group
-  createGroup(group: { name: string; description?: string }): Observable<Group> {
-    return this.http.post<Group>(`${this.baseUrl}/groups`, group, {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    });
+  /**
+   * PUT request
+   */
+  put<T>(endpoint: string, data: any, headers?: HttpHeaders): Observable<T> {
+    const url = `${this.baseUrl}${endpoint}`;
+    const requestHeaders = headers ? headers : this.defaultHeaders;
+
+    return this.http.put<T>(url, data, { headers: requestHeaders }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * PATCH request
+   */
+  patch<T>(endpoint: string, data: any, headers?: HttpHeaders): Observable<T> {
+    const url = `${this.baseUrl}${endpoint}`;
+    const requestHeaders = headers ? headers : this.defaultHeaders;
+
+    return this.http.patch<T>(url, data, { headers: requestHeaders }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * DELETE request
+   */
+  delete<T>(endpoint: string, headers?: HttpHeaders): Observable<T> {
+    const url = `${this.baseUrl}${endpoint}`;
+    const requestHeaders = headers ? headers : this.defaultHeaders;
+
+    return this.http.delete<T>(url, { headers: requestHeaders }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Handle HTTP errors
+   */
+  private handleError = (error: HttpErrorResponse): Observable<never> => {
+    let apiError: ApiError = {
+      message: 'An unknown error occurred',
+      status: 0
+    };
+
+    if (error.error instanceof ErrorEvent) {
+      // Client-side error
+      apiError = {
+        message: error.error.message,
+        status: 0,
+        error: error.error
+      };
+    } else {
+      // Server-side error
+      apiError = {
+        message: error.error?.message || error.message || `Error ${error.status}`,
+        status: error.status,
+        error: error.error
+      };
+    }
+
+    console.error('API Error:', apiError);
+    return throwError(() => apiError);
+  };
+
+  /**
+   * Helper method to update base URL if needed
+   */
+  setBaseUrl(url: string): void {
+    this.baseUrl = url;
   }
 }

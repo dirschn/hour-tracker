@@ -14,9 +14,7 @@ import { Observable }                                        from 'rxjs';
 import { CompaniesPost422Response } from '../model/models';
 import { UsersGet200ResponseInner } from '../model/models';
 import { UsersIdGet404Response } from '../model/models';
-import { UsersIdPut200Response } from '../model/models';
 import { UsersIdPutRequest } from '../model/models';
-import { UsersPost201Response } from '../model/models';
 import { UsersPostRequest } from '../model/models';
 
 
@@ -46,7 +44,7 @@ export interface UsersServiceInterface {
      * Retrieve a specific user
      * @param id user id
      */
-    usersIdGet(id: string, extraHttpRequestParams?: any): Observable<UsersPost201Response>;
+    usersIdGet(id: string, extraHttpRequestParams?: any): Observable<UsersGet200ResponseInner>;
 
     /**
      * update user
@@ -54,7 +52,7 @@ export interface UsersServiceInterface {
      * @param id user id
      * @param usersIdPutRequest 
      */
-    usersIdPatch(id: string, usersIdPutRequest?: UsersIdPutRequest, extraHttpRequestParams?: any): Observable<UsersIdPut200Response>;
+    usersIdPatch(id: string, usersIdPutRequest?: UsersIdPutRequest, extraHttpRequestParams?: any): Observable<UsersGet200ResponseInner>;
 
     /**
      * update user
@@ -62,13 +60,13 @@ export interface UsersServiceInterface {
      * @param id user id
      * @param usersIdPutRequest 
      */
-    usersIdPut(id: string, usersIdPutRequest?: UsersIdPutRequest, extraHttpRequestParams?: any): Observable<UsersIdPut200Response>;
+    usersIdPut(id: string, usersIdPutRequest?: UsersIdPutRequest, extraHttpRequestParams?: any): Observable<UsersGet200ResponseInner>;
 
     /**
      * create user
      * Create a new user
      * @param usersPostRequest 
      */
-    usersPost(usersPostRequest?: UsersPostRequest, extraHttpRequestParams?: any): Observable<UsersPost201Response>;
+    usersPost(usersPostRequest?: UsersPostRequest, extraHttpRequestParams?: any): Observable<UsersGet200ResponseInner>;
 
 }

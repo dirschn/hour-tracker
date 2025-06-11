@@ -73,10 +73,8 @@ model/userPositionsPostRequest.ts
 model/userPositionsPostRequestUserPosition.ts
 model/usersGet200ResponseInner.ts
 model/usersIdGet404Response.ts
-model/usersIdPut200Response.ts
 model/usersIdPutRequest.ts
 model/usersIdPutRequestUser.ts
-model/usersPost201Response.ts
 model/usersPostRequest.ts
 model/usersPostRequestUser.ts
 ng-package.json

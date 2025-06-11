@@ -4,6 +4,22 @@ RSpec.describe 'users', type: :request do
   # Create a test user for tests that need an existing user
   let!(:test_user) { User.create!(first_name: 'John', last_name: 'Doe', username: 'johndoe', email: 'john.doe@example.com') }
 
+  # Define shared schema as a constant
+  USER_SCHEMA = {
+    type: :object,
+    properties: {
+      id: { type: :integer, example: 1 },
+      first_name: { type: :string, example: 'John' },
+      last_name: { type: :string, example: 'Doe' },
+      name: { type: :string, example: 'John Doe' },
+      username: { type: :string, example: 'johndoe' },
+      email: { type: :string, example: 'john.doe@example.com' },
+      created_at: { type: :string, format: 'date-time' },
+      updated_at: { type: :string, format: 'date-time' }
+    },
+    required: ['id', 'first_name', 'last_name', 'username', 'email']
+  }.freeze
+
   path '/users' do
     get('list users') do
       tags 'Users'
@@ -11,20 +27,7 @@ RSpec.describe 'users', type: :request do
       produces 'application/json'
 
       response(200, 'successful') do
-        schema type: :array,
-          items: {
-            type: :object,
-            properties: {
-              id: { type: :integer, example: 1 },
-              first_name: { type: :string, example: 'John' },
-              last_name: { type: :string, example: 'Doe' },
-              username: { type: :string, example: 'johndoe' },
-              email: { type: :string, example: 'john.doe@example.com' },
-              created_at: { type: :string, format: 'date-time' },
-              updated_at: { type: :string, format: 'date-time' }
-            },
-            required: ['id', 'first_name', 'last_name', 'username', 'email']
-          }
+        schema type: :array, items: USER_SCHEMA
 
         run_test!
       end
@@ -54,16 +57,7 @@ RSpec.describe 'users', type: :request do
       }
 
       response(201, 'user created') do
-        schema type: :object,
-          properties: {
-            id: { type: :integer, example: 1 },
-            first_name: { type: :string, example: 'John' },
-            last_name: { type: :string, example: 'Doe' },
-            username: { type: :string, example: 'johndoe' },
-            email: { type: :string, example: 'john.doe@example.com' },
-            created_at: { type: :string, format: 'date-time' },
-            updated_at: { type: :string, format: 'date-time' }
-          }
+        schema USER_SCHEMA
 
         let(:user) { { user: { first_name: 'Jane', last_name: 'Smith', username: 'janesmith', email: 'jane.smith@example.com' } } }
         run_test!
@@ -96,16 +90,7 @@ RSpec.describe 'users', type: :request do
       produces 'application/json'
 
       response(200, 'successful') do
-        schema type: :object,
-          properties: {
-            id: { type: :integer, example: 1 },
-            first_name: { type: :string, example: 'John' },
-            last_name: { type: :string, example: 'Doe' },
-            username: { type: :string, example: 'johndoe' },
-            email: { type: :string, example: 'john.doe@example.com' },
-            created_at: { type: :string, format: 'date-time' },
-            updated_at: { type: :string, format: 'date-time' }
-          }
+        schema USER_SCHEMA
 
         let(:id) { test_user.id }
         run_test!
@@ -145,16 +130,7 @@ RSpec.describe 'users', type: :request do
       }
 
       response(200, 'user updated') do
-        schema type: :object,
-          properties: {
-            id: { type: :integer, example: 1 },
-            first_name: { type: :string, example: 'Jane' },
-            last_name: { type: :string, example: 'Smith' },
-            username: { type: :string, example: 'janesmith' },
-            email: { type: :string, example: 'jane.smith@example.com' },
-            created_at: { type: :string, format: 'date-time' },
-            updated_at: { type: :string, format: 'date-time' }
-          }
+        schema USER_SCHEMA
 
         let(:id) { test_user.id }
         let(:user) { { user: { first_name: 'Jane', last_name: 'Smith', username: 'janesmith', email: 'jane.smith@example.com' } } }
@@ -213,16 +189,7 @@ RSpec.describe 'users', type: :request do
       }
 
       response(200, 'user updated') do
-        schema type: :object,
-          properties: {
-            id: { type: :integer, example: 1 },
-            first_name: { type: :string, example: 'Jane' },
-            last_name: { type: :string, example: 'Smith' },
-            username: { type: :string, example: 'janesmith' },
-            email: { type: :string, example: 'jane.smith@example.com' },
-            created_at: { type: :string, format: 'date-time' },
-            updated_at: { type: :string, format: 'date-time' }
-          }
+        schema USER_SCHEMA
 
         let(:id) { test_user.id }
         let(:user) { { user: { first_name: 'Jane', last_name: 'Smith', username: 'janesmith', email: 'jane.smith@example.com' } } }
