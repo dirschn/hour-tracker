@@ -48,6 +48,6 @@ class UserPositionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_position_params
-      params.expect(user_position: [ :user_id, :position_id, :start_date ])
+      params.expect(user_position: [:user_id, :position_id, :start_date])
     end
 end

@@ -48,6 +48,6 @@ class PositionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def position_params
-      params.expect(position: [ :name ])
+      params.expect(position: [:name])
     end
 end

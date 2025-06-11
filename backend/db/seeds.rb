@@ -124,11 +124,11 @@ user_positions.each do |user_position|
     next if rand > 0.7
 
     hours = case date.wday
-                   when 1..5 # Monday to Friday
+            when 1..5 # Monday to Friday
                      [4, 6, 8, 8, 8, 8, 9, 10].sample + rand(0.0..2.0).round(2)
-                   else # Weekend
+            else # Weekend
                      [2, 3, 4, 5].sample + rand(0.0..1.0).round(2)
-                   end
+            end
 
     TimeEntry.create!(
       user: user_position.user,

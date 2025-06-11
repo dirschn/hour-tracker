@@ -48,6 +48,6 @@ class TimeEntriesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def time_entry_params
-      params.expect(time_entry: [ :user_position_id, :minutes_worked, :date ])
+      params.expect(time_entry: [:user_position_id, :minutes_worked, :date])
     end
 end

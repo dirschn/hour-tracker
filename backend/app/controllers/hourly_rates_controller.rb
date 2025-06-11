@@ -48,6 +48,6 @@ class HourlyRatesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def hourly_rate_params
-      params.expect(hourly_rate: [ :user_position_id, :hourly_rate_cents ])
+      params.expect(hourly_rate: [:user_position_id, :hourly_rate_cents])
     end
 end

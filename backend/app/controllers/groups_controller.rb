@@ -48,6 +48,6 @@ class GroupsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def group_params
-      params.expect(group: [ :name ])
+      params.expect(group: [:name])
     end
 end
