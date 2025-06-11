@@ -17,6 +17,8 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
+import { CompaniesPost422Response } from '../model/companiesPost422Response';
+// @ts-ignore
 import { UsersGet200ResponseInner } from '../model/usersGet200ResponseInner';
 // @ts-ignore
 import { UsersIdGet404Response } from '../model/usersIdGet404Response';
@@ -26,8 +28,6 @@ import { UsersIdPut200Response } from '../model/usersIdPut200Response';
 import { UsersIdPutRequest } from '../model/usersIdPutRequest';
 // @ts-ignore
 import { UsersPost201Response } from '../model/usersPost201Response';
-// @ts-ignore
-import { UsersPost422Response } from '../model/usersPost422Response';
 // @ts-ignore
 import { UsersPostRequest } from '../model/usersPostRequest';
 

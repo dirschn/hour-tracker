@@ -11,12 +11,12 @@ import { HttpHeaders }                                       from '@angular/comm
 
 import { Observable }                                        from 'rxjs';
 
+import { CompaniesPost422Response } from '../model/models';
 import { UsersGet200ResponseInner } from '../model/models';
 import { UsersIdGet404Response } from '../model/models';
 import { UsersIdPut200Response } from '../model/models';
 import { UsersIdPutRequest } from '../model/models';
 import { UsersPost201Response } from '../model/models';
-import { UsersPost422Response } from '../model/models';
 import { UsersPostRequest } from '../model/models';
 
 

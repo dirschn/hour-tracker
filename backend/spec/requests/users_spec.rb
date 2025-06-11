@@ -1,6 +1,9 @@
 require 'swagger_helper'
 
 RSpec.describe 'users', type: :request do
+  # Create a test user for tests that need an existing user
+  let!(:test_user) { User.create!(first_name: 'John', last_name: 'Doe', username: 'johndoe', email: 'john.doe@example.com') }
+
   path '/users' do
     get('list users') do
       tags 'Users'
@@ -62,7 +65,7 @@ RSpec.describe 'users', type: :request do
             updated_at: { type: :string, format: 'date-time' }
           }
 
-        let(:user) { { user: { first_name: 'John', last_name: 'Doe', username: 'johndoe', email: 'john.doe@example.com' } } }
+        let(:user) { { user: { first_name: 'Jane', last_name: 'Smith', username: 'janesmith', email: 'jane.smith@example.com' } } }
         run_test!
       end
 
@@ -104,7 +107,7 @@ RSpec.describe 'users', type: :request do
             updated_at: { type: :string, format: 'date-time' }
           }
 
-        let(:id) { '1' }
+        let(:id) { test_user.id }
         run_test!
       end
 
@@ -153,7 +156,7 @@ RSpec.describe 'users', type: :request do
             updated_at: { type: :string, format: 'date-time' }
           }
 
-        let(:id) { '1' }
+        let(:id) { test_user.id }
         let(:user) { { user: { first_name: 'Jane', last_name: 'Smith', username: 'janesmith', email: 'jane.smith@example.com' } } }
         run_test!
       end
@@ -170,7 +173,7 @@ RSpec.describe 'users', type: :request do
             }
           }
 
-        let(:id) { '1' }
+        let(:id) { test_user.id }
         let(:user) { { user: { first_name: '', last_name: '', username: '', email: 'invalid-email' } } }
         run_test!
       end
@@ -221,7 +224,7 @@ RSpec.describe 'users', type: :request do
             updated_at: { type: :string, format: 'date-time' }
           }
 
-        let(:id) { '1' }
+        let(:id) { test_user.id }
         let(:user) { { user: { first_name: 'Jane', last_name: 'Smith', username: 'janesmith', email: 'jane.smith@example.com' } } }
         run_test!
       end
@@ -232,7 +235,7 @@ RSpec.describe 'users', type: :request do
       description 'Delete a user'
 
       response(204, 'user deleted') do
-        let(:id) { '1' }
+        let(:id) { test_user.id }
         run_test!
       end
 

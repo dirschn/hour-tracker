@@ -4,6 +4,1785 @@ info:
   title: API V1
   version: v1
 paths:
+  "/companies":
+    get:
+      summary: list companies
+      tags:
+      - Companies
+      description: Retrieve all companies
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    name:
+                      type: string
+                      example: Acme Corp
+                    created_at:
+                      type: string
+                      format: date-time
+                    updated_at:
+                      type: string
+                      format: date-time
+                  required:
+                  - id
+                  - name
+    post:
+      summary: create company
+      tags:
+      - Companies
+      description: Create a new company
+      parameters: []
+      responses:
+        '201':
+          description: company created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: Acme Corp
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+        '422':
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                company:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Acme Corp
+                  required:
+                  - name
+              required:
+              - company
+  "/companies/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: company id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show company
+      tags:
+      - Companies
+      description: Retrieve a specific company
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: Acme Corp
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+        '404':
+          description: company not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Company not found
+    patch:
+      summary: update company
+      tags:
+      - Companies
+      description: Update a company
+      parameters: []
+      responses:
+        '200':
+          description: company updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: Updated Corp
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+        '422':
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+        '404':
+          description: company not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Company not found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                company:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Updated Corp
+              required:
+              - company
+    put:
+      summary: update company
+      tags:
+      - Companies
+      description: Update a company (PUT)
+      parameters: []
+      responses:
+        '200':
+          description: company updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: Updated Corp
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                company:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Updated Corp
+              required:
+              - company
+    delete:
+      summary: delete company
+      tags:
+      - Companies
+      description: Delete a company
+      responses:
+        '204':
+          description: company deleted
+        '404':
+          description: company not found
+  "/groups":
+    get:
+      summary: list groups
+      tags:
+      - Groups
+      description: Retrieve all groups
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    name:
+                      type: string
+                      example: Development Team
+                    user_id:
+                      type: integer
+                      example: 1
+                    created_at:
+                      type: string
+                      format: date-time
+                    updated_at:
+                      type: string
+                      format: date-time
+                  required:
+                  - id
+                  - name
+                  - user_id
+    post:
+      summary: create group
+      tags:
+      - Groups
+      description: Create a new group
+      parameters: []
+      responses:
+        '201':
+          description: group created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: Development Team
+                  user_id:
+                    type: integer
+                    example: 1
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+        '422':
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                group:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Development Team
+                    user_id:
+                      type: integer
+                      example: 1
+                  required:
+                  - name
+                  - user_id
+              required:
+              - group
+  "/groups/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: group id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show group
+      tags:
+      - Groups
+      description: Retrieve a specific group
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: Development Team
+                  user_id:
+                    type: integer
+                    example: 1
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+        '404':
+          description: group not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Group not found
+    patch:
+      summary: update group
+      tags:
+      - Groups
+      description: Update a group
+      parameters: []
+      responses:
+        '200':
+          description: group updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: Updated Team
+                  user_id:
+                    type: integer
+                    example: 1
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+        '422':
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+        '404':
+          description: group not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Group not found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                group:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Updated Team
+              required:
+              - group
+    put:
+      summary: update group
+      tags:
+      - Groups
+      description: Update a group (PUT)
+      parameters: []
+      responses:
+        '200':
+          description: group updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: Updated Team
+                  user_id:
+                    type: integer
+                    example: 1
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                group:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Updated Team
+              required:
+              - group
+    delete:
+      summary: delete group
+      tags:
+      - Groups
+      description: Delete a group
+      responses:
+        '204':
+          description: group deleted
+        '404':
+          description: group not found
+  "/hourly_rates":
+    get:
+      summary: list hourly rates
+      tags:
+      - Hourly Rates
+      description: Retrieve all hourly rates
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    user_position_id:
+                      type: integer
+                      example: 1
+                    rate_cents:
+                      type: integer
+                      example: 5000
+                    rate:
+                      type: string
+                      example: '50.00'
+                    effective_date:
+                      type: string
+                      format: date
+                      example: '2024-01-01'
+                    created_at:
+                      type: string
+                      format: date-time
+                    updated_at:
+                      type: string
+                      format: date-time
+                  required:
+                  - id
+                  - user_position_id
+                  - rate_cents
+                  - effective_date
+    post:
+      summary: create hourly rate
+      tags:
+      - Hourly Rates
+      description: Create a new hourly rate
+      parameters: []
+      responses:
+        '201':
+          description: hourly rate created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  user_position_id:
+                    type: integer
+                    example: 1
+                  rate_cents:
+                    type: integer
+                    example: 5000
+                  rate:
+                    type: string
+                    example: '50.00'
+                  effective_date:
+                    type: string
+                    format: date
+                    example: '2024-01-01'
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+        '422':
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                hourly_rate:
+                  type: object
+                  properties:
+                    user_position_id:
+                      type: integer
+                      example: 1
+                    rate_cents:
+                      type: integer
+                      example: 5000
+                    effective_date:
+                      type: string
+                      format: date
+                      example: '2024-01-01'
+                  required:
+                  - user_position_id
+                  - rate_cents
+                  - effective_date
+              required:
+              - hourly_rate
+  "/hourly_rates/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: hourly rate id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show hourly rate
+      tags:
+      - Hourly Rates
+      description: Retrieve a specific hourly rate
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  user_position_id:
+                    type: integer
+                    example: 1
+                  rate_cents:
+                    type: integer
+                    example: 5000
+                  rate:
+                    type: string
+                    example: '50.00'
+                  effective_date:
+                    type: string
+                    format: date
+                    example: '2024-01-01'
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+        '404':
+          description: hourly rate not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Hourly rate not found
+    patch:
+      summary: update hourly rate
+      tags:
+      - Hourly Rates
+      description: Update an hourly rate
+      parameters: []
+      responses:
+        '200':
+          description: hourly rate updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  user_position_id:
+                    type: integer
+                    example: 1
+                  rate_cents:
+                    type: integer
+                    example: 5500
+                  rate:
+                    type: string
+                    example: '55.00'
+                  effective_date:
+                    type: string
+                    format: date
+                    example: '2024-06-01'
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+        '422':
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+        '404':
+          description: hourly rate not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Hourly rate not found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                hourly_rate:
+                  type: object
+                  properties:
+                    rate_cents:
+                      type: integer
+                      example: 5500
+                    effective_date:
+                      type: string
+                      format: date
+                      example: '2024-06-01'
+              required:
+              - hourly_rate
+    put:
+      summary: update hourly rate
+      tags:
+      - Hourly Rates
+      description: Update an hourly rate (PUT)
+      parameters: []
+      responses:
+        '200':
+          description: hourly rate updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  user_position_id:
+                    type: integer
+                    example: 1
+                  rate_cents:
+                    type: integer
+                    example: 5500
+                  rate:
+                    type: string
+                    example: '55.00'
+                  effective_date:
+                    type: string
+                    format: date
+                    example: '2024-06-01'
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                hourly_rate:
+                  type: object
+                  properties:
+                    rate_cents:
+                      type: integer
+                      example: 5500
+                    effective_date:
+                      type: string
+                      format: date
+                      example: '2024-06-01'
+              required:
+              - hourly_rate
+    delete:
+      summary: delete hourly rate
+      tags:
+      - Hourly Rates
+      description: Delete an hourly rate
+      responses:
+        '204':
+          description: hourly rate deleted
+        '404':
+          description: hourly rate not found
+  "/positions":
+    get:
+      summary: list positions
+      tags:
+      - Positions
+      description: Retrieve all positions
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    title:
+                      type: string
+                      example: Software Developer
+                    company_id:
+                      type: integer
+                      example: 1
+                    created_at:
+                      type: string
+                      format: date-time
+                    updated_at:
+                      type: string
+                      format: date-time
+                  required:
+                  - id
+                  - title
+                  - company_id
+    post:
+      summary: create position
+      tags:
+      - Positions
+      description: Create a new position
+      parameters: []
+      responses:
+        '201':
+          description: position created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  title:
+                    type: string
+                    example: Software Developer
+                  company_id:
+                    type: integer
+                    example: 1
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+        '422':
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                position:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                      example: Software Developer
+                    company_id:
+                      type: integer
+                      example: 1
+                  required:
+                  - title
+                  - company_id
+              required:
+              - position
+  "/positions/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: position id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show position
+      tags:
+      - Positions
+      description: Retrieve a specific position
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  title:
+                    type: string
+                    example: Software Developer
+                  company_id:
+                    type: integer
+                    example: 1
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+        '404':
+          description: position not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Position not found
+    patch:
+      summary: update position
+      tags:
+      - Positions
+      description: Update a position
+      parameters: []
+      responses:
+        '200':
+          description: position updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  title:
+                    type: string
+                    example: Senior Software Developer
+                  company_id:
+                    type: integer
+                    example: 1
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+        '422':
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+        '404':
+          description: position not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Position not found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                position:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                      example: Senior Software Developer
+              required:
+              - position
+    put:
+      summary: update position
+      tags:
+      - Positions
+      description: Update a position (PUT)
+      parameters: []
+      responses:
+        '200':
+          description: position updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  title:
+                    type: string
+                    example: Senior Software Developer
+                  company_id:
+                    type: integer
+                    example: 1
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                position:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                      example: Senior Software Developer
+              required:
+              - position
+    delete:
+      summary: delete position
+      tags:
+      - Positions
+      description: Delete a position
+      responses:
+        '204':
+          description: position deleted
+        '404':
+          description: position not found
+  "/time_entries":
+    get:
+      summary: list time entries
+      tags:
+      - Time Entries
+      description: Retrieve all time entries
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    user_position_id:
+                      type: integer
+                      example: 1
+                    user_id:
+                      type: integer
+                      example: 1
+                    group_id:
+                      type: integer
+                      example: 1
+                      nullable: true
+                    minutes_worked:
+                      type: integer
+                      example: 480
+                    date:
+                      type: string
+                      format: date
+                      example: '2024-01-15'
+                    notes:
+                      type: string
+                      example: Worked on feature development
+                      nullable: true
+                    created_at:
+                      type: string
+                      format: date-time
+                    updated_at:
+                      type: string
+                      format: date-time
+                  required:
+                  - id
+                  - user_position_id
+                  - user_id
+                  - minutes_worked
+                  - date
+    post:
+      summary: create time entry
+      tags:
+      - Time Entries
+      description: Create a new time entry
+      parameters: []
+      responses:
+        '201':
+          description: time entry created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  user_position_id:
+                    type: integer
+                    example: 1
+                  user_id:
+                    type: integer
+                    example: 1
+                  group_id:
+                    type: integer
+                    example: 1
+                    nullable: true
+                  minutes_worked:
+                    type: integer
+                    example: 480
+                  date:
+                    type: string
+                    format: date
+                    example: '2024-01-15'
+                  notes:
+                    type: string
+                    example: Worked on feature development
+                    nullable: true
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+        '422':
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                time_entry:
+                  type: object
+                  properties:
+                    user_position_id:
+                      type: integer
+                      example: 1
+                    user_id:
+                      type: integer
+                      example: 1
+                    group_id:
+                      type: integer
+                      example: 1
+                      nullable: true
+                    minutes_worked:
+                      type: integer
+                      example: 480
+                    date:
+                      type: string
+                      format: date
+                      example: '2024-01-15'
+                    notes:
+                      type: string
+                      example: Worked on feature development
+                      nullable: true
+                  required:
+                  - user_position_id
+                  - user_id
+                  - minutes_worked
+                  - date
+              required:
+              - time_entry
+  "/time_entries/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: time entry id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show time entry
+      tags:
+      - Time Entries
+      description: Retrieve a specific time entry
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  user_position_id:
+                    type: integer
+                    example: 1
+                  user_id:
+                    type: integer
+                    example: 1
+                  group_id:
+                    type: integer
+                    example: 1
+                    nullable: true
+                  minutes_worked:
+                    type: integer
+                    example: 480
+                  date:
+                    type: string
+                    format: date
+                    example: '2024-01-15'
+                  notes:
+                    type: string
+                    example: Worked on feature development
+                    nullable: true
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+        '404':
+          description: time entry not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Time entry not found
+    patch:
+      summary: update time entry
+      tags:
+      - Time Entries
+      description: Update a time entry
+      parameters: []
+      responses:
+        '200':
+          description: time entry updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  user_position_id:
+                    type: integer
+                    example: 1
+                  user_id:
+                    type: integer
+                    example: 1
+                  group_id:
+                    type: integer
+                    example: 1
+                    nullable: true
+                  minutes_worked:
+                    type: integer
+                    example: 520
+                  date:
+                    type: string
+                    format: date
+                    example: '2024-01-16'
+                  notes:
+                    type: string
+                    example: Updated work on feature development
+                    nullable: true
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+        '422':
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+        '404':
+          description: time entry not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Time entry not found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                time_entry:
+                  type: object
+                  properties:
+                    minutes_worked:
+                      type: integer
+                      example: 520
+                    date:
+                      type: string
+                      format: date
+                      example: '2024-01-16'
+                    notes:
+                      type: string
+                      example: Updated work on feature development
+                      nullable: true
+              required:
+              - time_entry
+    put:
+      summary: update time entry
+      tags:
+      - Time Entries
+      description: Update a time entry (PUT)
+      parameters: []
+      responses:
+        '200':
+          description: time entry updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  user_position_id:
+                    type: integer
+                    example: 1
+                  user_id:
+                    type: integer
+                    example: 1
+                  group_id:
+                    type: integer
+                    example: 1
+                    nullable: true
+                  minutes_worked:
+                    type: integer
+                    example: 520
+                  date:
+                    type: string
+                    format: date
+                    example: '2024-01-16'
+                  notes:
+                    type: string
+                    example: Updated work on feature development
+                    nullable: true
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                time_entry:
+                  type: object
+                  properties:
+                    minutes_worked:
+                      type: integer
+                      example: 520
+                    date:
+                      type: string
+                      format: date
+                      example: '2024-01-16'
+                    notes:
+                      type: string
+                      example: Updated work on feature development
+                      nullable: true
+              required:
+              - time_entry
+    delete:
+      summary: delete time entry
+      tags:
+      - Time Entries
+      description: Delete a time entry
+      responses:
+        '204':
+          description: time entry deleted
+        '404':
+          description: time entry not found
+  "/user_positions":
+    get:
+      summary: list user positions
+      tags:
+      - User Positions
+      description: Retrieve all user positions
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    user_id:
+                      type: integer
+                      example: 1
+                    position_id:
+                      type: integer
+                      example: 1
+                    start_date:
+                      type: string
+                      format: date
+                      example: '2024-01-01'
+                    end_date:
+                      type: string
+                      format: date
+                      example: '2024-12-31'
+                      nullable: true
+                    created_at:
+                      type: string
+                      format: date-time
+                    updated_at:
+                      type: string
+                      format: date-time
+                  required:
+                  - id
+                  - user_id
+                  - position_id
+                  - start_date
+    post:
+      summary: create user position
+      tags:
+      - User Positions
+      description: Create a new user position
+      parameters: []
+      responses:
+        '201':
+          description: user position created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  user_id:
+                    type: integer
+                    example: 1
+                  position_id:
+                    type: integer
+                    example: 1
+                  start_date:
+                    type: string
+                    format: date
+                    example: '2024-01-01'
+                  end_date:
+                    type: string
+                    format: date
+                    example: '2024-12-31'
+                    nullable: true
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+        '422':
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_position:
+                  type: object
+                  properties:
+                    user_id:
+                      type: integer
+                      example: 1
+                    position_id:
+                      type: integer
+                      example: 1
+                    start_date:
+                      type: string
+                      format: date
+                      example: '2024-01-01'
+                    end_date:
+                      type: string
+                      format: date
+                      example: '2024-12-31'
+                      nullable: true
+                  required:
+                  - user_id
+                  - position_id
+                  - start_date
+              required:
+              - user_position
+  "/user_positions/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: user position id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show user position
+      tags:
+      - User Positions
+      description: Retrieve a specific user position
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  user_id:
+                    type: integer
+                    example: 1
+                  position_id:
+                    type: integer
+                    example: 1
+                  start_date:
+                    type: string
+                    format: date
+                    example: '2024-01-01'
+                  end_date:
+                    type: string
+                    format: date
+                    example: '2024-12-31'
+                    nullable: true
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+        '404':
+          description: user position not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: User position not found
+    patch:
+      summary: update user position
+      tags:
+      - User Positions
+      description: Update a user position
+      parameters: []
+      responses:
+        '200':
+          description: user position updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  user_id:
+                    type: integer
+                    example: 1
+                  position_id:
+                    type: integer
+                    example: 1
+                  start_date:
+                    type: string
+                    format: date
+                    example: '2024-02-01'
+                  end_date:
+                    type: string
+                    format: date
+                    example: '2024-11-30'
+                    nullable: true
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+        '422':
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+        '404':
+          description: user position not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: User position not found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_position:
+                  type: object
+                  properties:
+                    start_date:
+                      type: string
+                      format: date
+                      example: '2024-02-01'
+                    end_date:
+                      type: string
+                      format: date
+                      example: '2024-11-30'
+                      nullable: true
+              required:
+              - user_position
+    put:
+      summary: update user position
+      tags:
+      - User Positions
+      description: Update a user position (PUT)
+      parameters: []
+      responses:
+        '200':
+          description: user position updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  user_id:
+                    type: integer
+                    example: 1
+                  position_id:
+                    type: integer
+                    example: 1
+                  start_date:
+                    type: string
+                    format: date
+                    example: '2024-02-01'
+                  end_date:
+                    type: string
+                    format: date
+                    example: '2024-11-30'
+                    nullable: true
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_position:
+                  type: object
+                  properties:
+                    start_date:
+                      type: string
+                      format: date
+                      example: '2024-02-01'
+                    end_date:
+                      type: string
+                      format: date
+                      example: '2024-11-30'
+                      nullable: true
+              required:
+              - user_position
+    delete:
+      summary: delete user position
+      tags:
+      - User Positions
+      description: Delete a user position
+      responses:
+        '204':
+          description: user position deleted
+        '404':
+          description: user position not found
   "/users":
     get:
       summary: list users

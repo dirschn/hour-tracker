@@ -3,4 +3,9 @@ class User < ApplicationRecord
   has_many :positions, through: :user_positions
   has_many :companies, through: :positions
   has_many :time_entries, dependent: :destroy
+
+  validates :first_name, presence: true
+  validates :last_name, presence: true
+  validates :username, presence: true, uniqueness: true
+  validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
 end

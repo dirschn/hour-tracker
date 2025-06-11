@@ -20,7 +20,7 @@ class UsersController < ApplicationController
     if @user.save
       render :show, status: :created, location: @user
     else
-      render json: @user.errors, status: :unprocessable_entity
+      render json: { errors: @user.errors }, status: :unprocessable_entity
     end
   end
 
@@ -30,7 +30,7 @@ class UsersController < ApplicationController
     if @user.update(user_params)
       render :show, status: :ok, location: @user
     else
-      render json: @user.errors, status: :unprocessable_entity
+      render json: { errors: @user.errors }, status: :unprocessable_entity
     end
   end
 
@@ -38,12 +38,15 @@ class UsersController < ApplicationController
   # DELETE /users/1.json
   def destroy
     @user.destroy!
+    head :no_content
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
       @user = User.find(params.expect(:id))
+    rescue ActiveRecord::RecordNotFound
+      render json: { error: 'User not found' }, status: :not_found
     end
 
     # Only allow a list of trusted parameters through.
