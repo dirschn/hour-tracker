@@ -11,13 +11,6 @@
           <a class="nav-link" routerLink="/users" routerLinkActive="active">Users</a>
         </li>
       </ul>
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <span class="navbar-text">
-            Backend: {{ backendStatus }}
-          </span>
-        </li>
-      </ul>
     </div>
   </div>
 </nav>
@@ -33,67 +26,3 @@
   <!-- Router Outlet for components -->
   <router-outlet></router-outlet>
 </main>
-
-<!-- Backend Test Section (minimized) -->
-<div class="container mt-4" *ngIf="false">
-  <div class="card">
-    <div class="card-header">
-      <h5 class="card-title mb-0">Backend Communication Test</h5>
-    </div>
-    <div class="card-body">
-      <!-- Backend Status -->
-      <div class="mb-3">
-        <p><strong>Backend Status:</strong> {{ backendStatus }}</p>
-        <button class="btn btn-outline-primary btn-sm" (click)="testBackendHealth()" [disabled]="isLoading">
-          {{ isLoading ? 'Testing...' : 'Test Connection' }}
-        </button>
-      </div>
-
-      <!-- Groups Section -->
-      <div class="mb-3">
-        <h6>Groups ({{ groups.length }})</h6>
-
-        <!-- Create New Group -->
-        <div class="row g-2 mb-3">
-          <div class="col-md-4">
-            <input
-              type="text"
-              [(ngModel)]="newGroupName"
-              placeholder="Group name"
-              class="form-control"
-            >
-          </div>
-          <div class="col-md-4">
-            <input
-              type="text"
-              [(ngModel)]="newGroupDescription"
-              placeholder="Description (optional)"
-              class="form-control"
-            >
-          </div>
-          <div class="col-md-4">
-            <button
-              (click)="createGroup()"
-              [disabled]="!newGroupName.trim() || isLoading"
-              class="btn btn-primary"
-            >
-              Create Group
-            </button>
-          </div>
-        </div>
-
-        <!-- Groups List -->
-        <div *ngIf="groups.length === 0" class="text-muted">
-          No groups found.
-        </div>
-        <div *ngFor="let group of groups" class="card mb-2">
-          <div class="card-body p-2">
-            <h6 class="card-title mb-1">{{ group.name }}</h6>
-            <p class="card-text mb-1" *ngIf="group.description">{{ group.description }}</p>
-            <small class="text-muted">Created: {{ group.created_at | date:'medium' }}</small>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
