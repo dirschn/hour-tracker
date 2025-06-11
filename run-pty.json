@@ -1,0 +1,12 @@
+[
+  {
+    "title": "Rails Backend",
+    "command": ["bin/rails", "server", "-p", "3000"],
+    "cwd": "backend"
+  },
+  {
+    "title": "Angular Frontend",
+    "command": ["ng", "serve"],
+    "cwd": "frontend"
+  }
+]

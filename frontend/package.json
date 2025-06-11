@@ -7,9 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "update-api-client": "./scripts/update-api-client.sh",
-    "generate-api-client": "./scripts/update-api-client.sh",
-    "api:update": "./scripts/update-api-client.sh"
+    "api:update": "./scripts/update-api-client.sh",
+    "dev": "cd .. && ./dev.sh"
   },
   "private": true,
   "dependencies": {

@@ -4,7 +4,7 @@ A full-stack time tracking application built with Ruby on Rails (backend) and An
 
 ## Architecture Overview
 
-- **Backend**: Ruby on Rails API with OpenAPI spec generation
+- **Backend**: Ruby on Rails 8.0 API with OpenAPI spec generation
 - **Frontend**: Angular 20 with TypeScript and Bootstrap
 - **API Documentation**: Auto-generated OpenAPI 3.0 specs using rswag
 - **Type Safety**: Auto-generated TypeScript clients from OpenAPI specs
@@ -13,21 +13,26 @@ A full-stack time tracking application built with Ruby on Rails (backend) and An
 
 - Ruby 3.2.2+
 - Node.js 18+
-- npm or yarn
+- npm
 - SQLite3 (for development)
 
 ## Project Structure
 
 ```
 hour-tracker/
-├── backend/          # Rails API application
-├── frontend/         # Angular application
-└── README.md         # This file
+├── backend/              # Rails API application
+├── frontend/             # Angular application
+├── scripts/              # Additional utility scripts
+└── README.md
 ```
 
 ## Quick Start
 
-### 1. Backend Setup (Rails API)
+### Development Environment (Recommended)
+
+### Manual Setup
+
+#### 1. Backend Setup (Rails API)
 
 ```bash
 cd backend
@@ -44,7 +49,7 @@ rails server
 
 The backend will be available at `http://localhost:3000`
 
-### 2. Frontend Setup (Angular)
+#### 2. Frontend Setup (Angular)
 
 ```bash
 cd frontend
@@ -58,294 +63,138 @@ ng serve
 
 The frontend will be available at `http://localhost:4200`
 
-## Development Workflow
+## Essential Scripts & Commands
 
-### Backend Development
-
-#### Adding New API Endpoints
-
-1. **Create/Update Controllers**: Add your controller actions in `app/controllers/`
-
-2. **Create rswag Specs**: Create request specs in `spec/requests/` that document your API:
-
-```ruby
-# spec/requests/users_spec.rb
-require 'swagger_helper'
-
-RSpec.describe 'users', type: :request do
-  path '/users' do
-    get('list users') do
-      tags 'Users'
-      description 'Retrieve all users'
-      produces 'application/json'
-
-      response(200, 'successful') do
-        schema type: :array,
-          items: {
-            type: :object,
-            properties: {
-              id: { type: :integer },
-              first_name: { type: :string },
-              last_name: { type: :string },
-              username: { type: :string },
-              email: { type: :string }
-            }
-          }
-
-        run_test!
-      end
-    end
-  end
-end
+**Start both servers with one command:**
+```bash
+# From project root
+./scripts/dev.sh
 ```
 
-3. **Generate OpenAPI Specs**: Run the rswag rake task to generate/update the OpenAPI specification:
+This launches both Rails and Angular servers using `run-pty`, giving you:
+- Interactive dashboard to switch between server outputs (Ctrl+Z)
+- Clean shutdown of both servers (Ctrl+C)
+- Backend at `http://localhost:3000`
+- Frontend at `http://localhost:4200`
+
+### Master API Update Script
+
+The quickest way to update both backend specs and frontend client:
 
 ```bash
-bundle exec rake rswag:specs:swaggerize
+# From project root
+./scripts/update-api.sh
 ```
 
-This creates/updates `swagger/v1/swagger.yaml`
+This script:
+1. Generates OpenAPI specs from rswag tests
+2. Updates the Angular TypeScript client
+3. Provides clear feedback on success/failure
 
-4. **Test Your API**: Run the specs to ensure your API works correctly:
+### Individual Commands
 
-```bash
-bundle exec rspec spec/requests/
-```
-
-### Frontend Development
-
-#### Updating API Client from Backend Changes
-
-When the backend API changes, follow these steps to update the frontend:
-
-1. **Regenerate OpenAPI Specs** (in backend directory):
+**Backend API Documentation:**
 ```bash
 cd backend
-bundle exec rake rswag:specs:swaggerize
+bin/generate-api-docs
+# or
+bundle exec rails rswag:specs:swaggerize
 ```
 
-2. **Generate TypeScript Client** (in frontend directory):
+**Frontend API Client Update:**
 ```bash
 cd frontend
-npx @openapitools/openapi-generator-cli generate \
-  -i ../backend/swagger/v1/swagger.yaml \
-  -g typescript-angular \
-  -o ./src/generated-api \
-  --additional-properties=ngVersion=20,npmName=hour-tracker-api,supportsES6=true,withInterfaces=true
+npm run update-api-client
+# or
+npm run api:update
 ```
 
-3. **Use Generated Types and Services** in your Angular components:
-
-```typescript
-import { UsersService } from '../generated-api/api/users.service';
-import { UsersGet200ResponseInner } from '../generated-api';
-
-@Component({...})
-export class UsersComponent {
-  constructor(private usersService: UsersService) {}
-
-  loadUsers() {
-    this.usersService.usersGet().subscribe(users => {
-      // users is fully typed based on your OpenAPI spec
-      console.log(users);
-    });
-  }
-}
-```
-
-#### Adding New Components
-
+**Development Servers:**
 ```bash
-cd frontend
-ng generate component my-new-component
+# Backend
+cd backend && rails server
+
+# Frontend
+cd frontend && ng serve
 ```
+
+**Testing:**
+```bash
+# Backend tests
+cd backend && bundle exec rspec
+
+# Frontend tests
+cd frontend && ng test
+```
+
+## Development Workflow
+
+### Making Backend Changes
+
+1. **Modify controllers/models** in `backend/app/`
+2. **Update/create rswag specs** in `backend/spec/requests/`
+3. **Run the master update script:**
+   ```bash
+   ./scripts/update-api.sh
+   ```
+4. **Update Angular components** to use new types/services
+
+### Adding New API Endpoints
+
+1. **Create controller** and add routes in `config/routes.rb`
+2. **Create rswag request spec** in `spec/requests/`
+3. **Generate documentation:**
+   ```bash
+   cd backend && bin/generate-api-docs
+   ```
+4. **Update frontend client:**
+   ```bash
+   cd frontend && npm run api:update
+   ```
+
+## Key Configuration Files
+
+- **Backend CORS**: `backend/config/initializers/cors.rb`
+- **Routes**: `backend/config/routes.rb`
+- **Database**: `backend/config/database.yml`
+- **OpenAPI Config**: `backend/spec/swagger_helper.rb`
+- **Frontend Scripts**: `frontend/package.json`
 
 ## API Documentation
 
-### Generated API Endpoints
+- **OpenAPI Spec**: `backend/swagger/v1/swagger.yaml` (auto-generated)
+- **Swagger UI**: Available at `http://localhost:3000/api-docs` when backend is running
+- **Generated TypeScript Types**: `frontend/src/generated-api/`
 
-After running `rake rswag:specs:swaggerize`, you can view the complete API documentation at:
+## Common Issues & Solutions
 
-- **OpenAPI Spec**: `backend/swagger/v1/swagger.yaml`
-- **Swagger UI**: Available when backend is running (if configured)
+**CORS Errors**: Check `backend/config/initializers/cors.rb` allows `http://localhost:4200`
 
-### Example API Usage
+**API Client Generation Fails**:
+- Ensure OpenAPI spec exists: `ls backend/swagger/v1/swagger.yaml`
+- Validate spec at [Swagger Editor](https://editor.swagger.io/)
 
-**List Users:**
+**Missing Dependencies**:
 ```bash
-curl http://localhost:3000/users
+# Backend
+cd backend && bundle install
+
+# Frontend
+cd frontend && npm install
 ```
 
-**Create User:**
-```bash
-curl -X POST http://localhost:3000/users \
-  -H "Content-Type: application/json" \
-  -d '{
-    "user": {
-      "first_name": "John",
-      "last_name": "Doe",
-      "username": "johndoe",
-      "email": "john@example.com"
-    }
-  }'
-```
+## Project Goals
 
-## Configuration
-
-### Backend Configuration
-
-- **Database**: SQLite3 (development), configured in `config/database.yml`
-- **CORS**: Configured in `config/initializers/cors.rb` for frontend access
-- **OpenAPI**: Configured in `spec/swagger_helper.rb`
-
-### Frontend Configuration
-
-- **API Base URL**: Configured in `src/app/app.config.ts` (defaults to `http://localhost:3000`)
-- **Bootstrap**: Configured in `angular.json` styles array
-- **Generated API**: Located in `src/generated-api/`
-
-## Testing
-
-### Backend Tests
-
-```bash
-cd backend
-
-# Run all tests
-bundle exec rspec
-
-# Run specific test file
-bundle exec rspec spec/requests/users_spec.rb
-
-# Run tests and generate OpenAPI specs
-bundle exec rake rswag:specs:swaggerize
-```
-
-### Frontend Tests
-
-```bash
-cd frontend
-
-# Run unit tests
-ng test
-
-# Run e2e tests
-ng e2e
-
-# Build for production
-ng build
-```
-
-## Common Tasks
-
-### Adding a New Model with API
-
-1. **Generate the model and migration**:
-```bash
-cd backend
-rails generate model MyModel name:string description:text
-rails db:migrate
-```
-
-2. **Create the controller**:
-```bash
-rails generate controller MyModels index show create update destroy
-```
-
-3. **Add routes** in `config/routes.rb`:
-```ruby
-resources :my_models
-```
-
-4. **Create rswag specs** in `spec/requests/my_models_spec.rb`
-
-5. **Generate OpenAPI specs**:
-```bash
-bundle exec rake rswag:specs:swaggerize
-```
-
-6. **Update frontend API client**:
-```bash
-cd ../frontend
-npx @openapitools/openapi-generator-cli generate \
-  -i ../backend/swagger/v1/swagger.yaml \
-  -g typescript-angular \
-  -o ./src/generated-api \
-  --additional-properties=ngVersion=20,npmName=hour-tracker-api,supportsES6=true,withInterfaces=true
-```
-
-7. **Create Angular component** to use the new API:
-```bash
-ng generate component my-models
-```
-
-### Updating API Schemas
-
-When you modify your Rails models or controller responses:
-
-1. Update the rswag specs with the new schema
-2. Regenerate the OpenAPI specs: `bundle exec rake rswag:specs:swaggerize`
-3. Regenerate the frontend client (see command above)
-4. Update your Angular components to use the new types
-
-## Automation Scripts
-
-You can create scripts to automate the API generation process:
-
-**Backend script** (`backend/bin/generate-api-docs`):
-```bash
-#!/bin/bash
-bundle exec rake rswag:specs:swaggerize
-echo "OpenAPI specs generated at swagger/v1/swagger.yaml"
-```
-
-**Frontend script** (`frontend/scripts/update-api-client.sh`):
-```bash
-#!/bin/bash
-npx @openapitools/openapi-generator-cli generate \
-  -i ../backend/swagger/v1/swagger.yaml \
-  -g typescript-angular \
-  -o ./src/generated-api \
-  --additional-properties=ngVersion=20,npmName=hour-tracker-api,supportsES6=true,withInterfaces=true
-
-echo "TypeScript API client updated in src/generated-api/"
-```
-
-## Troubleshooting
-
-### Common Issues
-
-1. **CORS Errors**: Ensure CORS is properly configured in `backend/config/initializers/cors.rb`
-
-2. **API Client Generation Fails**:
-   - Check that the OpenAPI spec is valid YAML
-   - Ensure the OpenAPI generator CLI is properly installed
-
-3. **Type Errors in Frontend**:
-   - Regenerate the API client after backend changes
-   - Check that the OpenAPI spec matches your actual API responses
-
-4. **Backend Test Failures**:
-   - Ensure database is migrated: `rails db:migrate RAILS_ENV=test`
-   - Check that test data is properly set up
-
-### Getting Help
-
-- Check the Rails logs: `tail -f backend/log/development.log`
-- Check the Angular console for frontend errors
-- Validate your OpenAPI spec at [Swagger Editor](https://editor.swagger.io/)
+This is a time tracking application for managing:
+- User time entries across different positions
+- Hourly rates for different roles
+- Company and group organization
+- Comprehensive time reporting
 
 ## Contributing
 
 1. Create a feature branch
-2. Make your changes
-3. Update/add rswag specs for API changes
-4. Regenerate OpenAPI specs
-5. Update frontend API client if needed
-6. Run tests
-7. Submit a pull request
-
-## License
-
-[Add your license information here]
+2. Make changes and add/update tests
+3. Run `./scripts/update-api.sh` if you modified the API
+4. Test your changes locally
+5. Submit a pull request
