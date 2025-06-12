@@ -4,12 +4,7 @@ class Users::SessionsController < Devise::SessionsController
   def create
     super do |user|
       if user.persisted?
-        render json: {
-          user: {
-            id: user.id,
-            email: user.email
-          }
-        }, status: :ok and return
+        render json: { user: }, status: :ok and return
       end
     end
   end
