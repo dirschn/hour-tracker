@@ -58,6 +58,9 @@ gem 'rswag', '~> 2.16'
 
 gem "devise", "~> 4.9"
 
+# Authorization
+gem 'pundit', '~> 2.3'
+
 # OAuth support
 gem 'omniauth', '~> 2.1'
 gem 'omniauth-google-oauth2', '~> 1.1'
