@@ -25,7 +25,9 @@ users = []
     first_name: Faker::Name.first_name,
     last_name: Faker::Name.last_name,
     username: Faker::Internet.unique.username,
-    created_at: Faker::Time.between(from: 6.months.ago, to: 1.month.ago)
+    created_at: Faker::Time.between(from: 6.months.ago, to: 1.month.ago),
+    password: 'password',
+    password_confirmation: 'password'
   )
 end
 
