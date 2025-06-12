@@ -8,7 +8,7 @@ export const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'sign-in',
+    path: 'sign_in',
     loadComponent: () => import('./components/sign-in.component').then(m => m.SignInComponent)
   },
   {
