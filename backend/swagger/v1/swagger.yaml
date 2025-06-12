@@ -1985,13 +1985,13 @@ components:
           example: user@example.com
         first_name:
           type: string
-          example: John
+          example: Jane
         last_name:
           type: string
           example: Doe
         username:
           type: string
-          example: johndoe
+          example: janedoe
       required:
       - id
       - email

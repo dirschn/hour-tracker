@@ -14,6 +14,7 @@ export class App {
   protected title = 'frontend';
   errorMessage = '';
   currentUser: AuthenticatedUser | null = null;
+  isAuthenticated = false; // Cached authentication state
 
   constructor(
     private authService: AuthService,
@@ -21,11 +22,8 @@ export class App {
   ) {
     this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
+      this.isAuthenticated = user !== null; // Update cached state
     });
-  }
-
-  isAuthenticated(): boolean {
-    return this.authService.isAuthenticated();
   }
 
   signOut(): void {

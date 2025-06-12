@@ -70,6 +70,25 @@ RSpec.describe 'Authentication', type: :request do
             message: { type: :string, example: 'Logged out successfully' }
           }
 
+        before do
+          # Create and sign in a test user
+          @user = User.create!(
+            email: 'test@example.com',
+            password: 'password123',
+            first_name: 'Test',
+            last_name: 'User',
+            username: 'testuser'
+          )
+
+          # Sign in the user to establish a session
+          post '/sign_in', params: {
+            user: {
+              email: 'test@example.com',
+              password: 'password123'
+            }
+          }
+        end
+
         run_test!
       end
     end
