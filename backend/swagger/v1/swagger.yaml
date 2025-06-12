@@ -4,6 +4,70 @@ info:
   title: API V1
   version: v1
 paths:
+  "/sign_in":
+    post:
+      summary: sign in user
+      tags:
+      - Authentication
+      description: Authenticate user and create session
+      parameters: []
+      responses:
+        '200':
+          description: successful authentication
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/LoginResponse"
+        '401':
+          description: invalid credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                    - Invalid email or password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                      example: user@example.com
+                    password:
+                      type: string
+                      example: password123
+                  required:
+                  - email
+                  - password
+              required:
+              - user
+  "/sign_out":
+    delete:
+      summary: sign out user
+      tags:
+      - Authentication
+      description: Destroy user session
+      responses:
+        '200':
+          description: successful logout
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Logged out successfully
   "/companies":
     get:
       summary: list companies
@@ -1902,6 +1966,34 @@ components:
       - first_name
       - last_name
       - username
+      - email
+    LoginResponse:
+      type: object
+      properties:
+        user:
+          "$ref": "#/components/schemas/AuthenticatedUser"
+      required:
+      - user
+    AuthenticatedUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        email:
+          type: string
+          example: user@example.com
+        first_name:
+          type: string
+          example: John
+        last_name:
+          type: string
+          example: Doe
+        username:
+          type: string
+          example: johndoe
+      required:
+      - id
       - email
     Position:
       type: object

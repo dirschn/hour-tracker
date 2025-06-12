@@ -49,6 +49,21 @@ RSpec.configure do |config|
             },
             required: ['id', 'first_name', 'last_name', 'username', 'email']
           },
+          LoginResponse: {
+            type: :object,
+            properties: {
+              user: { '$ref': '#/components/schemas/AuthenticatedUser' }
+            },
+            required: ['user']
+          },
+          AuthenticatedUser: {
+            type: :object,
+            properties: {
+              id: { type: :integer, example: 1 },
+              email: { type: :string, example: 'user@example.com' },
+            },
+            required: ['id', 'email']
+          },
           Position: {
             type: :object,
             properties: {
