@@ -19,12 +19,7 @@ class Users::SessionsController < Devise::SessionsController
 
   def respond_with(resource, _opts = {})
     if resource.persisted?
-      render json: {
-        user: {
-          id: resource.id,
-          email: resource.email
-        },
-      }, status: :ok
+      render 'users/current', status: :ok
     else
       render json: { errors: resource.errors.full_messages }, status: :unprocessable_entity
     end
