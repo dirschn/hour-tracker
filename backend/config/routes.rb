@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  devise_for :users,
+             path: '/',
+             controllers: {
+               sessions: 'users/sessions',
+               registrations: 'users/registrations'
+             }
   mount Rswag::Ui::Engine => '/api-docs'
   mount Rswag::Api::Engine => '/api-docs'
   resources :time_entries

@@ -3,6 +3,8 @@ README.md
 api.base.service.ts
 api.module.ts
 api/api.ts
+api/authentication.service.ts
+api/authentication.serviceInterface.ts
 api/companies.service.ts
 api/companies.serviceInterface.ts
 api/groups.service.ts
@@ -21,6 +23,7 @@ configuration.ts
 encoder.ts
 git_push.sh
 index.ts
+model/authenticatedUser.ts
 model/companiesIdGet404Response.ts
 model/companiesIdPutRequest.ts
 model/companiesIdPutRequestCompany.ts
@@ -44,6 +47,7 @@ model/hourlyRatesIdPutRequestHourlyRate.ts
 model/hourlyRatesPost201Response.ts
 model/hourlyRatesPostRequest.ts
 model/hourlyRatesPostRequestHourlyRate.ts
+model/loginResponse.ts
 model/models.ts
 model/position.ts
 model/positionsIdGet404Response.ts
@@ -51,6 +55,10 @@ model/positionsIdPutRequest.ts
 model/positionsIdPutRequestPosition.ts
 model/positionsPostRequest.ts
 model/positionsPostRequestPosition.ts
+model/signInPost401Response.ts
+model/signInPostRequest.ts
+model/signInPostRequestUser.ts
+model/signOutDelete200Response.ts
 model/timeEntriesGet200ResponseInner.ts
 model/timeEntriesIdGet404Response.ts
 model/timeEntriesIdPut200Response.ts
