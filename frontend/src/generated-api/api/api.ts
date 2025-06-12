@@ -1,3 +1,6 @@
+export * from './authentication.service';
+import { AuthenticationService } from './authentication.service';
+export * from './authentication.serviceInterface';
 export * from './companies.service';
 import { CompaniesService } from './companies.service';
 export * from './companies.serviceInterface';
@@ -19,4 +22,4 @@ export * from './userPositions.serviceInterface';
 export * from './users.service';
 import { UsersService } from './users.service';
 export * from './users.serviceInterface';
-export const APIS = [CompaniesService, GroupsService, HourlyRatesService, PositionsService, TimeEntriesService, UserPositionsService, UsersService];
+export const APIS = [AuthenticationService, CompaniesService, GroupsService, HourlyRatesService, PositionsService, TimeEntriesService, UserPositionsService, UsersService];
