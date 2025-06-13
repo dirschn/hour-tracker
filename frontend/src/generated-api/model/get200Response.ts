@@ -14,7 +14,10 @@ import { Employment } from './employment';
 export interface Get200Response { 
     shifts: Array<Shift>;
     active_employments: Array<Employment>;
-    total_weekly_hours: number;
+    /**
+     * Object where each key is an employment ID (as a string) and each value is the total hours worked that week (float).
+     */
+    total_weekly_hours: { [key: string]: number; };
     current_shifts: Array<Shift>;
 }
 

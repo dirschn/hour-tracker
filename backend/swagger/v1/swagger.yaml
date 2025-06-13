@@ -92,8 +92,13 @@ paths:
                     items:
                       "$ref": "#/components/schemas/Employment"
                   total_weekly_hours:
-                    type: number
-                    format: float
+                    type: object
+                    description: Object where each key is an employment ID (as a string)
+                      and each value is the total hours worked that week (float).
+                    additionalProperties:
+                      type: number
+                      format: float
+                      example: 38.5
                   current_shifts:
                     type: array
                     items:
@@ -110,13 +115,13 @@ components:
       properties:
         id:
           type: integer
-          example: 21
+          example: 34
         name:
           type: string
-          example: Mayer Group
+          example: Predovic-Ryan
         description:
           type: string
-          example: Self-enabling multi-tasking open architecture
+          example: Adaptive optimal conglomeration
         created_at:
           type: string
           format: date-time
@@ -134,19 +139,19 @@ components:
           example: 1
         first_name:
           type: string
-          example: Sunday
+          example: Van
         last_name:
           type: string
-          example: Turner
+          example: Zboncak
         username:
           type: string
-          example: caridad.bechtelar
+          example: emile_windler
         email:
           type: string
-          example: vincent@hoppe.example
+          example: amiee_toy@schmidt.test
         name:
           type: string
-          example: Alton Stoltenberg DC
+          example: Eulah Effertz
         created_at:
           type: string
           format: date-time
@@ -167,16 +172,16 @@ components:
           example: 1
         email:
           type: string
-          example: chloe_jaskolski@hartmann.example
+          example: mao.bernhard@farrell.test
         first_name:
           type: string
-          example: Shante
+          example: Del
         last_name:
           type: string
-          example: Koch
+          example: Mraz
         username:
           type: string
-          example: denny
+          example: sabra
       required:
       - id
       - email
@@ -185,21 +190,21 @@ components:
       properties:
         id:
           type: integer
-          example: 89
+          example: 57
         user_id:
           type: integer
-          example: 50
+          example: 32
         position_id:
           type: integer
-          example: 85
+          example: 27
         start_date:
           type: string
           format: date
-          example: '2025-05-16'
+          example: '2025-05-23'
         end_date:
           type: string
           format: date
-          example: '2025-06-28'
+          example: '2025-07-07'
         created_at:
           type: string
           format: date-time
@@ -216,19 +221,19 @@ components:
       properties:
         id:
           type: integer
-          example: 49
+          example: 81
         title:
           type: string
-          example: Product Design Engineer
+          example: Future Consulting Supervisor
         description:
           type: string
-          example: User-friendly interactive internet solution
+          example: Devolved local conglomeration
         company_id:
           type: integer
-          example: 57
+          example: 85
         remote:
           type: boolean
-          example: false
+          example: true
         created_at:
           type: string
           format: date-time
@@ -244,26 +249,26 @@ components:
       properties:
         id:
           type: integer
-          example: 21
+          example: 89
         employment_id:
           type: integer
-          example: 78
+          example: 56
         date:
           type: string
           format: date
-          example: '2025-05-18'
+          example: '2025-05-22'
         start_time:
           type: string
           format: date-time
-          example: '2025-05-20 10:17:22 -0400'
+          example: '2025-06-11 19:42:45 -0400'
         end_time:
           type: string
           format: date-time
-          example: '2025-05-29 17:30:14 -0400'
+          example: '2025-05-22 18:30:04 -0400'
         hours:
           type: number
           format: float
-          example: 0.21
+          example: 6.78
         active:
           type: boolean
           example: true
