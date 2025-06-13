@@ -9,12 +9,14 @@
  */
 
 
-export interface Position { 
+export interface Shift { 
     id: number;
-    title: string;
-    description?: string;
-    company_id: number;
-    remote?: boolean;
+    employment_id: number;
+    date: string;
+    start_time: string;
+    end_time?: string;
+    hours?: number;
+    active?: boolean;
     created_at?: string;
     updated_at?: string;
 }

@@ -30,7 +30,6 @@ RSpec.configure do |config|
               id: { type: :integer, example: Faker::Number.number(digits: 2) },
               name: { type: :string, example: Faker::Company.name },
               description: { type: :string, example: Faker::Company.catch_phrase },
-              url: { type: :string, example: 'http://www.example.com/companies/1' },
               created_at: { type: :string, format: 'date-time' },
               updated_at: { type: :string, format: 'date-time' }
             },
@@ -45,7 +44,6 @@ RSpec.configure do |config|
               username: { type: :string, example: Faker::Internet.username },
               email: { type: :string, example: Faker::Internet.email },
               name: { type: :string, example: Faker::Name.name },
-              url: { type: :string, example: 'http://www.example.com/users/1' },
               created_at: { type: :string, format: 'date-time' },
               updated_at: { type: :string, format: 'date-time' }
             },
@@ -79,7 +77,6 @@ RSpec.configure do |config|
             type: :object,
             properties: {
               id: { type: :integer, example: Faker::Number.number(digits: 2) },
-              url: { type: :string, example: 'http://www.example.com/positions/1' },
               title: { type: :string, example: Faker::Job.title },
               description: { type: :string, example: Faker::Company.catch_phrase },
               company_id: { type: :integer, example: Faker::Number.number(digits: 2) },

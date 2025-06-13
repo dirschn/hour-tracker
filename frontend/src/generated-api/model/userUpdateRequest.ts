@@ -9,13 +9,12 @@
  */
 
 
-export interface Position { 
-    id: number;
-    title: string;
-    description?: string;
-    company_id: number;
-    remote?: boolean;
-    created_at?: string;
-    updated_at?: string;
+export interface UserUpdateRequest { 
+    first_name?: string;
+    last_name?: string;
+    username?: string;
+    email?: string;
+    password?: string;
+    password_confirmation?: string;
 }
 

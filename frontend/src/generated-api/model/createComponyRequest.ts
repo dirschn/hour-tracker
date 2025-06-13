@@ -9,13 +9,8 @@
  */
 
 
-export interface Position { 
-    id: number;
-    title: string;
+export interface CreateComponyRequest { 
+    name: string;
     description?: string;
-    company_id: number;
-    remote?: boolean;
-    created_at?: string;
-    updated_at?: string;
 }
 

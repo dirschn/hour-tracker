@@ -10,6 +10,8 @@ if [ ! -f "../backend/swagger/v1/swagger.yaml" ]; then
     exit 1
 fi
 
+rm -rf ./src/generated-api
+
 # Generate the TypeScript client
 npx @openapitools/openapi-generator-cli generate \
   -i ../backend/swagger/v1/swagger.yaml \

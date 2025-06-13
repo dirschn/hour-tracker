@@ -23,6 +23,8 @@ echo ""
 echo "🔄 Step 2: Updating frontend TypeScript client..."
 cd ../frontend
 
+rm -rf ./src/generated-api
+
 npx @openapitools/openapi-generator-cli generate \
   -i ../backend/swagger/v1/swagger.yaml \
   -g typescript-angular \

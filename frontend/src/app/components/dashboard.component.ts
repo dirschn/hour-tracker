@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { DashboardService } from '../../generated-api';
 import { AuthenticatedUser } from '../../generated-api';
 
 @Component({
@@ -9,132 +10,96 @@ import { AuthenticatedUser } from '../../generated-api';
   standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
-    <div class="min-vh-100 bg-light">
-      <!-- Main Content -->
-      <div class="container-fluid py-4">
-        <!-- Page Header -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-          <div>
-            <h1 class="h3 mb-1">Dashboard</h1>
-            <p class="text-muted mb-0">Welcome back, {{ currentUser?.first_name }}!</p>
-          </div>
-          <div class="text-end">
-            <small class="text-muted">{{ getCurrentDate() }}</small>
+    <div class="container py-4">
+      <h1 class="h3 mb-3">Dashboard</h1>
+      <div *ngIf="dashboardData; else loading">
+        <div class="mb-4">
+          <div class="card text-center bg-light mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Total Weekly Hours</h5>
+              <span class="display-4 fw-bold">{{ dashboardData.total_weekly_hours }}</span>
+            </div>
           </div>
         </div>
-
-        <!-- Dashboard Cards -->
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
-          <div class="col">
-            <div class="card border-0 shadow-sm h-100 dashboard-card" (click)="navigateTo('/companies')">
-              <div class="card-body text-center p-4">
-                <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
-                  <i class="bi bi-building fs-3 text-primary"></i>
-                </div>
-                <h5 class="card-title mb-2">Companies</h5>
-                <p class="card-text text-muted">Manage your companies and clients</p>
-                <div class="mt-auto">
-                  <span class="btn btn-outline-primary btn-sm">View Companies</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="card border-0 shadow-sm h-100 dashboard-card" (click)="navigateTo('/positions')">
-              <div class="card-body text-center p-4">
-                <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
-                  <i class="bi bi-briefcase fs-3 text-success"></i>
-                </div>
-                <h5 class="card-title mb-2">Positions</h5>
-                <p class="card-text text-muted">Manage job positions and roles</p>
-                <div class="mt-auto">
-                  <span class="btn btn-outline-success btn-sm">View Positions</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="card border-0 shadow-sm h-100 dashboard-card">
-              <div class="card-body text-center p-4">
-                <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
-                  <i class="bi bi-clock-history fs-3 text-warning"></i>
-                </div>
-                <h5 class="card-title mb-2">Shifts</h5>
-                <p class="card-text text-muted">Track and manage your time</p>
-                <div class="mt-auto">
-                  <span class="btn btn-outline-warning btn-sm">Coming Soon</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="card border-0 shadow-sm h-100 dashboard-card">
-              <div class="card-body text-center p-4">
-                <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
-                  <i class="bi bi-graph-up fs-3 text-info"></i>
-                </div>
-                <h5 class="card-title mb-2">Reports</h5>
-                <p class="card-text text-muted">View analytics and reports</p>
-                <div class="mt-auto">
-                  <span class="btn btn-outline-info btn-sm">Coming Soon</span>
+        <div class="mb-4">
+          <h5>Active Employments</h5>
+          <div class="row g-3">
+            <div class="col-md-6 col-lg-4" *ngFor="let emp of dashboardData.active_employments">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h6 class="card-subtitle mb-2 text-muted">Employment #{{ emp.id }}</h6>
+                  <div><strong>Position:</strong> {{ emp.position_id }}</div>
+                  <div><strong>Start Date:</strong> {{ emp.start_date | date }}</div>
+                  <div><strong>Employment ID:</strong> {{ emp.id }}</div>
+                  <div><strong>User ID:</strong> {{ emp.user_id }}</div>
+                  <div><strong>Created:</strong> {{ emp.created_at | date:'short' }}</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-        <!-- Quick Actions -->
-        <div class="card border-0 shadow-sm mt-5">
-          <div class="card-header bg-white">
-            <h5 class="card-title mb-0">Quick Actions</h5>
+        <div class="mb-4">
+          <h5>Shifts</h5>
+          <div class="row g-3">
+            <div class="col-md-6 col-lg-4" *ngFor="let shift of dashboardData.shifts">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h6 class="card-subtitle mb-2 text-muted">Shift #{{ shift.id }}</h6>
+                  <div><strong>Date:</strong> {{ shift.date | date }}</div>
+                  <div><strong>Start:</strong> {{ shift.start_time | date:'shortTime' }}</div>
+                  <div><strong>End:</strong> {{ shift.end_time ? (shift.end_time | date:'shortTime') : '—' }}</div>
+                  <div><strong>Hours:</strong> <span class="badge bg-primary">{{ shift.hours }}</span></div>
+                  <div><strong>Status:</strong> <span [ngClass]="shift.active ? 'badge bg-success' : 'badge bg-secondary'">{{ shift.active ? 'Active' : 'Completed' }}</span></div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="card-body">
-            <div class="row row-cols-auto g-3">
-              <div class="col">
-                <button class="btn btn-primary" (click)="navigateTo('/companies/new')">
-                  <i class="bi bi-plus-circle me-2"></i>Add Company
-                </button>
-              </div>
-              <div class="col">
-                <button class="btn btn-success" (click)="navigateTo('/positions/new')">
-                  <i class="bi bi-plus-circle me-2"></i>Add Position
-                </button>
-              </div>
-              <div class="col">
-                <button class="btn btn-info" (click)="navigateTo('/users/new')">
-                  <i class="bi bi-plus-circle me-2"></i>Add User
-                </button>
+        </div>
+        <div class="mb-4">
+          <h5>Current Shifts</h5>
+          <div class="row g-3">
+            <div class="col-md-6 col-lg-4" *ngFor="let shift of dashboardData.current_shifts">
+              <div class="card border-success h-100">
+                <div class="card-body">
+                  <h6 class="card-subtitle mb-2 text-success">Current Shift #{{ shift.id }}</h6>
+                  <div><strong>Date:</strong> {{ shift.date | date }}</div>
+                  <div><strong>Start:</strong> {{ shift.start_time | date:'shortTime' }}</div>
+                  <div><strong>Hours:</strong> <span class="badge bg-success">{{ shift.hours }}</span></div>
+                  <div><strong>Status:</strong> <span class="badge bg-success">Active</span></div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <ng-template #loading>
+        <div>Loading dashboard data...</div>
+      </ng-template>
     </div>
   `,
-  styles: [`
-    .dashboard-card {
-      cursor: pointer;
-      transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    }
-
-    .dashboard-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-    }
-  `]
+  styles: [``]
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   currentUser: AuthenticatedUser | null = null;
+  dashboardData: any = null;
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private dashboardService: DashboardService
   ) {
     this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
+    });
+  }
+
+  ngOnInit(): void {
+    this.dashboardService.rootGet().subscribe({
+      next: (data) => this.dashboardData = data,
+      error: (err) => {
+        console.error('Failed to load dashboard data', err);
+        this.dashboardData = null;
+      }
     });
   }
 
