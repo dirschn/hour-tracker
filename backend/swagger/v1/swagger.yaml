@@ -1005,12 +1005,12 @@ paths:
           description: position deleted
         '404':
           description: position not found
-  "/time_entries":
+  "/shifts":
     get:
-      summary: list time entries
+      summary: list shifts
       tags:
-      - Time Entries
-      description: Retrieve all time entries
+      - Shifts
+      description: Retrieve all shifts
       responses:
         '200':
           description: successful
@@ -1058,14 +1058,14 @@ paths:
                   - minutes_worked
                   - date
     post:
-      summary: create time entry
+      summary: create shift
       tags:
-      - Time Entries
-      description: Create a new time entry
+      - Shifts
+      description: Create a new shift
       parameters: []
       responses:
         '201':
-          description: time entry created
+          description: shift created
           content:
             application/json:
               schema:
@@ -1120,7 +1120,7 @@ paths:
             schema:
               type: object
               properties:
-                time_entry:
+                shift:
                   type: object
                   properties:
                     employment_id:
@@ -1150,20 +1150,20 @@ paths:
                   - minutes_worked
                   - date
               required:
-              - time_entry
-  "/time_entries/{id}":
+              - shift
+  "/shifts/{id}":
     parameters:
     - name: id
       in: path
-      description: time entry id
+      description: shift id
       required: true
       schema:
         type: string
     get:
-      summary: show time entry
+      summary: show shift
       tags:
-      - Time Entries
-      description: Retrieve a specific time entry
+      - Shifts
+      description: Retrieve a specific shift
       responses:
         '200':
           description: successful
@@ -1203,7 +1203,7 @@ paths:
                     type: string
                     format: date-time
         '404':
-          description: time entry not found
+          description: shift not found
           content:
             application/json:
               schema:
@@ -1211,16 +1211,16 @@ paths:
                 properties:
                   error:
                     type: string
-                    example: Time entry not found
+                    example: Shift not found
     patch:
-      summary: update time entry
+      summary: update shift
       tags:
-      - Time Entries
-      description: Update a time entry
+      - Shifts
+      description: Update a shift
       parameters: []
       responses:
         '200':
-          description: time entry updated
+          description: shift updated
           content:
             application/json:
               schema:
@@ -1270,7 +1270,7 @@ paths:
                       items:
                         type: string
         '404':
-          description: time entry not found
+          description: shift not found
           content:
             application/json:
               schema:
@@ -1278,14 +1278,14 @@ paths:
                 properties:
                   error:
                     type: string
-                    example: Time entry not found
+                    example: Shift not found
       requestBody:
         content:
           application/json:
             schema:
               type: object
               properties:
-                time_entry:
+                shift:
                   type: object
                   properties:
                     minutes_worked:
@@ -1300,16 +1300,16 @@ paths:
                       example: Updated work on feature development
                       nullable: true
               required:
-              - time_entry
+              - shift
     put:
-      summary: update time entry
+      summary: update shift
       tags:
-      - Time Entries
-      description: Update a time entry (PUT)
+      - Shifts
+      description: Update a shift (PUT)
       parameters: []
       responses:
         '200':
-          description: time entry updated
+          description: shift updated
           content:
             application/json:
               schema:
@@ -1351,7 +1351,7 @@ paths:
             schema:
               type: object
               properties:
-                time_entry:
+                shift:
                   type: object
                   properties:
                     minutes_worked:
@@ -1366,23 +1366,23 @@ paths:
                       example: Updated work on feature development
                       nullable: true
               required:
-              - time_entry
+              - shift
     delete:
-      summary: delete time entry
+      summary: delete shift
       tags:
-      - Time Entries
-      description: Delete a time entry
+      - Shifts
+      description: Delete a shift
       responses:
         '204':
-          description: time entry deleted
+          description: shift deleted
         '404':
-          description: time entry not found
+          description: shift not found
   "/employments":
     get:
-      summary: list user positions
+      summary: list employments
       tags:
-      - User Positions
-      description: Retrieve all user positions
+      - Employments
+      description: Retrieve all employments
       responses:
         '200':
           description: successful
@@ -1423,14 +1423,14 @@ paths:
                   - position_id
                   - start_date
     post:
-      summary: create user position
+      summary: create employment
       tags:
-      - User Positions
-      description: Create a new user position
+      - Employments
+      description: Create a new employment
       parameters: []
       responses:
         '201':
-          description: user position created
+          description: employment created
           content:
             application/json:
               schema:
@@ -1507,15 +1507,15 @@ paths:
     parameters:
     - name: id
       in: path
-      description: user position id
+      description: employment id
       required: true
       schema:
         type: string
     get:
-      summary: show user position
+      summary: show employment
       tags:
-      - User Positions
-      description: Retrieve a specific user position
+      - Employments
+      description: Retrieve a specific employment
       responses:
         '200':
           description: successful
@@ -1549,7 +1549,7 @@ paths:
                     type: string
                     format: date-time
         '404':
-          description: user position not found
+          description: employment not found
           content:
             application/json:
               schema:
@@ -1557,16 +1557,16 @@ paths:
                 properties:
                   error:
                     type: string
-                    example: User position not found
+                    example: Employment not found
     patch:
-      summary: update user position
+      summary: update employment
       tags:
-      - User Positions
-      description: Update a user position
+      - Employments
+      description: Update a employment
       parameters: []
       responses:
         '200':
-          description: user position updated
+          description: employment updated
           content:
             application/json:
               schema:
@@ -1610,7 +1610,7 @@ paths:
                       items:
                         type: string
         '404':
-          description: user position not found
+          description: employment not found
           content:
             application/json:
               schema:
@@ -1618,7 +1618,7 @@ paths:
                 properties:
                   error:
                     type: string
-                    example: User position not found
+                    example: Employment not found
       requestBody:
         content:
           application/json:
@@ -1640,14 +1640,14 @@ paths:
               required:
               - employment
     put:
-      summary: update user position
+      summary: update employment
       tags:
-      - User Positions
-      description: Update a user position (PUT)
+      - Employments
+      description: Update a employment (PUT)
       parameters: []
       responses:
         '200':
-          description: user position updated
+          description: employment updated
           content:
             application/json:
               schema:
@@ -1698,15 +1698,15 @@ paths:
               required:
               - employment
     delete:
-      summary: delete user position
+      summary: delete employment
       tags:
-      - User Positions
-      description: Delete a user position
+      - Employments
+      description: Delete a employment
       responses:
         '204':
-          description: user position deleted
+          description: employment deleted
         '404':
-          description: user position not found
+          description: employment not found
   "/users":
     get:
       summary: list users

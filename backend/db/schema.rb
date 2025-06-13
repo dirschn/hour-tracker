@@ -69,7 +69,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_12_160100) do
     t.index ["name", "company_id"], name: "index_roles_on_name_and_company_id", unique: true
   end
 
-  create_table "time_entries", force: :cascade do |t|
+  create_table "shifts", force: :cascade do |t|
     t.integer "employment_id", null: false
     t.datetime "start_time", null: false
     t.datetime "end_time"
@@ -78,7 +78,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_12_160100) do
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["employment_id"], name: "index_time_entries_on_employment_id"
+    t.index ["employment_id"], name: "index_shifts_on_employment_id"
   end
 
   create_table "user_roles", force: :cascade do |t|
@@ -114,7 +114,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_12_160100) do
   add_foreign_key "hourly_rates", "employments"
   add_foreign_key "positions", "companies"
   add_foreign_key "roles", "companies"
-  add_foreign_key "time_entries", "employments"
+  add_foreign_key "shifts", "employments"
   add_foreign_key "user_roles", "companies"
   add_foreign_key "user_roles", "roles"
   add_foreign_key "user_roles", "users"

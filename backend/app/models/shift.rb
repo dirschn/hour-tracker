@@ -1,4 +1,4 @@
-class TimeEntry < ApplicationRecord
+class Shift < ApplicationRecord
   belongs_to :employment
 
   validates :date, :start_time, presence: true

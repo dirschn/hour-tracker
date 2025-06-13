@@ -7,7 +7,7 @@ class User < ApplicationRecord
   has_many :employments, dependent: :destroy
   has_many :positions, through: :employments
   has_many :companies, through: :positions
-  has_many :time_entries, through: :employments
+  has_many :shifts, through: :employments
 
   validates :first_name, :last_name, :username, :email, presence: true
   validates :email, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }

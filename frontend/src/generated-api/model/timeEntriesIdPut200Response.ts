@@ -9,7 +9,7 @@
  */
 
 
-export interface TimeEntriesIdPut200Response {
+export interface ShiftsIdPut200Response {
     id?: number;
     employment_id?: number;
     user_id?: number;

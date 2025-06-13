@@ -186,7 +186,7 @@ cd frontend && npm install
 ## Project Goals
 
 This is a time tracking application for managing:
-- User time entries across different positions
+- User shifts across different positions
 - Hourly rates for different roles
 - Company and group organization
 - Comprehensive time reporting

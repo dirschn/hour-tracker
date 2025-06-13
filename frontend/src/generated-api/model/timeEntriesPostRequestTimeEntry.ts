@@ -9,7 +9,7 @@
  */
 
 
-export interface TimeEntriesPostRequestTimeEntry {
+export interface ShiftsPostRequestShift {
     employment_id: number;
     user_id: number;
     group_id?: number | null;

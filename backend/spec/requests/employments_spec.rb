@@ -2,9 +2,9 @@ require 'swagger_helper'
 
 RSpec.describe 'employments', type: :request do
   path '/employments' do
-    get('list user positions') do
-      tags 'User Positions'
-      description 'Retrieve all user positions'
+    get('list employments') do
+      tags 'Employments'
+      description 'Retrieve all employments'
       produces 'application/json'
 
       response(200, 'successful') do
@@ -27,9 +27,9 @@ RSpec.describe 'employments', type: :request do
       end
     end
 
-    post('create user position') do
-      tags 'User Positions'
-      description 'Create a new user position'
+    post('create employment') do
+      tags 'Employments'
+      description 'Create a new employment'
       consumes 'application/json'
       produces 'application/json'
 
@@ -50,7 +50,7 @@ RSpec.describe 'employments', type: :request do
         required: ['employment']
       }
 
-      response(201, 'user position created') do
+      response(201, 'employment created') do
         schema type: :object,
           properties: {
             id: { type: :integer, example: 1 },
@@ -85,11 +85,11 @@ RSpec.describe 'employments', type: :request do
   end
 
   path '/employments/{id}' do
-    parameter name: 'id', in: :path, type: :string, description: 'user position id'
+    parameter name: 'id', in: :path, type: :string, description: 'employment id'
 
-    get('show user position') do
-      tags 'User Positions'
-      description 'Retrieve a specific user position'
+    get('show employment') do
+      tags 'Employments'
+      description 'Retrieve a specific employment'
       produces 'application/json'
 
       response(200, 'successful') do
@@ -108,10 +108,10 @@ RSpec.describe 'employments', type: :request do
         run_test!
       end
 
-      response(404, 'user position not found') do
+      response(404, 'employment not found') do
         schema type: :object,
           properties: {
-            error: { type: :string, example: 'User position not found' }
+            error: { type: :string, example: 'Employment not found' }
           }
 
         let(:id) { 'invalid' }
@@ -119,9 +119,9 @@ RSpec.describe 'employments', type: :request do
       end
     end
 
-    patch('update user position') do
-      tags 'User Positions'
-      description 'Update a user position'
+    patch('update employment') do
+      tags 'Employments'
+      description 'Update a employment'
       consumes 'application/json'
       produces 'application/json'
 
@@ -139,7 +139,7 @@ RSpec.describe 'employments', type: :request do
         required: ['employment']
       }
 
-      response(200, 'user position updated') do
+      response(200, 'employment updated') do
         schema type: :object,
           properties: {
             id: { type: :integer, example: 1 },
@@ -173,10 +173,10 @@ RSpec.describe 'employments', type: :request do
         run_test!
       end
 
-      response(404, 'user position not found') do
+      response(404, 'employment not found') do
         schema type: :object,
           properties: {
-            error: { type: :string, example: 'User position not found' }
+            error: { type: :string, example: 'Employment not found' }
           }
 
         let(:id) { 'invalid' }
@@ -185,9 +185,9 @@ RSpec.describe 'employments', type: :request do
       end
     end
 
-    put('update user position') do
-      tags 'User Positions'
-      description 'Update a user position (PUT)'
+    put('update employment') do
+      tags 'Employments'
+      description 'Update a employment (PUT)'
       consumes 'application/json'
       produces 'application/json'
 
@@ -205,7 +205,7 @@ RSpec.describe 'employments', type: :request do
         required: ['employment']
       }
 
-      response(200, 'user position updated') do
+      response(200, 'employment updated') do
         schema type: :object,
           properties: {
             id: { type: :integer, example: 1 },
@@ -223,19 +223,19 @@ RSpec.describe 'employments', type: :request do
       end
     end
 
-    delete('delete user position') do
-      tags 'User Positions'
-      description 'Delete a user position'
+    delete('delete employment') do
+      tags 'Employments'
+      description 'Delete a employment'
 
-      response(204, 'user position deleted') do
+      response(204, 'employment deleted') do
         let(:id) { '1' }
         run_test!
       end
 
-      response(404, 'user position not found') do
+      response(404, 'employment not found') do
         schema type: :object,
           properties: {
-            error: { type: :string, example: 'User position not found' }
+            error: { type: :string, example: 'Employment not found' }
           }
 
         let(:id) { 'invalid' }

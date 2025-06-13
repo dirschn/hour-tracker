@@ -1,10 +1,10 @@
 require 'swagger_helper'
 
-RSpec.describe 'time_entries', type: :request do
-  path '/time_entries' do
-    get('list time entries') do
-      tags 'Time Entries'
-      description 'Retrieve all time entries'
+RSpec.describe 'shifts', type: :request do
+  path '/shifts' do
+    get('list shifts') do
+      tags 'Shifts'
+      description 'Retrieve all shifts'
       produces 'application/json'
 
       response(200, 'successful') do
@@ -29,16 +29,16 @@ RSpec.describe 'time_entries', type: :request do
       end
     end
 
-    post('create time entry') do
-      tags 'Time Entries'
-      description 'Create a new time entry'
+    post('create shift') do
+      tags 'Shifts'
+      description 'Create a new shift'
       consumes 'application/json'
       produces 'application/json'
 
-      parameter name: :time_entry, in: :body, schema: {
+      parameter name: :shift, in: :body, schema: {
         type: :object,
         properties: {
-          time_entry: {
+          shift: {
             type: :object,
             properties: {
               employment_id: { type: :integer, example: 1 },
@@ -51,10 +51,10 @@ RSpec.describe 'time_entries', type: :request do
             required: ['employment_id', 'user_id', 'minutes_worked', 'date']
           }
         },
-        required: ['time_entry']
+        required: ['shift']
       }
 
-      response(201, 'time entry created') do
+      response(201, 'shift created') do
         schema type: :object,
           properties: {
             id: { type: :integer, example: 1 },
@@ -68,7 +68,7 @@ RSpec.describe 'time_entries', type: :request do
             updated_at: { type: :string, format: 'date-time' }
           }
 
-        let(:time_entry) { { time_entry: { employment_id: 1, user_id: 1, minutes_worked: 480, date: '2024-01-15' } } }
+        let(:shift) { { shift: { employment_id: 1, user_id: 1, minutes_worked: 480, date: '2024-01-15' } } }
         run_test!
       end
 
@@ -84,18 +84,18 @@ RSpec.describe 'time_entries', type: :request do
             }
           }
 
-        let(:time_entry) { { time_entry: { employment_id: nil, minutes_worked: 1500, date: '' } } }
+        let(:shift) { { shift: { employment_id: nil, minutes_worked: 1500, date: '' } } }
         run_test!
       end
     end
   end
 
-  path '/time_entries/{id}' do
-    parameter name: 'id', in: :path, type: :string, description: 'time entry id'
+  path '/shifts/{id}' do
+    parameter name: 'id', in: :path, type: :string, description: 'shift id'
 
-    get('show time entry') do
-      tags 'Time Entries'
-      description 'Retrieve a specific time entry'
+    get('show shift') do
+      tags 'Shifts'
+      description 'Retrieve a specific shift'
       produces 'application/json'
 
       response(200, 'successful') do
@@ -116,10 +116,10 @@ RSpec.describe 'time_entries', type: :request do
         run_test!
       end
 
-      response(404, 'time entry not found') do
+      response(404, 'shift not found') do
         schema type: :object,
           properties: {
-            error: { type: :string, example: 'Time entry not found' }
+            error: { type: :string, example: 'Shift not found' }
           }
 
         let(:id) { 'invalid' }
@@ -127,16 +127,16 @@ RSpec.describe 'time_entries', type: :request do
       end
     end
 
-    patch('update time entry') do
-      tags 'Time Entries'
-      description 'Update a time entry'
+    patch('update shift') do
+      tags 'Shifts'
+      description 'Update a shift'
       consumes 'application/json'
       produces 'application/json'
 
-      parameter name: :time_entry, in: :body, schema: {
+      parameter name: :shift, in: :body, schema: {
         type: :object,
         properties: {
-          time_entry: {
+          shift: {
             type: :object,
             properties: {
               minutes_worked: { type: :integer, example: 520 },
@@ -145,10 +145,10 @@ RSpec.describe 'time_entries', type: :request do
             }
           }
         },
-        required: ['time_entry']
+        required: ['shift']
       }
 
-      response(200, 'time entry updated') do
+      response(200, 'shift updated') do
         schema type: :object,
           properties: {
             id: { type: :integer, example: 1 },
@@ -163,7 +163,7 @@ RSpec.describe 'time_entries', type: :request do
           }
 
         let(:id) { '1' }
-        let(:time_entry) { { time_entry: { minutes_worked: 520, date: '2024-01-16', notes: 'Updated work on feature development' } } }
+        let(:shift) { { shift: { minutes_worked: 520, date: '2024-01-16', notes: 'Updated work on feature development' } } }
         run_test!
       end
 
@@ -180,32 +180,32 @@ RSpec.describe 'time_entries', type: :request do
           }
 
         let(:id) { '1' }
-        let(:time_entry) { { time_entry: { minutes_worked: 1500 } } }
+        let(:shift) { { shift: { minutes_worked: 1500 } } }
         run_test!
       end
 
-      response(404, 'time entry not found') do
+      response(404, 'shift not found') do
         schema type: :object,
           properties: {
-            error: { type: :string, example: 'Time entry not found' }
+            error: { type: :string, example: 'Shift not found' }
           }
 
         let(:id) { 'invalid' }
-        let(:time_entry) { { time_entry: { minutes_worked: 520 } } }
+        let(:shift) { { shift: { minutes_worked: 520 } } }
         run_test!
       end
     end
 
-    put('update time entry') do
-      tags 'Time Entries'
-      description 'Update a time entry (PUT)'
+    put('update shift') do
+      tags 'Shifts'
+      description 'Update a shift (PUT)'
       consumes 'application/json'
       produces 'application/json'
 
-      parameter name: :time_entry, in: :body, schema: {
+      parameter name: :shift, in: :body, schema: {
         type: :object,
         properties: {
-          time_entry: {
+          shift: {
             type: :object,
             properties: {
               minutes_worked: { type: :integer, example: 520 },
@@ -214,10 +214,10 @@ RSpec.describe 'time_entries', type: :request do
             }
           }
         },
-        required: ['time_entry']
+        required: ['shift']
       }
 
-      response(200, 'time entry updated') do
+      response(200, 'shift updated') do
         schema type: :object,
           properties: {
             id: { type: :integer, example: 1 },
@@ -232,24 +232,24 @@ RSpec.describe 'time_entries', type: :request do
           }
 
         let(:id) { '1' }
-        let(:time_entry) { { time_entry: { minutes_worked: 520, date: '2024-01-16', notes: 'Updated work on feature development' } } }
+        let(:shift) { { shift: { minutes_worked: 520, date: '2024-01-16', notes: 'Updated work on feature development' } } }
         run_test!
       end
     end
 
-    delete('delete time entry') do
-      tags 'Time Entries'
-      description 'Delete a time entry'
+    delete('delete shift') do
+      tags 'Shifts'
+      description 'Delete a shift'
 
-      response(204, 'time entry deleted') do
+      response(204, 'shift deleted') do
         let(:id) { '1' }
         run_test!
       end
 
-      response(404, 'time entry not found') do
+      response(404, 'shift not found') do
         schema type: :object,
           properties: {
-            error: { type: :string, example: 'Time entry not found' }
+            error: { type: :string, example: 'Shift not found' }
           }
 
         let(:id) { 'invalid' }

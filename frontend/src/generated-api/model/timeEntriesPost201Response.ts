@@ -9,7 +9,7 @@
  */
 
 
-export interface TimeEntriesPost201Response {
+export interface ShiftsPost201Response {
     id?: number;
     employment_id?: number;
     user_id?: number;

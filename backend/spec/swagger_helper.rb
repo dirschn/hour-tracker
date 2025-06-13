@@ -89,7 +89,7 @@ RSpec.configure do |config|
             },
             required: ['id', 'title', 'company_id']
           },
-          TimeEntry: {
+          Shift: {
             type: :object,
             properties: {
               id: { type: :integer, example: Faker::Number.number(digits: 2) },

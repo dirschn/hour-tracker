@@ -1,2 +1,0 @@
-class TimeEntriesController < ApplicationController
-end

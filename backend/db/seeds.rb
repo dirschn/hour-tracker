@@ -9,7 +9,7 @@ puts 'Seeding database...'
 # Clear existing data in development
 if Rails.env.development?
   puts 'Clearing existing data...'
-  TimeEntry.destroy_all
+  Shift.destroy_all
   Employment.destroy_all
   Position.destroy_all
   Company.destroy_all
@@ -59,8 +59,8 @@ companies.each do |company|
   end
 end
 
-# Create User Positions (assign users to positions)
-puts 'Creating user positions...'
+# Create Employments (assign users to positions)
+puts 'Creating employments...'
 employments = []
 users.each do |user|
   # Each user has 1-3 positions
@@ -90,8 +90,8 @@ users.each do |user|
   end
 end
 
-# Create Time Entries
-puts 'Creating time entries...'
+# Create Shifts
+puts 'Creating shifts...'
 employments.each do |employment|
   next if employment.end_date && employment.end_date < 2.months.ago
 
@@ -113,7 +113,7 @@ employments.each do |employment|
                      [2, 3, 4, 5].sample + rand(0.0..1.0).round(2)
             end
 
-    TimeEntry.create!(
+    Shift.create!(
       employment: employment,
       date: date,
       start_time: date + rand(6..10).hours + rand(0..59).minutes,
@@ -136,7 +136,7 @@ end
 
 # Create some overtime and varied schedules
 puts 'Adding varied work patterns...'
-recent_entries = TimeEntry.where(date: 4.weeks.ago..Date.current)
+recent_entries = Shift.where(date: 4.weeks.ago..Date.current)
 
 # Add some longer days (overtime)
 recent_entries.sample(recent_entries.count / 10).each do |entry|
@@ -158,18 +158,18 @@ puts "\nSeed data created successfully!"
 puts "#{User.count} users created"
 puts "#{Company.count} companies created"
 puts "#{Position.count} positions created"
-puts "#{Employment.count} user positions created"
-puts "#{TimeEntry.count} time entries created"
+puts "#{Employment.count} employments created"
+puts "#{Shift.count} shifts created"
 
 # Display some sample data
 puts "\nSample user with their positions and recent hours:"
-sample_user = User.includes(:positions, :companies, :time_entries).first
+sample_user = User.includes(:positions, :companies, :shifts).first
 puts "#{sample_user.first_name} #{sample_user.last_name} (#{sample_user.email})"
 puts "Companies: #{sample_user.companies.pluck(:name).join(', ')}"
 puts "Positions: #{sample_user.positions.pluck(:title).join(', ')}"
 
-recent_hours = sample_user.time_entries.where(date: 1.week.ago..Date.current).map(&:hours_worked).sum
+recent_hours = sample_user.shifts.where(date: 1.week.ago..Date.current).map(&:hours_worked).sum
 puts "Hours worked in the last week: #{recent_hours}"
 
-total_hours = sample_user.time_entries.map(&:hours_worked).sum
+total_hours = sample_user.shifts.map(&:hours_worked).sum
 puts "Total hours tracked: #{total_hours}"

@@ -61,7 +61,7 @@ import { AuthenticatedUser } from '../../generated-api';
                 <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
                   <i class="bi bi-clock-history fs-3 text-warning"></i>
                 </div>
-                <h5 class="card-title mb-2">Time Entries</h5>
+                <h5 class="card-title mb-2">Shifts</h5>
                 <p class="card-text text-muted">Track and manage your time</p>
                 <div class="mt-auto">
                   <span class="btn btn-outline-warning btn-sm">Coming Soon</span>

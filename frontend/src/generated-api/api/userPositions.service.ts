@@ -51,8 +51,8 @@ export class UserPositionsService extends BaseService implements UserPositionsSe
     }
 
     /**
-     * list user positions
-     * Retrieve all user positions
+     * list employments
+     * Retrieve all employments
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -102,9 +102,9 @@ export class UserPositionsService extends BaseService implements UserPositionsSe
     }
 
     /**
-     * delete user position
-     * Delete a user position
-     * @param id user position id
+     * delete employment
+     * Delete a employment
+     * @param id employment id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -156,9 +156,9 @@ export class UserPositionsService extends BaseService implements UserPositionsSe
     }
 
     /**
-     * show user position
-     * Retrieve a specific user position
-     * @param id user position id
+     * show employment
+     * Retrieve a specific employment
+     * @param id employment id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -211,9 +211,9 @@ export class UserPositionsService extends BaseService implements UserPositionsSe
     }
 
     /**
-     * update user position
-     * Update a user position
-     * @param id user position id
+     * update employment
+     * Update a employment
+     * @param id employment id
      * @param userPositionsIdPutRequest
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -277,9 +277,9 @@ export class UserPositionsService extends BaseService implements UserPositionsSe
     }
 
     /**
-     * update user position
-     * Update a user position (PUT)
-     * @param id user position id
+     * update employment
+     * Update a employment (PUT)
+     * @param id employment id
      * @param userPositionsIdPutRequest
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -343,8 +343,8 @@ export class UserPositionsService extends BaseService implements UserPositionsSe
     }
 
     /**
-     * create user position
-     * Create a new user position
+     * create employment
+     * Create a new employment
      * @param userPositionsPostRequest
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
