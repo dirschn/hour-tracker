@@ -108,6 +108,70 @@ paths:
                 - active_employments
                 - total_weekly_hours
                 - current_shifts
+  "/employments/{id}/clock_in":
+    post:
+      summary: clock in employment
+      tags:
+      - Employments
+      description: Clock in for a specific employment
+      parameters:
+      - name: id
+        in: path
+        description: Employment ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful clock in
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Shift"
+        '422':
+          description: unprocessable entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: string
+                    example: Already clocked in for this employment
+        '401':
+          description: unauthorized
+  "/employments/{id}/clock_out":
+    post:
+      summary: clock out employment
+      tags:
+      - Employments
+      description: Clock out for a specific employment
+      parameters:
+      - name: id
+        in: path
+        description: Employment ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful clock out
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Shift"
+        '422':
+          description: unprocessable entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: string
+                    example: No active shift to clock out of
+        '401':
+          description: unauthorized
 components:
   schemas:
     Company:
@@ -115,13 +179,13 @@ components:
       properties:
         id:
           type: integer
-          example: 34
+          example: 69
         name:
           type: string
-          example: Predovic-Ryan
+          example: Jerde LLC
         description:
           type: string
-          example: Adaptive optimal conglomeration
+          example: Devolved bifurcated capability
         created_at:
           type: string
           format: date-time
@@ -139,19 +203,19 @@ components:
           example: 1
         first_name:
           type: string
-          example: Van
+          example: Markus
         last_name:
           type: string
-          example: Zboncak
+          example: Will
         username:
           type: string
-          example: emile_windler
+          example: salvatore_beer
         email:
           type: string
-          example: amiee_toy@schmidt.test
+          example: scot.mckenzie@jenkins.test
         name:
           type: string
-          example: Eulah Effertz
+          example: Shasta Block
         created_at:
           type: string
           format: date-time
@@ -172,16 +236,16 @@ components:
           example: 1
         email:
           type: string
-          example: mao.bernhard@farrell.test
+          example: quentin@labadie.test
         first_name:
           type: string
-          example: Del
+          example: Gilda
         last_name:
           type: string
-          example: Mraz
+          example: Denesik
         username:
           type: string
-          example: sabra
+          example: miles_herzog
       required:
       - id
       - email
@@ -190,13 +254,13 @@ components:
       properties:
         id:
           type: integer
-          example: 57
+          example: 80
         user_id:
           type: integer
-          example: 32
+          example: 94
         position_id:
           type: integer
-          example: 27
+          example: 61
         start_date:
           type: string
           format: date
@@ -204,7 +268,7 @@ components:
         end_date:
           type: string
           format: date
-          example: '2025-07-07'
+          example: '2025-06-18'
         created_at:
           type: string
           format: date-time
@@ -221,19 +285,19 @@ components:
       properties:
         id:
           type: integer
-          example: 81
+          example: 41
         title:
           type: string
-          example: Future Consulting Supervisor
+          example: Investor Community-Services Assistant
         description:
           type: string
-          example: Devolved local conglomeration
+          example: Cloned actuating migration
         company_id:
           type: integer
-          example: 85
+          example: 64
         remote:
           type: boolean
-          example: true
+          example: false
         created_at:
           type: string
           format: date-time
@@ -249,29 +313,29 @@ components:
       properties:
         id:
           type: integer
-          example: 89
+          example: 30
         employment_id:
           type: integer
-          example: 56
+          example: 19
         date:
           type: string
           format: date
-          example: '2025-05-22'
+          example: '2025-05-18'
         start_time:
           type: string
           format: date-time
-          example: '2025-06-11 19:42:45 -0400'
+          example: '2025-05-15 21:49:55 -0400'
         end_time:
           type: string
           format: date-time
-          example: '2025-05-22 18:30:04 -0400'
+          example: '2025-05-21 17:33:56 -0400'
         hours:
           type: number
           format: float
-          example: 6.78
+          example: 1.41
         active:
           type: boolean
-          example: true
+          example: false
         created_at:
           type: string
           format: date-time
@@ -283,6 +347,22 @@ components:
       - employment_id
       - date
       - start_time
+    ClockInRequest:
+      type: object
+      properties:
+        employment_id:
+          type: integer
+          description: ID of the employment to clock in for
+      required:
+      - id
+    ClockOutRequest:
+      type: object
+      properties:
+        employment_id:
+          type: integer
+          description: ID of the employment to clock out of
+      required:
+      - id
     UserCreateRequest:
       type: object
       properties:

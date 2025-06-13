@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { DashboardService } from '../../generated-api';
+import { DashboardService, EmploymentsService } from '../../generated-api';
 import { AuthenticatedUser } from '../../generated-api';
 
 @Component({
@@ -86,8 +86,8 @@ import { AuthenticatedUser } from '../../generated-api';
                   >
                     {{
                       expandedEmployment === emp.id
-                        ? 'Hide Shifts'
-                        : 'Show Shifts'
+                        ? "Hide this week's shifts"
+                        : "Show this week's shifts"
                     }}
                   </button>
                   <div *ngIf="expandedEmployment === emp.id" class="mt-3">
@@ -149,6 +149,56 @@ import { AuthenticatedUser } from '../../generated-api';
                       </div>
                     </ng-template>
                   </div>
+
+                  <!-- Clock In button (if no current shift) -->
+                  <div
+                    *ngIf="!getCurrentShiftForEmployment(emp.id)"
+                    class="mt-3"
+                  >
+                    <button
+                      class="btn btn-success"
+                      (click)="clockIn(emp.id)"
+                      [disabled]="clockingInEmploymentId === emp.id"
+                    >
+                      <span *ngIf="clockingInEmploymentId === emp.id"
+                        >Clocking in...</span
+                      >
+                      <span *ngIf="clockingInEmploymentId !== emp.id"
+                        >Clock In</span
+                      >
+                    </button>
+                    <div
+                      *ngIf="clockInError && clockingInEmploymentId === emp.id"
+                      class="text-danger mt-2"
+                    >
+                      {{ clockInError }}
+                    </div>
+                  </div>
+
+                  <!-- Clock Out button (if current shift is active) -->
+                  <div
+                    *ngIf="getCurrentShiftForEmployment(emp.id)"
+                    class="mt-3"
+                  >
+                    <button
+                      class="btn btn-danger"
+                      (click)="clockOut(emp.id)"
+                      [disabled]="clockingOutEmploymentId === emp.id"
+                    >
+                      <span *ngIf="clockingOutEmploymentId === emp.id"
+                        >Clocking out...</span
+                      >
+                      <span *ngIf="clockingOutEmploymentId !== emp.id"
+                        >Clock Out</span
+                      >
+                    </button>
+                    <div
+                      *ngIf="clockOutError && clockingOutEmploymentId === emp.id"
+                      class="text-danger mt-2"
+                    >
+                      {{ clockOutError }}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -166,11 +216,16 @@ export class DashboardComponent implements OnInit {
   currentUser: AuthenticatedUser | null = null;
   dashboardData: any = null;
   expandedEmployment: number | null = null;
+  clockingInEmploymentId: number | null = null;
+  clockInError: string | null = null;
+  clockingOutEmploymentId: number | null = null;
+  clockOutError: string | null = null;
 
   constructor(
     private authService: AuthService,
     private router: Router,
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
+    private employmentsService: EmploymentsService
   ) {
     this.authService.currentUser$.subscribe((user) => {
       this.currentUser = user;
@@ -238,5 +293,54 @@ export class DashboardComponent implements OnInit {
         (shift: any) => shift.employment_id === empId
       ) || null
     );
+  }
+
+  // Call the API to clock in for an employment
+  clockIn(empId: number): void {
+    this.clockingInEmploymentId = empId;
+    this.clockInError = null;
+    this.employmentsService
+      .employmentsIdClockInPost(empId.toString())
+      .subscribe({
+        next: () => {
+          this.clockingInEmploymentId = null;
+          this.refreshDashboard();
+        },
+        error: (err) => {
+          this.clockingInEmploymentId = null;
+          this.clockInError = err?.error?.errors?.[0] || 'Failed to clock in.';
+        },
+      });
+  }
+
+  // Call the API to clock out for an employment
+  clockOut(empId: number): void {
+    this.clockingOutEmploymentId = empId;
+    this.clockOutError = null;
+    this.employmentsService
+      .employmentsIdClockOutPost(empId.toString())
+      .subscribe({
+        next: () => {
+          this.clockingOutEmploymentId = null;
+          this.refreshDashboard();
+        },
+        error: (err) => {
+          this.clockingOutEmploymentId = null;
+          this.clockOutError = err?.error?.errors?.[0] || 'Failed to clock out.';
+        },
+      });
+  }
+
+  // Refresh dashboard data
+  refreshDashboard(): void {
+    // You may need to update this to use the correct service if dashboardService is not correct
+    // For now, leaving as is
+    this.dashboardService.rootGet().subscribe({
+      next: (data) => (this.dashboardData = data),
+      error: (err) => {
+        console.error('Failed to load dashboard data', err);
+        this.dashboardData = null;
+      },
+    });
   }
 }

@@ -101,6 +101,20 @@ RSpec.configure do |config|
             },
             required: ['id', 'employment_id', 'date', 'start_time']
           },
+          ClockInRequest: {
+            type: :object,
+            properties: {
+              employment_id: { type: :integer, description: 'ID of the employment to clock in for' }
+            },
+            required: ['id']
+          },
+          ClockOutRequest: {
+            type: :object,
+            properties: {
+              employment_id: { type: :integer, description: 'ID of the employment to clock out of' }
+            },
+            required: ['id']
+          },
           UserCreateRequest: {
             type: :object,
             properties: {
