@@ -7,13 +7,7 @@ Rails.application.routes.draw do
              }
   mount Rswag::Ui::Engine => '/api-docs'
   mount Rswag::Api::Engine => '/api-docs'
-  resources :time_entries
-  resources :hourly_rates
-  resources :user_positions
-  resources :positions
-  resources :companies
-  resources :users
-  resources :groups
+
   resource :dashboard, only: [:show]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

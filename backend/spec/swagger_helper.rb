@@ -27,9 +27,10 @@ RSpec.configure do |config|
           Company: {
             type: :object,
             properties: {
-              id: { type: :integer, example: 1 },
-              name: { type: :string, example: 'Tech Corp' },
-              description: { type: :string, example: 'A technology company' },
+              id: { type: :integer, example: Faker::Number.number(digits: 2) },
+              name: { type: :string, example: Faker::Company.name },
+              description: { type: :string, example: Faker::Company.catch_phrase },
+              url: { type: :string, example: 'http://www.example.com/companies/1' },
               created_at: { type: :string, format: 'date-time' },
               updated_at: { type: :string, format: 'date-time' }
             },
@@ -39,15 +40,93 @@ RSpec.configure do |config|
             type: :object,
             properties: {
               id: { type: :integer, example: 1 },
-              first_name: { type: :string, example: 'John' },
-              last_name: { type: :string, example: 'Doe' },
-              username: { type: :string, example: 'johndoe' },
-              email: { type: :string, example: 'john@example.com' },
-              name: { type: :string, example: 'John Doe' },
+              first_name: { type: :string, example: Faker::Name.first_name },
+              last_name: { type: :string, example: Faker::Name.last_name },
+              username: { type: :string, example: Faker::Internet.username },
+              email: { type: :string, example: Faker::Internet.email },
+              name: { type: :string, example: Faker::Name.name },
+              url: { type: :string, example: 'http://www.example.com/users/1' },
               created_at: { type: :string, format: 'date-time' },
               updated_at: { type: :string, format: 'date-time' }
             },
             required: ['id', 'first_name', 'last_name', 'username', 'email']
+          },
+          AuthenticatedUser: {
+            type: :object,
+            properties: {
+              id: { type: :integer, example: 1 },
+              email: { type: :string, example: Faker::Internet.email },
+              first_name: { type: :string, example: Faker::Name.first_name },
+              last_name: { type: :string, example: Faker::Name.last_name },
+              username: { type: :string, example: Faker::Internet.username },
+            },
+            required: ['id', 'email']
+          },
+          Employment: {
+            type: :object,
+            properties: {
+              id: { type: :integer, example: Faker::Number.number(digits: 2) },
+              user_id: { type: :integer, example: Faker::Number.number(digits: 2) },
+              position_id: { type: :integer, example: Faker::Number.number(digits: 2) },
+              start_date: { type: :string, format: 'date', example: Faker::Date.backward(days: 30).to_s },
+              end_date: { type: :string, format: 'date', example: Faker::Date.forward(days: 30).to_s },
+              created_at: { type: :string, format: 'date-time' },
+              updated_at: { type: :string, format: 'date-time' }
+            },
+            required: ['id', 'user_id', 'position_id', 'start_date']
+          },
+          Position: {
+            type: :object,
+            properties: {
+              id: { type: :integer, example: Faker::Number.number(digits: 2) },
+              url: { type: :string, example: 'http://www.example.com/positions/1' },
+              title: { type: :string, example: Faker::Job.title },
+              description: { type: :string, example: Faker::Company.catch_phrase },
+              company_id: { type: :integer, example: Faker::Number.number(digits: 2) },
+              remote: { type: :boolean, example: Faker::Boolean.boolean },
+              created_at: { type: :string, format: 'date-time' },
+              updated_at: { type: :string, format: 'date-time' }
+            },
+            required: ['id', 'title', 'company_id']
+          },
+          TimeEntry: {
+            type: :object,
+            properties: {
+              id: { type: :integer, example: Faker::Number.number(digits: 2) },
+              employment_id: { type: :integer, example: Faker::Number.number(digits: 2) },
+              date: { type: :string, format: 'date', example: Faker::Date.backward(days: 30).to_s },
+              start_time: { type: :string, format: 'date-time', example: Faker::Time.backward(days: 30) },
+              end_time: { type: :string, format: 'date-time', example: Faker::Time.backward(days: 29) },
+              hours: { type: :number, format: 'float', example: Faker::Number.decimal(l_digits: 1, r_digits: 2) },
+              active: { type: :boolean, example: Faker::Boolean.boolean },
+              created_at: { type: :string, format: 'date-time' },
+              updated_at: { type: :string, format: 'date-time' }
+            },
+            required: ['id', 'employment_id', 'date', 'start_time']
+          },
+          UserCreateRequest: {
+            type: :object,
+            properties: {
+              first_name: { type: :string },
+              last_name: { type: :string },
+              username: { type: :string },
+              email: { type: :string },
+              password: { type: :string },
+              password_confirmation: { type: :string }
+            },
+            required: ['first_name', 'last_name', 'username', 'email', 'password', 'password_confirmation']
+          },
+          UserUpdateRequest: {
+            type: :object,
+            properties: {
+              first_name: { type: :string },
+              last_name: { type: :string },
+              username: { type: :string },
+              email: { type: :string },
+              password: { type: :string },
+              password_confirmation: { type: :string }
+            },
+            required: []
           },
           LoginResponse: {
             type: :object,
@@ -56,28 +135,21 @@ RSpec.configure do |config|
             },
             required: ['user']
           },
-          AuthenticatedUser: {
+          CreateComponyRequest: {
             type: :object,
             properties: {
-              id: { type: :integer, example: 1 },
-              email: { type: :string, example: 'user@example.com' },
-              first_name: { type: :string, example: 'Jane' },
-              last_name: { type: :string, example: 'Doe' },
-              username: { type: :string, example: 'janedoe' }
+              name: { type: :string },
+              description: { type: :string }
             },
-            required: ['id', 'email']
+            required: ['name']
           },
-          Position: {
+          UpdateCompanyRequest: {
             type: :object,
             properties: {
-              id: { type: :integer, example: 1 },
-              title: { type: :string, example: 'Software Developer' },
-              company_id: { type: :integer, example: 1 },
-              company: { '$ref': '#/components/schemas/Company' },
-              created_at: { type: :string, format: 'date-time' },
-              updated_at: { type: :string, format: 'date-time' }
+              name: { type: :string },
+              description: { type: :string }
             },
-            required: ['id', 'title', 'company_id']
+            required: []
           }
         }
       },

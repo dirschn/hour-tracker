@@ -1,7 +1,7 @@
 require 'swagger_helper'
 
-RSpec.describe 'user_positions', type: :request do
-  path '/user_positions' do
+RSpec.describe 'employments', type: :request do
+  path '/employments' do
     get('list user positions') do
       tags 'User Positions'
       description 'Retrieve all user positions'
@@ -33,10 +33,10 @@ RSpec.describe 'user_positions', type: :request do
       consumes 'application/json'
       produces 'application/json'
 
-      parameter name: :user_position, in: :body, schema: {
+      parameter name: :employment, in: :body, schema: {
         type: :object,
         properties: {
-          user_position: {
+          employment: {
             type: :object,
             properties: {
               user_id: { type: :integer, example: 1 },
@@ -47,7 +47,7 @@ RSpec.describe 'user_positions', type: :request do
             required: ['user_id', 'position_id', 'start_date']
           }
         },
-        required: ['user_position']
+        required: ['employment']
       }
 
       response(201, 'user position created') do
@@ -62,7 +62,7 @@ RSpec.describe 'user_positions', type: :request do
             updated_at: { type: :string, format: 'date-time' }
           }
 
-        let(:user_position) { { user_position: { user_id: 1, position_id: 1, start_date: '2024-01-01' } } }
+        let(:employment) { { employment: { user_id: 1, position_id: 1, start_date: '2024-01-01' } } }
         run_test!
       end
 
@@ -78,13 +78,13 @@ RSpec.describe 'user_positions', type: :request do
             }
           }
 
-        let(:user_position) { { user_position: { user_id: nil, position_id: nil, start_date: '' } } }
+        let(:employment) { { employment: { user_id: nil, position_id: nil, start_date: '' } } }
         run_test!
       end
     end
   end
 
-  path '/user_positions/{id}' do
+  path '/employments/{id}' do
     parameter name: 'id', in: :path, type: :string, description: 'user position id'
 
     get('show user position') do
@@ -125,10 +125,10 @@ RSpec.describe 'user_positions', type: :request do
       consumes 'application/json'
       produces 'application/json'
 
-      parameter name: :user_position, in: :body, schema: {
+      parameter name: :employment, in: :body, schema: {
         type: :object,
         properties: {
-          user_position: {
+          employment: {
             type: :object,
             properties: {
               start_date: { type: :string, format: 'date', example: '2024-02-01' },
@@ -136,7 +136,7 @@ RSpec.describe 'user_positions', type: :request do
             }
           }
         },
-        required: ['user_position']
+        required: ['employment']
       }
 
       response(200, 'user position updated') do
@@ -152,7 +152,7 @@ RSpec.describe 'user_positions', type: :request do
           }
 
         let(:id) { '1' }
-        let(:user_position) { { user_position: { start_date: '2024-02-01', end_date: '2024-11-30' } } }
+        let(:employment) { { employment: { start_date: '2024-02-01', end_date: '2024-11-30' } } }
         run_test!
       end
 
@@ -169,7 +169,7 @@ RSpec.describe 'user_positions', type: :request do
           }
 
         let(:id) { '1' }
-        let(:user_position) { { user_position: { start_date: 'invalid-date' } } }
+        let(:employment) { { employment: { start_date: 'invalid-date' } } }
         run_test!
       end
 
@@ -180,7 +180,7 @@ RSpec.describe 'user_positions', type: :request do
           }
 
         let(:id) { 'invalid' }
-        let(:user_position) { { user_position: { start_date: '2024-02-01' } } }
+        let(:employment) { { employment: { start_date: '2024-02-01' } } }
         run_test!
       end
     end
@@ -191,10 +191,10 @@ RSpec.describe 'user_positions', type: :request do
       consumes 'application/json'
       produces 'application/json'
 
-      parameter name: :user_position, in: :body, schema: {
+      parameter name: :employment, in: :body, schema: {
         type: :object,
         properties: {
-          user_position: {
+          employment: {
             type: :object,
             properties: {
               start_date: { type: :string, format: 'date', example: '2024-02-01' },
@@ -202,7 +202,7 @@ RSpec.describe 'user_positions', type: :request do
             }
           }
         },
-        required: ['user_position']
+        required: ['employment']
       }
 
       response(200, 'user position updated') do
@@ -218,7 +218,7 @@ RSpec.describe 'user_positions', type: :request do
           }
 
         let(:id) { '1' }
-        let(:user_position) { { user_position: { start_date: '2024-02-01', end_date: '2024-11-30' } } }
+        let(:employment) { { employment: { start_date: '2024-02-01', end_date: '2024-11-30' } } }
         run_test!
       end
     end

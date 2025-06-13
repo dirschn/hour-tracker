@@ -5,6 +5,7 @@ class CreatePositions < ActiveRecord::Migration[8.0]
       t.text :description
       t.references :company, null: false, foreign_key: true
       t.boolean :remote, default: true
+
       t.index [:title, :company_id], unique: true
 
       t.timestamps

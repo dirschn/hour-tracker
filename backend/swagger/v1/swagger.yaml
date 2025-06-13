@@ -535,7 +535,7 @@ paths:
                     id:
                       type: integer
                       example: 1
-                    user_position_id:
+                    employment_id:
                       type: integer
                       example: 1
                     rate_cents:
@@ -556,7 +556,7 @@ paths:
                       format: date-time
                   required:
                   - id
-                  - user_position_id
+                  - employment_id
                   - rate_cents
                   - effective_date
     post:
@@ -576,7 +576,7 @@ paths:
                   id:
                     type: integer
                     example: 1
-                  user_position_id:
+                  employment_id:
                     type: integer
                     example: 1
                   rate_cents:
@@ -617,7 +617,7 @@ paths:
                 hourly_rate:
                   type: object
                   properties:
-                    user_position_id:
+                    employment_id:
                       type: integer
                       example: 1
                     rate_cents:
@@ -628,7 +628,7 @@ paths:
                       format: date
                       example: '2024-01-01'
                   required:
-                  - user_position_id
+                  - employment_id
                   - rate_cents
                   - effective_date
               required:
@@ -657,7 +657,7 @@ paths:
                   id:
                     type: integer
                     example: 1
-                  user_position_id:
+                  employment_id:
                     type: integer
                     example: 1
                   rate_cents:
@@ -703,7 +703,7 @@ paths:
                   id:
                     type: integer
                     example: 1
-                  user_position_id:
+                  employment_id:
                     type: integer
                     example: 1
                   rate_cents:
@@ -780,7 +780,7 @@ paths:
                   id:
                     type: integer
                     example: 1
-                  user_position_id:
+                  employment_id:
                     type: integer
                     example: 1
                   rate_cents:
@@ -1024,7 +1024,7 @@ paths:
                     id:
                       type: integer
                       example: 1
-                    user_position_id:
+                    employment_id:
                       type: integer
                       example: 1
                     user_id:
@@ -1053,7 +1053,7 @@ paths:
                       format: date-time
                   required:
                   - id
-                  - user_position_id
+                  - employment_id
                   - user_id
                   - minutes_worked
                   - date
@@ -1074,7 +1074,7 @@ paths:
                   id:
                     type: integer
                     example: 1
-                  user_position_id:
+                  employment_id:
                     type: integer
                     example: 1
                   user_id:
@@ -1123,7 +1123,7 @@ paths:
                 time_entry:
                   type: object
                   properties:
-                    user_position_id:
+                    employment_id:
                       type: integer
                       example: 1
                     user_id:
@@ -1145,7 +1145,7 @@ paths:
                       example: Worked on feature development
                       nullable: true
                   required:
-                  - user_position_id
+                  - employment_id
                   - user_id
                   - minutes_worked
                   - date
@@ -1175,7 +1175,7 @@ paths:
                   id:
                     type: integer
                     example: 1
-                  user_position_id:
+                  employment_id:
                     type: integer
                     example: 1
                   user_id:
@@ -1229,7 +1229,7 @@ paths:
                   id:
                     type: integer
                     example: 1
-                  user_position_id:
+                  employment_id:
                     type: integer
                     example: 1
                   user_id:
@@ -1318,7 +1318,7 @@ paths:
                   id:
                     type: integer
                     example: 1
-                  user_position_id:
+                  employment_id:
                     type: integer
                     example: 1
                   user_id:
@@ -1377,7 +1377,7 @@ paths:
           description: time entry deleted
         '404':
           description: time entry not found
-  "/user_positions":
+  "/employments":
     get:
       summary: list user positions
       tags:
@@ -1479,7 +1479,7 @@ paths:
             schema:
               type: object
               properties:
-                user_position:
+                employment:
                   type: object
                   properties:
                     user_id:
@@ -1502,8 +1502,8 @@ paths:
                   - position_id
                   - start_date
               required:
-              - user_position
-  "/user_positions/{id}":
+              - employment
+  "/employments/{id}":
     parameters:
     - name: id
       in: path
@@ -1625,7 +1625,7 @@ paths:
             schema:
               type: object
               properties:
-                user_position:
+                employment:
                   type: object
                   properties:
                     start_date:
@@ -1638,7 +1638,7 @@ paths:
                       example: '2024-11-30'
                       nullable: true
               required:
-              - user_position
+              - employment
     put:
       summary: update user position
       tags:
@@ -1683,7 +1683,7 @@ paths:
             schema:
               type: object
               properties:
-                user_position:
+                employment:
                   type: object
                   properties:
                     start_date:
@@ -1696,7 +1696,7 @@ paths:
                       example: '2024-11-30'
                       nullable: true
               required:
-              - user_position
+              - employment
     delete:
       summary: delete user position
       tags:

@@ -1,5 +1,5 @@
 class HourlyRate < ApplicationRecord
-  belongs_to :user_position
+  belongs_to :employment
 
   monetize :rate_cents
 

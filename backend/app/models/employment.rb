@@ -1,4 +1,4 @@
-class UserPosition < ApplicationRecord
+class Employment < ApplicationRecord
   belongs_to :user
   belongs_to :position
   has_many :time_entries, dependent: :destroy

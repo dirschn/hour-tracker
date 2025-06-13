@@ -13,7 +13,7 @@ RSpec.describe 'time_entries', type: :request do
             type: :object,
             properties: {
               id: { type: :integer, example: 1 },
-              user_position_id: { type: :integer, example: 1 },
+              employment_id: { type: :integer, example: 1 },
               user_id: { type: :integer, example: 1 },
               group_id: { type: :integer, example: 1, nullable: true },
               minutes_worked: { type: :integer, example: 480 },
@@ -22,7 +22,7 @@ RSpec.describe 'time_entries', type: :request do
               created_at: { type: :string, format: 'date-time' },
               updated_at: { type: :string, format: 'date-time' }
             },
-            required: ['id', 'user_position_id', 'user_id', 'minutes_worked', 'date']
+            required: ['id', 'employment_id', 'user_id', 'minutes_worked', 'date']
           }
 
         run_test!
@@ -41,14 +41,14 @@ RSpec.describe 'time_entries', type: :request do
           time_entry: {
             type: :object,
             properties: {
-              user_position_id: { type: :integer, example: 1 },
+              employment_id: { type: :integer, example: 1 },
               user_id: { type: :integer, example: 1 },
               group_id: { type: :integer, example: 1, nullable: true },
               minutes_worked: { type: :integer, example: 480 },
               date: { type: :string, format: 'date', example: '2024-01-15' },
               notes: { type: :string, example: 'Worked on feature development', nullable: true }
             },
-            required: ['user_position_id', 'user_id', 'minutes_worked', 'date']
+            required: ['employment_id', 'user_id', 'minutes_worked', 'date']
           }
         },
         required: ['time_entry']
@@ -58,7 +58,7 @@ RSpec.describe 'time_entries', type: :request do
         schema type: :object,
           properties: {
             id: { type: :integer, example: 1 },
-            user_position_id: { type: :integer, example: 1 },
+            employment_id: { type: :integer, example: 1 },
             user_id: { type: :integer, example: 1 },
             group_id: { type: :integer, example: 1, nullable: true },
             minutes_worked: { type: :integer, example: 480 },
@@ -68,7 +68,7 @@ RSpec.describe 'time_entries', type: :request do
             updated_at: { type: :string, format: 'date-time' }
           }
 
-        let(:time_entry) { { time_entry: { user_position_id: 1, user_id: 1, minutes_worked: 480, date: '2024-01-15' } } }
+        let(:time_entry) { { time_entry: { employment_id: 1, user_id: 1, minutes_worked: 480, date: '2024-01-15' } } }
         run_test!
       end
 
@@ -84,7 +84,7 @@ RSpec.describe 'time_entries', type: :request do
             }
           }
 
-        let(:time_entry) { { time_entry: { user_position_id: nil, minutes_worked: 1500, date: '' } } }
+        let(:time_entry) { { time_entry: { employment_id: nil, minutes_worked: 1500, date: '' } } }
         run_test!
       end
     end
@@ -102,7 +102,7 @@ RSpec.describe 'time_entries', type: :request do
         schema type: :object,
           properties: {
             id: { type: :integer, example: 1 },
-            user_position_id: { type: :integer, example: 1 },
+            employment_id: { type: :integer, example: 1 },
             user_id: { type: :integer, example: 1 },
             group_id: { type: :integer, example: 1, nullable: true },
             minutes_worked: { type: :integer, example: 480 },
@@ -152,7 +152,7 @@ RSpec.describe 'time_entries', type: :request do
         schema type: :object,
           properties: {
             id: { type: :integer, example: 1 },
-            user_position_id: { type: :integer, example: 1 },
+            employment_id: { type: :integer, example: 1 },
             user_id: { type: :integer, example: 1 },
             group_id: { type: :integer, example: 1, nullable: true },
             minutes_worked: { type: :integer, example: 520 },
@@ -221,7 +221,7 @@ RSpec.describe 'time_entries', type: :request do
         schema type: :object,
           properties: {
             id: { type: :integer, example: 1 },
-            user_position_id: { type: :integer, example: 1 },
+            employment_id: { type: :integer, example: 1 },
             user_id: { type: :integer, example: 1 },
             group_id: { type: :integer, example: 1, nullable: true },
             minutes_worked: { type: :integer, example: 520 },

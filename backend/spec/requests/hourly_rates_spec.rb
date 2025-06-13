@@ -13,14 +13,14 @@ RSpec.describe 'hourly_rates', type: :request do
             type: :object,
             properties: {
               id: { type: :integer, example: 1 },
-              user_position_id: { type: :integer, example: 1 },
+              employment_id: { type: :integer, example: 1 },
               rate_cents: { type: :integer, example: 5000 },
               rate: { type: :string, example: '50.00' },
               effective_date: { type: :string, format: 'date', example: '2024-01-01' },
               created_at: { type: :string, format: 'date-time' },
               updated_at: { type: :string, format: 'date-time' }
             },
-            required: ['id', 'user_position_id', 'rate_cents', 'effective_date']
+            required: ['id', 'employment_id', 'rate_cents', 'effective_date']
           }
 
         run_test!
@@ -39,11 +39,11 @@ RSpec.describe 'hourly_rates', type: :request do
           hourly_rate: {
             type: :object,
             properties: {
-              user_position_id: { type: :integer, example: 1 },
+              employment_id: { type: :integer, example: 1 },
               rate_cents: { type: :integer, example: 5000 },
               effective_date: { type: :string, format: 'date', example: '2024-01-01' }
             },
-            required: ['user_position_id', 'rate_cents', 'effective_date']
+            required: ['employment_id', 'rate_cents', 'effective_date']
           }
         },
         required: ['hourly_rate']
@@ -53,7 +53,7 @@ RSpec.describe 'hourly_rates', type: :request do
         schema type: :object,
           properties: {
             id: { type: :integer, example: 1 },
-            user_position_id: { type: :integer, example: 1 },
+            employment_id: { type: :integer, example: 1 },
             rate_cents: { type: :integer, example: 5000 },
             rate: { type: :string, example: '50.00' },
             effective_date: { type: :string, format: 'date', example: '2024-01-01' },
@@ -61,7 +61,7 @@ RSpec.describe 'hourly_rates', type: :request do
             updated_at: { type: :string, format: 'date-time' }
           }
 
-        let(:hourly_rate) { { hourly_rate: { user_position_id: 1, rate_cents: 5000, effective_date: '2024-01-01' } } }
+        let(:hourly_rate) { { hourly_rate: { employment_id: 1, rate_cents: 5000, effective_date: '2024-01-01' } } }
         run_test!
       end
 
@@ -77,7 +77,7 @@ RSpec.describe 'hourly_rates', type: :request do
             }
           }
 
-        let(:hourly_rate) { { hourly_rate: { user_position_id: nil, rate_cents: -100, effective_date: '' } } }
+        let(:hourly_rate) { { hourly_rate: { employment_id: nil, rate_cents: -100, effective_date: '' } } }
         run_test!
       end
     end
@@ -95,7 +95,7 @@ RSpec.describe 'hourly_rates', type: :request do
         schema type: :object,
           properties: {
             id: { type: :integer, example: 1 },
-            user_position_id: { type: :integer, example: 1 },
+            employment_id: { type: :integer, example: 1 },
             rate_cents: { type: :integer, example: 5000 },
             rate: { type: :string, example: '50.00' },
             effective_date: { type: :string, format: 'date', example: '2024-01-01' },
@@ -142,7 +142,7 @@ RSpec.describe 'hourly_rates', type: :request do
         schema type: :object,
           properties: {
             id: { type: :integer, example: 1 },
-            user_position_id: { type: :integer, example: 1 },
+            employment_id: { type: :integer, example: 1 },
             rate_cents: { type: :integer, example: 5500 },
             rate: { type: :string, example: '55.00' },
             effective_date: { type: :string, format: 'date', example: '2024-06-01' },
@@ -208,7 +208,7 @@ RSpec.describe 'hourly_rates', type: :request do
         schema type: :object,
           properties: {
             id: { type: :integer, example: 1 },
-            user_position_id: { type: :integer, example: 1 },
+            employment_id: { type: :integer, example: 1 },
             rate_cents: { type: :integer, example: 5500 },
             rate: { type: :string, example: '55.00' },
             effective_date: { type: :string, format: 'date', example: '2024-06-01' },
