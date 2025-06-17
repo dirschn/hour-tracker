@@ -18,11 +18,14 @@ import { ProfilesService, ProfileResponse } from '../../generated-api';
           <div *ngIf="profileData; else loading">
             <!-- User Information Card -->
             <div class="card mb-4">
-              <div class="card-header">
+              <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">
                   <i class="bi bi-person-circle me-2"></i>
                   Personal Information
                 </h5>
+                <button type="button" class="btn btn-primary btn-sm" (click)="editProfile()">
+                  <i class="bi bi-pencil me-2"></i>Edit
+                </button>
               </div>
               <div class="card-body">
                 <div class="row">
@@ -164,5 +167,10 @@ export class ProfileComponent implements OnInit {
 
   goBack(): void {
     this.router.navigate(['/']);
+  }
+
+  editProfile(): void {
+    // Logic to navigate to the edit profile page
+    this.router.navigate(['/profile/edit']);
   }
 }
