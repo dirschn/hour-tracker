@@ -1,6 +1,8 @@
 class DashboardController < ApplicationController
+  before_action :authenticate_user!
+
   def show
-    @active_employments = User.first.employments.active
+    @active_employments = current_user.employments.active.includes(:position => :company)
 
     week_start = Date.current.beginning_of_week(:sunday)
     week_end = Date.current.end_of_week(:sunday)
@@ -11,5 +13,10 @@ class DashboardController < ApplicationController
     end
 
     @current_shifts = @shifts.active
+
+    respond_to do |format|
+      format.html
+      format.json
+    end
   end
 end

@@ -5,7 +5,7 @@ class ApplicationController < ActionController::API
 
   before_action :authenticate_user!
   before_action :configure_permitted_parameters, if: :devise_controller?
-  before_action :force_json_response
+  # before_action :force_json_response
 
   # Pundit authorization failed handler
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
