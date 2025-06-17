@@ -12,7 +12,10 @@ import { HttpHeaders }                                       from '@angular/comm
 import { Observable }                                        from 'rxjs';
 
 import { ProfileGet404Response } from '../model/models';
+import { ProfilePatch200Response } from '../model/models';
+import { ProfilePatch422Response } from '../model/models';
 import { ProfileResponse } from '../model/models';
+import { ProfileUpdateRequest } from '../model/models';
 
 
 import { Configuration }                                     from '../configuration';
@@ -28,5 +31,12 @@ export interface ProfilesServiceInterface {
      * 
      */
     profileGet(extraHttpRequestParams?: any): Observable<ProfileResponse>;
+
+    /**
+     * update profile
+     * 
+     * @param profileUpdateRequest 
+     */
+    profilePatch(profileUpdateRequest?: ProfileUpdateRequest, extraHttpRequestParams?: any): Observable<ProfilePatch200Response>;
 
 }

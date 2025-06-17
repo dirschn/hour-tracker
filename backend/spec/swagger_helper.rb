@@ -49,6 +49,15 @@ RSpec.configure do |config|
             },
             required: ['id', 'first_name', 'last_name', 'username', 'email']
           },
+          Profile: {
+            type: :object,
+            properties: {
+              first_name: { type: :string, example: Faker::Name.first_name },
+              last_name: { type: :string, example: Faker::Name.last_name },
+              username: { type: :string, example: Faker::Internet.username },
+              email: { type: :string, example: Faker::Internet.email }
+            }
+          },
           AuthenticatedUser: {
             type: :object,
             properties: {
@@ -194,6 +203,13 @@ RSpec.configure do |config|
               }
             },
             required: ['user']
+          },
+          ProfileUpdateRequest: {
+            type: :object,
+            properties: {
+              profile: { '$ref': '#/components/schemas/Profile' }
+            },
+            required: ['profile']
           }
         }
       },

@@ -41,4 +41,69 @@ RSpec.describe "Profiles", type: :request do
       end
     end
   end
+
+  describe "PATCH /profile" do
+    path '/profile' do
+      patch('update profile') do
+        tags 'Profiles'
+        consumes 'application/json'
+        produces 'application/json'
+        parameter name: :profile, in: :body, schema: {
+          '$ref' => '#/components/schemas/ProfileUpdateRequest'
+        }
+
+        response(200, 'successful') do
+          schema type: :object,
+            properties: {
+              message: { type: :string }
+            },
+            required: ['message']
+
+          let!(:user) { create(:user) }
+          let(:profile) do
+            {
+              profile: {
+                first_name: 'Updated',
+                last_name: 'Name',
+                email: 'updated@example.com',
+                username: 'updated_user'
+              }
+            }
+          end
+
+          before do
+            sign_in user
+          end
+
+          run_test!
+        end
+
+        response(422, 'unprocessable entity') do
+          schema type: :object,
+            properties: {
+              error: {
+                type: :array,
+                items: { type: :string }
+              }
+            },
+            required: ['error']
+
+          let!(:user) { create(:user) }
+          let(:profile) do
+            {
+              profile: {
+                email: 'invalid-email'
+              }
+            }
+          end
+
+          before do
+            sign_in user
+          end
+
+          run_test!
+        end
+      end
+    end
+  end
 end

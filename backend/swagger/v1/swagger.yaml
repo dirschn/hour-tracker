@@ -195,6 +195,41 @@ paths:
                     type: string
                 required:
                 - error
+    patch:
+      summary: update profile
+      tags:
+      - Profiles
+      parameters: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                - message
+        '422':
+          description: unprocessable entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: array
+                    items:
+                      type: string
+                required:
+                - error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ProfileUpdateRequest"
 components:
   schemas:
     Company:
@@ -202,13 +237,13 @@ components:
       properties:
         id:
           type: integer
-          example: 72
+          example: 66
         name:
           type: string
-          example: Stamm-Moen
+          example: Kilback-Walsh
         description:
           type: string
-          example: Extended real-time core
+          example: Visionary optimal architecture
         created_at:
           type: string
           format: date-time
@@ -226,19 +261,19 @@ components:
           example: 1
         first_name:
           type: string
-          example: Treena
+          example: Mark
         last_name:
           type: string
-          example: Cruickshank
+          example: Batz
         username:
           type: string
-          example: joleen
+          example: frances_bayer
         email:
           type: string
-          example: adena_mclaughlin@bosco-bogan.example
+          example: jeffry@purdy.test
         name:
           type: string
-          example: Anita Kilback
+          example: Willis Kovacek
         created_at:
           type: string
           format: date-time
@@ -251,6 +286,21 @@ components:
       - last_name
       - username
       - email
+    Profile:
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: Billye
+        last_name:
+          type: string
+          example: Hickle
+        username:
+          type: string
+          example: nathanael.effertz
+        email:
+          type: string
+          example: reina_turcotte@schaefer.test
     AuthenticatedUser:
       type: object
       properties:
@@ -259,16 +309,16 @@ components:
           example: 1
         email:
           type: string
-          example: zonia@howell.test
+          example: lois@brown-carroll.example
         first_name:
           type: string
-          example: Renita
+          example: Melonie
         last_name:
           type: string
-          example: Douglas
+          example: Schulist
         username:
           type: string
-          example: lianne.nolan
+          example: rudolph.quigley
       required:
       - id
       - email
@@ -277,21 +327,21 @@ components:
       properties:
         id:
           type: integer
-          example: 77
+          example: 87
         user_id:
           type: integer
-          example: 82
+          example: 71
         position_id:
           type: integer
-          example: 60
+          example: 91
         start_date:
           type: string
           format: date
-          example: '2025-06-11'
+          example: '2025-06-02'
         end_date:
           type: string
           format: date
-          example: '2025-07-12'
+          example: '2025-06-27'
         created_at:
           type: string
           format: date-time
@@ -308,19 +358,19 @@ components:
       properties:
         id:
           type: integer
-          example: 77
+          example: 89
         title:
           type: string
-          example: Corporate Retail Officer
+          example: Global Community-Services Analyst
         description:
           type: string
-          example: Extended actuating conglomeration
+          example: Intuitive motivating process improvement
         company_id:
           type: integer
-          example: 34
+          example: 58
         remote:
           type: boolean
-          example: false
+          example: true
         created_at:
           type: string
           format: date-time
@@ -336,26 +386,26 @@ components:
       properties:
         id:
           type: integer
-          example: 97
+          example: 49
         employment_id:
           type: integer
-          example: 27
+          example: 11
         date:
           type: string
           format: date
-          example: '2025-06-08'
+          example: '2025-05-30'
         start_time:
           type: string
           format: date-time
-          example: '2025-06-01 00:44:02 -0400'
+          example: '2025-06-02 21:48:23 -0400'
         end_time:
           type: string
           format: date-time
-          example: '2025-06-02 21:36:33 -0400'
+          example: '2025-06-06 08:38:23 -0400'
         hours:
           type: number
           format: float
-          example: 8.28
+          example: 3.35
         active:
           type: boolean
           example: true
@@ -474,6 +524,13 @@ components:
             - employments
       required:
       - user
+    ProfileUpdateRequest:
+      type: object
+      properties:
+        profile:
+          "$ref": "#/components/schemas/Profile"
+      required:
+      - profile
 servers:
 - url: https://{defaultHost}
   variables:

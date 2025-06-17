@@ -28,10 +28,14 @@ model/get200Response.ts
 model/loginResponse.ts
 model/models.ts
 model/position.ts
+model/profile.ts
 model/profileGet404Response.ts
+model/profilePatch200Response.ts
+model/profilePatch422Response.ts
 model/profileResponse.ts
 model/profileResponseUser.ts
 model/profileResponseUserAllOfEmploymentsInner.ts
+model/profileUpdateRequest.ts
 model/shift.ts
 model/signInPost401Response.ts
 model/signInPostRequest.ts
