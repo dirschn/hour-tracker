@@ -31,7 +31,7 @@ const authInterceptor: HttpInterceptorFn = (req, next) => {
         // Clear the current user state
         authService.clearUserState();
         // Redirect to sign-in page
-        router.navigate(['/sign-in']);
+        router.navigate(['/sign_in']);
       }
 
       // Re-throw the error so components can still handle it if needed

@@ -29,11 +29,11 @@ export class App {
   signOut(): void {
     this.authService.signOut().subscribe({
       next: () => {
-        this.router.navigate(['/sign-in']);
+        this.router.navigate(['/sign_in']);
       },
       error: (error) => {
         console.error('Sign out error:', error);
-        this.router.navigate(['/sign-in']);
+        this.router.navigate(['/sign_in']);
       }
     });
   }

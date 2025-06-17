@@ -28,7 +28,7 @@ export class AuthInterceptor implements HttpInterceptor {
           // Clear the current user state
           this.authService.clearUserState();
           // Redirect to sign-in page
-          this.router.navigate(['/sign-in']);
+          this.router.navigate(['/sign_in']);
         }
 
         // Re-throw the error so components can still handle it if needed
