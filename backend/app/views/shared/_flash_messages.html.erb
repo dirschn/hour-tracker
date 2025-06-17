@@ -1,0 +1,13 @@
+<% if notice %>
+  <div class="alert alert-success alert-dismissible fade show" role="alert" data-controller="notification">
+    <%= notice %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" data-action="click->notification#dismiss"></button>
+  </div>
+<% end %>
+
+<% if alert %>
+  <div class="alert alert-danger alert-dismissible fade show" role="alert" data-controller="notification">
+    <%= alert %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" data-action="click->notification#dismiss"></button>
+  </div>
+<% end %>

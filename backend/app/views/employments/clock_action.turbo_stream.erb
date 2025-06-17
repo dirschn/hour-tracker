@@ -1,0 +1,32 @@
+<%= turbo_stream.replace "employment-#{@employment.id}-actions" do %>
+  <% if @employment.shifts.active.exists? %>
+    <div data-controller="clock" data-clock-action-value="Clocking Out">
+      <%= link_to "Clock Out", 
+                  clock_out_employment_path(@employment), 
+                  method: :post,
+                  class: "btn btn-danger w-100 clock-button",
+                  data: { 
+                    turbo_method: :post,
+                    confirm: "Are you sure you want to clock out?",
+                    clock_target: "button",
+                    action: "turbo:submit-start->clock#submitStart turbo:submit-end->clock#submitEnd"
+                  } %>
+    </div>
+  <% else %>
+    <div data-controller="clock" data-clock-action-value="Clocking In">
+      <%= link_to "Clock In", 
+                  clock_in_employment_path(@employment), 
+                  method: :post,
+                  class: "btn btn-success w-100 clock-button",
+                  data: { 
+                    turbo_method: :post,
+                    clock_target: "button",
+                    action: "turbo:submit-start->clock#submitStart turbo:submit-end->clock#submitEnd"
+                  } %>
+    </div>
+  <% end %>
+<% end %>
+
+<%= turbo_stream.replace "employment-#{@employment.id}" do %>
+  <%= render 'shared/employment_card', employment: @employment %>
+<% end %>

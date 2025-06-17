@@ -1,0 +1,8 @@
+<%= link_to "Clock Out", 
+            clock_out_employment_path(employment), 
+            method: :post,
+            class: "btn btn-danger w-100",
+            data: { 
+              turbo_method: :post,
+              confirm: "Are you sure you want to clock out?"
+            } %>

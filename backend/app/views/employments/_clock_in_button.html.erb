@@ -1,0 +1,7 @@
+<%= link_to "Clock In", 
+            clock_in_employment_path(employment), 
+            method: :post,
+            class: "btn btn-success w-100",
+            data: { 
+              turbo_method: :post
+            } %>

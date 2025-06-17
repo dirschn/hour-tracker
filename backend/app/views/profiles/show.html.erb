@@ -1,0 +1,74 @@
+<div class="container py-4">
+  <div class="row">
+    <div class="col-md-8">
+      <h1 class="mb-4">Profile</h1>
+      
+      <%= form_with model: @user, url: profile_path, method: :patch, local: true, class: "needs-validation", novalidate: true do |form| %>
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title mb-0">Personal Information</h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <%= form.label :first_name, class: "form-label" %>
+                <%= form.text_field :first_name, class: "form-control", required: true %>
+                <div class="invalid-feedback">
+                  Please provide a valid first name.
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <%= form.label :last_name, class: "form-label" %>
+                <%= form.text_field :last_name, class: "form-control", required: true %>
+                <div class="invalid-feedback">
+                  Please provide a valid last name.
+                </div>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <%= form.label :email, class: "form-label" %>
+              <%= form.email_field :email, class: "form-control", required: true %>
+              <div class="invalid-feedback">
+                Please provide a valid email address.
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <%= form.label :username, class: "form-label" %>
+              <%= form.text_field :username, class: "form-control" %>
+              <div class="form-text">Optional username for display purposes.</div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <%= form.submit "Update Profile", class: "btn btn-primary" %>
+            <%= link_to "Back to Dashboard", dashboard_path, class: "btn btn-secondary" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Employment Summary</h5>
+        </div>
+        <div class="card-body">
+          <% if @user.employments.any? %>
+            <p class="text-muted">Active Employments: <strong><%= @user.employments.active.count %></strong></p>
+            <ul class="list-group list-group-flush">
+              <% @user.employments.active.each do |employment| %>
+                <li class="list-group-item px-0">
+                  <strong><%= employment.position.title %></strong><br>
+                  <small class="text-muted"><%= employment.position.company.name %></small>
+                </li>
+              <% end %>
+            </ul>
+          <% else %>
+            <p class="text-muted">No active employments found.</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

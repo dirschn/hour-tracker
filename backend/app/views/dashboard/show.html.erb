@@ -1,0 +1,21 @@
+<div class="container py-4">
+  <h1 class="mb-4">Dashboard</h1>
+  
+  <% if @active_employments.any? %>
+    <div class="mb-5">
+      <h2 class="mb-4">Active Employments</h2>
+      <div class="row">
+        <% @active_employments.each do |employment| %>
+          <div class="col-md-6 col-lg-4 mb-4">
+            <%= render 'shared/employment_card', employment: employment %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% else %>
+    <div class="alert alert-info">
+      <h4>Welcome to Hour Tracker!</h4>
+      <p>You don't have any active employments yet. Contact your administrator to get started.</p>
+    </div>
+  <% end %>
+</div>

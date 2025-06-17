@@ -1,0 +1,75 @@
+<div class="card h-100 border-primary shadow employment-card" id="employment-<%= employment.id %>">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h5 class="card-title mb-0">
+      <%= employment.position.title %>
+      <small class="text-muted">at <%= employment.position.company.name %></small>
+    </h5>
+    <div class="badge weekly-hours-badge fs-6">
+      <i class="bi bi-clock"></i>
+      <span><%= @total_weekly_hours[employment.id] || 0 %> hrs</span>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <% if current_shift = @current_shifts.find { |s| s.employment_id == employment.id } %>
+      <div class="alert alert-success py-2 mb-3">
+        <strong>Currently Clocked In</strong>
+        <div><small>Started: <%= current_shift.start_time.strftime("%I:%M %p") %></small></div>
+        <div><small>Hours so far: <%= current_shift.current_hours.round(2) %></small></div>
+      </div>
+    <% end %>
+
+    <!-- Recent shifts this week -->
+    <% week_shifts = @shifts.select { |s| s.employment_id == employment.id } %>
+    <% if week_shifts.any? %>
+      <h6 class="mb-2">This Week's Shifts</h6>
+      <div class="list-group list-group-flush mb-3">
+        <% week_shifts.each do |shift| %>
+          <div class="list-group-item px-0 py-2">
+            <div class="d-flex justify-content-between">
+              <span><%= shift.date.strftime("%a %m/%d") %></span>
+              <span class="text-muted">
+                <% if shift.end_time %>
+                  <%= shift.start_time.strftime("%I:%M %p") %> - <%= shift.end_time.strftime("%I:%M %p") %>
+                  (<%= shift.hours_worked.round(2) %> hrs)
+                <% else %>
+                  <%= shift.start_time.strftime("%I:%M %p") %> - Active
+                <% end %>
+              </span>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
+    <!-- Clock In/Out buttons with enhanced Stimulus controller -->
+    <%= turbo_frame_tag "employment-#{employment.id}-actions" do %>
+      <% if @current_shifts.any? { |s| s.employment_id == employment.id } %>
+        <div data-controller="clock" data-clock-action-value="Clocking Out">
+          <%= link_to "Clock Out",
+                      clock_out_employment_path(employment),
+                      method: :post,
+                      class: "btn btn-danger w-100 clock-button",
+                      data: {
+                        turbo_method: :post,
+                        confirm: "Are you sure you want to clock out?",
+                        clock_target: "button",
+                        action: "turbo:submit-start->clock#submitStart turbo:submit-end->clock#submitEnd"
+                      } %>
+        </div>
+      <% else %>
+        <div data-controller="clock" data-clock-action-value="Clocking In">
+          <%= link_to "Clock In",
+                      clock_in_employment_path(employment),
+                      method: :post,
+                      class: "btn btn-success w-100 clock-button",
+                      data: {
+                        turbo_method: :post,
+                        clock_target: "button",
+                        action: "turbo:submit-start->clock#submitStart turbo:submit-end->clock#submitEnd"
+                      } %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>
