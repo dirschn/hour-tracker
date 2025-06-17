@@ -172,6 +172,29 @@ paths:
                     example: No active shift to clock out of
         '401':
           description: unauthorized
+  "/profile":
+    get:
+      summary: show profile
+      tags:
+      - Profiles
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProfileResponse"
+        '404':
+          description: user not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                required:
+                - error
 components:
   schemas:
     Company:
@@ -179,13 +202,13 @@ components:
       properties:
         id:
           type: integer
-          example: 69
+          example: 72
         name:
           type: string
-          example: Jerde LLC
+          example: Stamm-Moen
         description:
           type: string
-          example: Devolved bifurcated capability
+          example: Extended real-time core
         created_at:
           type: string
           format: date-time
@@ -203,19 +226,19 @@ components:
           example: 1
         first_name:
           type: string
-          example: Markus
+          example: Treena
         last_name:
           type: string
-          example: Will
+          example: Cruickshank
         username:
           type: string
-          example: salvatore_beer
+          example: joleen
         email:
           type: string
-          example: scot.mckenzie@jenkins.test
+          example: adena_mclaughlin@bosco-bogan.example
         name:
           type: string
-          example: Shasta Block
+          example: Anita Kilback
         created_at:
           type: string
           format: date-time
@@ -236,16 +259,16 @@ components:
           example: 1
         email:
           type: string
-          example: quentin@labadie.test
+          example: zonia@howell.test
         first_name:
           type: string
-          example: Gilda
+          example: Renita
         last_name:
           type: string
-          example: Denesik
+          example: Douglas
         username:
           type: string
-          example: miles_herzog
+          example: lianne.nolan
       required:
       - id
       - email
@@ -254,21 +277,21 @@ components:
       properties:
         id:
           type: integer
-          example: 80
+          example: 77
         user_id:
           type: integer
-          example: 94
+          example: 82
         position_id:
           type: integer
-          example: 61
+          example: 60
         start_date:
           type: string
           format: date
-          example: '2025-05-23'
+          example: '2025-06-11'
         end_date:
           type: string
           format: date
-          example: '2025-06-18'
+          example: '2025-07-12'
         created_at:
           type: string
           format: date-time
@@ -285,16 +308,16 @@ components:
       properties:
         id:
           type: integer
-          example: 41
+          example: 77
         title:
           type: string
-          example: Investor Community-Services Assistant
+          example: Corporate Retail Officer
         description:
           type: string
-          example: Cloned actuating migration
+          example: Extended actuating conglomeration
         company_id:
           type: integer
-          example: 64
+          example: 34
         remote:
           type: boolean
           example: false
@@ -313,29 +336,29 @@ components:
       properties:
         id:
           type: integer
-          example: 30
+          example: 97
         employment_id:
           type: integer
-          example: 19
+          example: 27
         date:
           type: string
           format: date
-          example: '2025-05-18'
+          example: '2025-06-08'
         start_time:
           type: string
           format: date-time
-          example: '2025-05-15 21:49:55 -0400'
+          example: '2025-06-01 00:44:02 -0400'
         end_time:
           type: string
           format: date-time
-          example: '2025-05-21 17:33:56 -0400'
+          example: '2025-06-02 21:36:33 -0400'
         hours:
           type: number
           format: float
-          example: 1.41
+          example: 8.28
         active:
           type: boolean
-          example: false
+          example: true
         created_at:
           type: string
           format: date-time
@@ -425,6 +448,32 @@ components:
         description:
           type: string
       required: []
+    ProfileResponse:
+      type: object
+      properties:
+        user:
+          allOf:
+          - "$ref": "#/components/schemas/User"
+          - type: object
+            properties:
+              employments:
+                type: array
+                items:
+                  allOf:
+                  - "$ref": "#/components/schemas/Employment"
+                  - type: object
+                    properties:
+                      position:
+                        "$ref": "#/components/schemas/Position"
+                      company:
+                        "$ref": "#/components/schemas/Company"
+                    required:
+                    - position
+                    - company
+            required:
+            - employments
+      required:
+      - user
 servers:
 - url: https://{defaultHost}
   variables:

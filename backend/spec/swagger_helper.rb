@@ -161,6 +161,39 @@ RSpec.configure do |config|
               description: { type: :string }
             },
             required: []
+          },
+          ProfileResponse: {
+            type: :object,
+            properties: {
+              user: {
+                allOf: [
+                  { '$ref': '#/components/schemas/User' },
+                  {
+                    type: :object,
+                    properties: {
+                      employments: {
+                        type: :array,
+                        items: {
+                          allOf: [
+                            { '$ref': '#/components/schemas/Employment' },
+                            {
+                              type: :object,
+                              properties: {
+                                position: { '$ref': '#/components/schemas/Position' },
+                                company: { '$ref': '#/components/schemas/Company' }
+                              },
+                              required: ['position', 'company']
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    required: ['employments']
+                  }
+                ]
+              }
+            },
+            required: ['user']
           }
         }
       },

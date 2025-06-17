@@ -10,6 +10,8 @@ api/dashboard.service.ts
 api/dashboard.serviceInterface.ts
 api/employments.service.ts
 api/employments.serviceInterface.ts
+api/profiles.service.ts
+api/profiles.serviceInterface.ts
 configuration.ts
 encoder.ts
 git_push.sh
@@ -26,6 +28,10 @@ model/get200Response.ts
 model/loginResponse.ts
 model/models.ts
 model/position.ts
+model/profileGet404Response.ts
+model/profileResponse.ts
+model/profileResponseUser.ts
+model/profileResponseUserAllOfEmploymentsInner.ts
 model/shift.ts
 model/signInPost401Response.ts
 model/signInPostRequest.ts

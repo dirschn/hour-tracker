@@ -7,4 +7,7 @@ export * from './dashboard.serviceInterface';
 export * from './employments.service';
 import { EmploymentsService } from './employments.service';
 export * from './employments.serviceInterface';
-export const APIS = [AuthenticationService, DashboardService, EmploymentsService];
+export * from './profiles.service';
+import { ProfilesService } from './profiles.service';
+export * from './profiles.serviceInterface';
+export const APIS = [AuthenticationService, DashboardService, EmploymentsService, ProfilesService];

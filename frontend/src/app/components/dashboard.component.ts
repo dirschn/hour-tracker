@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { DashboardService, EmploymentsService } from '../../generated-api';
 import { AuthenticatedUser } from '../../generated-api';
+
+import { Calendar } from '@fullcalendar/core';
+import timeGridPlugin from '@fullcalendar/timegrid';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,193 +14,102 @@ import { AuthenticatedUser } from '../../generated-api';
   imports: [CommonModule, RouterModule],
   template: `
     <div class="container py-4">
-      <h1 class="h3 mb-3">Dashboard</h1>
+      <h1 class="mb-3">Dashboard</h1>
       <div *ngIf="dashboardData; else loading">
         <div class="mb-5">
           <h2 class="mb-4">Active Employments</h2>
-          <div class="row g-4">
-            <div
-              class="col-md-6 col-lg-4"
-              *ngFor="let emp of dashboardData.active_employments"
-            >
-              <div class="card h-100 border-primary shadow">
-                <div class="card-body">
-                  <h5 class="card-title">Employment #{{ emp.id }}</h5>
-                  <div><strong>Position:</strong> {{ emp.position_id }}</div>
+          <div *ngFor="let emp of dashboardData.active_employments">
+            <div class="card h-100 border-primary shadow">
+              <div class="card-header d-flex justify-content-between align-items-center user-select-none">
+                <div class="d-flex align-items-center gap-2">
+                  <!-- Caret icon removed -->
+                  <h5 class="card-title mb-0">Employment #{{ emp.id }}</h5>
+                </div>
+                <div
+                  class="badge bg-secondary fs-6 d-flex gap-2"
+                  title="Hours for this week"
+                >
+                  <i class="bi bi-clock"></i>
+                  <span>{{ getWeeklyHours(emp.id) }}</span>
+                </div>
+              </div>
+              <div class="card-body" [id]="'employment-body-' + emp.id">
+                <div
+                  *ngIf="getCurrentShiftForEmployment(emp.id) as currentShift"
+                  class="alert alert-success py-2 mb-3"
+                >
+                  <strong>Current Shift:</strong>
+                  <div>Date: {{ currentShift.date | date }}</div>
                   <div>
-                    <strong>Start Date:</strong> {{ emp.start_date | date }}
+                    Start: {{ currentShift.start_time | date : 'shortTime' }}
                   </div>
-                  <div><strong>Employment ID:</strong> {{ emp.id }}</div>
-                  <div><strong>User ID:</strong> {{ emp.user_id }}</div>
                   <div>
-                    <strong>Created:</strong>
-                    {{ emp.created_at | date : 'short' }}
-                  </div>
-                  <div
-                    class="mt-2"
-                    *ngIf="
-                      dashboardData.total_weekly_hours &&
-                      dashboardData.total_weekly_hours[emp.id] !== undefined
-                    "
-                  >
-                    <strong>This Week's Hours:</strong>
-                    <span class="badge bg-info fs-5">{{
-                      dashboardData.total_weekly_hours[emp.id]
-                    }}</span>
-                  </div>
-                  <div
-                    class="mt-2"
-                    *ngIf="
-                      dashboardData.total_weekly_hours &&
-                      dashboardData.total_weekly_hours[emp.id] === undefined
-                    "
-                  >
-                    <strong>This Week's Hours:</strong>
-                    <span class="text-muted">0</span>
-                  </div>
-
-                  <!-- Current Shift (if any) -->
-                  <div
-                    *ngIf="getCurrentShiftForEmployment(emp.id) as currentShift"
-                    class="alert alert-success py-2 mb-3"
-                  >
-                    <strong>Current Shift:</strong>
-                    <div>Date: {{ currentShift.date | date }}</div>
-                    <div>
-                      Start: {{ currentShift.start_time | date : 'shortTime' }}
-                    </div>
-                    <div>
-                      Hours so far:
-                      <span class="badge bg-success">{{
-                        currentShift.hours
-                      }}</span>
-                    </div>
-                    <div>
-                      Status: <span class="badge bg-success">Active</span>
-                    </div>
-                  </div>
-
-                  <button
-                    class="btn btn-outline-primary btn-sm mt-3"
-                    (click)="
-                      expandedEmployment =
-                        expandedEmployment === emp.id ? null : emp.id
-                    "
-                  >
+                    Hours so far:
                     {{
-                      expandedEmployment === emp.id
-                        ? "Hide this week's shifts"
-                        : "Show this week's shifts"
+                      getCurrentShiftHours(currentShift.start_time)
                     }}
+                  </div>
+                </div>
+
+                <!-- Calendar always visible -->
+                <ng-container
+                  *ngIf="getWeeklyShiftsForEmployment(emp.id).length > 0; else noShifts"
+                >
+                  <div #weekCalendarContainer></div>
+                </ng-container>
+                <ng-template #noShifts>
+                  <div class="text-muted">
+                    No shifts for this employment this week.
+                  </div>
+                </ng-template>
+
+                <!-- Clock In button (if no current shift) -->
+                <div
+                  *ngIf="!getCurrentShiftForEmployment(emp.id)"
+                  class="mt-3"
+                >
+                  <button
+                    class="btn btn-success"
+                    (click)="clockIn(emp.id)"
+                    [disabled]="clockingInEmploymentId === emp.id"
+                  >
+                    <span *ngIf="clockingInEmploymentId === emp.id"
+                      >Clocking in...</span
+                    >
+                    <span *ngIf="clockingInEmploymentId !== emp.id"
+                      >Clock In</span
+                    >
                   </button>
-                  <div *ngIf="expandedEmployment === emp.id" class="mt-3">
-                    <ng-container
-                      *ngIf="
-                        getWeeklyShiftsForEmployment(emp.id).length > 0;
-                        else noShifts
-                      "
-                    >
-                      <table class="table table-sm table-bordered align-middle">
-                        <thead class="table-light">
-                          <tr>
-                            <th>Date</th>
-                            <th>Start</th>
-                            <th>End</th>
-                            <th>Hours</th>
-                            <th>Status</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr
-                            *ngFor="
-                              let shift of getWeeklyShiftsForEmployment(emp.id)
-                            "
-                          >
-                            <td>{{ shift.date | date }}</td>
-                            <td>{{ shift.start_time | date : 'shortTime' }}</td>
-                            <td>
-                              {{
-                                shift.end_time
-                                  ? (shift.end_time | date : 'shortTime')
-                                  : '—'
-                              }}
-                            </td>
-                            <td>
-                              <span class="badge bg-primary">{{
-                                shift.hours
-                              }}</span>
-                            </td>
-                            <td>
-                              <span
-                                [ngClass]="
-                                  shift.active
-                                    ? 'badge bg-success'
-                                    : 'badge bg-secondary'
-                                "
-                                >{{
-                                  shift.active ? 'Active' : 'Completed'
-                                }}</span
-                              >
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </ng-container>
-                    <ng-template #noShifts>
-                      <div class="text-muted">
-                        No shifts for this employment this week.
-                      </div>
-                    </ng-template>
-                  </div>
-
-                  <!-- Clock In button (if no current shift) -->
                   <div
-                    *ngIf="!getCurrentShiftForEmployment(emp.id)"
-                    class="mt-3"
+                    *ngIf="clockInError && clockingInEmploymentId === emp.id"
+                    class="text-danger mt-2"
                   >
-                    <button
-                      class="btn btn-success"
-                      (click)="clockIn(emp.id)"
-                      [disabled]="clockingInEmploymentId === emp.id"
-                    >
-                      <span *ngIf="clockingInEmploymentId === emp.id"
-                        >Clocking in...</span
-                      >
-                      <span *ngIf="clockingInEmploymentId !== emp.id"
-                        >Clock In</span
-                      >
-                    </button>
-                    <div
-                      *ngIf="clockInError && clockingInEmploymentId === emp.id"
-                      class="text-danger mt-2"
-                    >
-                      {{ clockInError }}
-                    </div>
+                    {{ clockInError }}
                   </div>
+                </div>
 
-                  <!-- Clock Out button (if current shift is active) -->
-                  <div
-                    *ngIf="getCurrentShiftForEmployment(emp.id)"
-                    class="mt-3"
+                <!-- Clock Out button (if current shift is active) -->
+                <div
+                  *ngIf="getCurrentShiftForEmployment(emp.id)"
+                  class="mt-3"
+                >
+                  <button
+                    class="btn btn-danger"
+                    (click)="clockOut(emp.id)"
+                    [disabled]="clockingOutEmploymentId === emp.id"
                   >
-                    <button
-                      class="btn btn-danger"
-                      (click)="clockOut(emp.id)"
-                      [disabled]="clockingOutEmploymentId === emp.id"
+                    <span *ngIf="clockingOutEmploymentId === emp.id"
+                      >Clocking out...</span
                     >
-                      <span *ngIf="clockingOutEmploymentId === emp.id"
-                        >Clocking out...</span
-                      >
-                      <span *ngIf="clockingOutEmploymentId !== emp.id"
-                        >Clock Out</span
-                      >
-                    </button>
-                    <div
-                      *ngIf="clockOutError && clockingOutEmploymentId === emp.id"
-                      class="text-danger mt-2"
+                    <span *ngIf="clockingOutEmploymentId !== emp.id"
+                      >Clock Out</span
                     >
-                      {{ clockOutError }}
-                    </div>
+                  </button>
+                  <div
+                    *ngIf="clockOutError && clockingOutEmploymentId === emp.id"
+                    class="text-danger mt-2"
+                  >
+                    {{ clockOutError }}
                   </div>
                 </div>
               </div>
@@ -215,11 +127,13 @@ import { AuthenticatedUser } from '../../generated-api';
 export class DashboardComponent implements OnInit {
   currentUser: AuthenticatedUser | null = null;
   dashboardData: any = null;
-  expandedEmployment: number | null = null;
   clockingInEmploymentId: number | null = null;
   clockInError: string | null = null;
   clockingOutEmploymentId: number | null = null;
   clockOutError: string | null = null;
+  @ViewChild('weekCalendarContainer', { static: false, read: ElementRef })
+  weekCalendarContainer!: ElementRef;
+  public weekCalendars: { [empId: number]: Calendar } = {};
 
   constructor(
     private authService: AuthService,
@@ -234,12 +148,46 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.dashboardService.rootGet().subscribe({
-      next: (data) => (this.dashboardData = data),
+      next: (data) => {
+        this.dashboardData = data;
+      },
       error: (err) => {
         console.error('Failed to load dashboard data', err);
         this.dashboardData = null;
       },
     });
+  }
+
+  ngAfterViewChecked(): void {
+    // Always render week calendar for all employments
+    if (this.weekCalendarContainer && this.dashboardData && this.dashboardData.active_employments) {
+      this.dashboardData.active_employments.forEach((emp: any) => {
+        const empId = emp.id;
+        if (!this.weekCalendars[empId]) {
+          const events = this.getWeeklyShiftsForEmployment(empId).map((shift: any) => ({
+            title: shift.position_title || 'Shift',
+            start: shift.start_time || shift.date,
+            end: shift.end_time || Date.now(),
+            allDay: false,
+            extendedProps: shift,
+          }));
+          const calendarOptions = {
+            plugins: [timeGridPlugin],
+            initialView: 'timeGridWeek',
+            events,
+            headerToolbar: false,
+            navLinks: false,
+            validRange: {
+              start: this.getCurrentWeekStart(),
+              end: this.getCurrentWeekEnd(),
+            },
+            allDaySlot: false,
+          } as any;
+          this.weekCalendars[empId] = new Calendar(this.weekCalendarContainer.nativeElement, calendarOptions);
+          this.weekCalendars[empId].render();
+        }
+      });
+    }
   }
 
   signOut(): void {
@@ -295,6 +243,19 @@ export class DashboardComponent implements OnInit {
     );
   }
 
+  // Calculate hours since start_time, rounded to nearest quarter hour
+  getCurrentShiftHours(startTime: string | Date): string {
+    if (!startTime) return '0.00';
+    const start = new Date(startTime);
+    const now = new Date();
+    let diffMs = now.getTime() - start.getTime();
+    if (diffMs < 0) diffMs = 0;
+    let hours = diffMs / (1000 * 60 * 60);
+    // Round to nearest quarter hour
+    hours = Math.round(hours * 4) / 4;
+    return hours.toFixed(2);
+  }
+
   // Call the API to clock in for an employment
   clockIn(empId: number): void {
     this.clockingInEmploymentId = empId;
@@ -342,5 +303,28 @@ export class DashboardComponent implements OnInit {
         this.dashboardData = null;
       },
     });
+  }
+
+  // Helper to get the start of the current week (Sunday)
+  getCurrentWeekStart(): string {
+    const now = new Date();
+    now.setDate(now.getDate() - now.getDay());
+    now.setHours(0, 0, 0, 0);
+    return now.toISOString().slice(0, 10);
+  }
+
+  // Helper to get the end of the current week (Saturday night)
+  getCurrentWeekEnd(): string {
+    const now = new Date();
+    now.setDate(now.getDate() - now.getDay() + 6);
+    now.setHours(23, 59, 59, 999);
+    return now.toISOString().slice(0, 10);
+  }
+
+  // Helper to get weekly hours for an employment
+  getWeeklyHours(empId: number): string {
+    if (!this.dashboardData || !this.dashboardData.total_weekly_hours) return '0';
+    const hours = this.dashboardData.total_weekly_hours[empId];
+    return hours !== undefined ? hours : '0';
   }
 }
