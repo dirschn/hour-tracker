@@ -14,7 +14,7 @@ export interface Shift {
     employment_id: number;
     date: string;
     start_time: string;
-    end_time?: string;
+    end_time?: string | null;
     hours?: number;
     active?: boolean;
     created_at?: string;

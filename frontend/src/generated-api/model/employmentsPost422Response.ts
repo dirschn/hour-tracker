@@ -9,7 +9,7 @@
  */
 
 
-export interface EmploymentsIdClockInPost422Response { 
-    errors?: string;
+export interface EmploymentsPost422Response { 
+    errors?: Array<string>;
 }
 

@@ -11,8 +11,10 @@ import { HttpHeaders }                                       from '@angular/comm
 
 import { Observable }                                        from 'rxjs';
 
-import { EmploymentsIdClockInPost422Response } from '../model/models';
-import { EmploymentsIdClockOutPost422Response } from '../model/models';
+import { Employment } from '../model/models';
+import { EmploymentsIdPutRequest } from '../model/models';
+import { EmploymentsPost422Response } from '../model/models';
+import { EmploymentsPostRequest } from '../model/models';
 import { Shift } from '../model/models';
 
 
@@ -23,6 +25,12 @@ import { Configuration }                                     from '../configurat
 export interface EmploymentsServiceInterface {
     defaultHeaders: HttpHeaders;
     configuration: Configuration;
+
+    /**
+     * list employments
+     * Get all employments for the current user
+     */
+    employmentsGet(extraHttpRequestParams?: any): Observable<Array<Employment>>;
 
     /**
      * clock in employment
@@ -37,5 +45,34 @@ export interface EmploymentsServiceInterface {
      * @param id Employment ID
      */
     employmentsIdClockOutPost(id: string, extraHttpRequestParams?: any): Observable<Shift>;
+
+    /**
+     * delete employment
+     * Delete an employment
+     * @param id Employment ID
+     */
+    employmentsIdDelete(id: string, extraHttpRequestParams?: any): Observable<{}>;
+
+    /**
+     * show employment
+     * Get a specific employment
+     * @param id Employment ID
+     */
+    employmentsIdGet(id: string, extraHttpRequestParams?: any): Observable<Employment>;
+
+    /**
+     * update employment
+     * Update an employment
+     * @param id Employment ID
+     * @param employmentsIdPutRequest 
+     */
+    employmentsIdPut(id: string, employmentsIdPutRequest?: EmploymentsIdPutRequest, extraHttpRequestParams?: any): Observable<Employment>;
+
+    /**
+     * create employment
+     * Create a new employment
+     * @param employmentsPostRequest 
+     */
+    employmentsPost(employmentsPostRequest?: EmploymentsPostRequest, extraHttpRequestParams?: any): Observable<Employment>;
 
 }

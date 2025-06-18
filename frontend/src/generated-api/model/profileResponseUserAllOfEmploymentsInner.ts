@@ -16,7 +16,8 @@ export interface ProfileResponseUserAllOfEmploymentsInner {
     user_id: number;
     position_id: number;
     start_date: string;
-    end_date?: string;
+    end_date?: string | null;
+    active: boolean;
     created_at?: string;
     updated_at?: string;
     position: Position;

@@ -41,8 +41,8 @@ RSpec.configure do |config|
               id: { type: :integer, example: 1 },
               first_name: { type: :string, example: Faker::Name.first_name },
               last_name: { type: :string, example: Faker::Name.last_name },
-              username: { type: :string, example: Faker::Internet.username },
-              email: { type: :string, example: Faker::Internet.email },
+              username: { type: :string, example: Faker::Internet.username, minLength: 3, maxLength: 20 },
+              email: { type: :string, format: 'email', example: Faker::Internet.email },
               name: { type: :string, example: Faker::Name.name },
               created_at: { type: :string, format: 'date-time' },
               updated_at: { type: :string, format: 'date-time' }
@@ -55,14 +55,14 @@ RSpec.configure do |config|
               first_name: { type: :string, example: Faker::Name.first_name },
               last_name: { type: :string, example: Faker::Name.last_name },
               username: { type: :string, example: Faker::Internet.username },
-              email: { type: :string, example: Faker::Internet.email }
+              email: { type: :string, format: 'email', example: Faker::Internet.email }
             }
           },
           AuthenticatedUser: {
             type: :object,
             properties: {
               id: { type: :integer, example: 1 },
-              email: { type: :string, example: Faker::Internet.email },
+              email: { type: :string, format: 'email', example: Faker::Internet.email },
               first_name: { type: :string, example: Faker::Name.first_name },
               last_name: { type: :string, example: Faker::Name.last_name },
               username: { type: :string, example: Faker::Internet.username },
@@ -76,11 +76,14 @@ RSpec.configure do |config|
               user_id: { type: :integer, example: Faker::Number.number(digits: 2) },
               position_id: { type: :integer, example: Faker::Number.number(digits: 2) },
               start_date: { type: :string, format: 'date', example: Faker::Date.backward(days: 30).to_s },
-              end_date: { type: :string, format: 'date', example: Faker::Date.forward(days: 30).to_s },
+              end_date: { type: :string, format: 'date', nullable: true, example: Faker::Date.forward(days: 30).to_s },
+              active: { type: :boolean, example: true },
               created_at: { type: :string, format: 'date-time' },
-              updated_at: { type: :string, format: 'date-time' }
+              updated_at: { type: :string, format: 'date-time' },
+              position: { '$ref': '#/components/schemas/Position' },
+              company: { '$ref': '#/components/schemas/Company' }
             },
-            required: ['id', 'user_id', 'position_id', 'start_date']
+            required: ['id', 'user_id', 'position_id', 'start_date', 'active', 'position', 'company']
           },
           Position: {
             type: :object,
@@ -102,7 +105,7 @@ RSpec.configure do |config|
               employment_id: { type: :integer, example: Faker::Number.number(digits: 2) },
               date: { type: :string, format: 'date', example: Faker::Date.backward(days: 30).to_s },
               start_time: { type: :string, format: 'date-time', example: Faker::Time.backward(days: 30) },
-              end_time: { type: :string, format: 'date-time', example: Faker::Time.backward(days: 29) },
+              end_time: { type: :string, format: 'date-time', nullable: true, example: Faker::Time.backward(days: 29) },
               hours: { type: :number, format: 'float', example: Faker::Number.decimal(l_digits: 1, r_digits: 2) },
               active: { type: :boolean, example: Faker::Boolean.boolean },
               created_at: { type: :string, format: 'date-time' },
@@ -130,7 +133,7 @@ RSpec.configure do |config|
               first_name: { type: :string },
               last_name: { type: :string },
               username: { type: :string },
-              email: { type: :string },
+              email: { type: :string, format: 'email' },
               password: { type: :string },
               password_confirmation: { type: :string }
             },
@@ -142,7 +145,7 @@ RSpec.configure do |config|
               first_name: { type: :string },
               last_name: { type: :string },
               username: { type: :string },
-              email: { type: :string },
+              email: { type: :string, format: 'email' },
               password: { type: :string },
               password_confirmation: { type: :string }
             },
@@ -215,12 +218,12 @@ RSpec.configure do |config|
       },
       servers: [
         {
-          url: 'https://{defaultHost}',
-          variables: {
-            defaultHost: {
-              default: 'www.example.com'
-            }
-          }
+          url: 'http://localhost:3000',
+          description: 'Development server'
+        },
+        {
+          url: 'https://api.nmd98.com',
+          description: 'Production server'
         }
       ]
     }

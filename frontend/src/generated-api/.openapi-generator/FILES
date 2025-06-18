@@ -22,8 +22,11 @@ model/clockOutRequest.ts
 model/company.ts
 model/createComponyRequest.ts
 model/employment.ts
-model/employmentsIdClockInPost422Response.ts
-model/employmentsIdClockOutPost422Response.ts
+model/employmentsIdPutRequest.ts
+model/employmentsIdPutRequestEmployment.ts
+model/employmentsPost422Response.ts
+model/employmentsPostRequest.ts
+model/employmentsPostRequestEmployment.ts
 model/get200Response.ts
 model/loginResponse.ts
 model/models.ts

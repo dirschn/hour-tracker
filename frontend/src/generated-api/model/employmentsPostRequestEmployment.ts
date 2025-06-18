@@ -9,7 +9,9 @@
  */
 
 
-export interface EmploymentsIdClockOutPost422Response { 
-    errors?: string;
+export interface EmploymentsPostRequestEmployment { 
+    position_id: number;
+    start_date: string;
+    end_date?: string | null;
 }
 
