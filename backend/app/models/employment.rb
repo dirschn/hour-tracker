@@ -4,6 +4,8 @@ class Employment < ApplicationRecord
   has_many :shifts, dependent: :destroy
   has_many :hourly_rates, dependent: :destroy
 
+  accepts_nested_attributes_for :position, update_only: true
+
   validates :user_id, uniqueness: { scope: :position_id }
   validates :start_date, presence: true
 

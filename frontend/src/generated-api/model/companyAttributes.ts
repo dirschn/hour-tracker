@@ -7,10 +7,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { EmploymentsIdPutRequestEmployment } from './employmentsIdPutRequestEmployment';
 
 
-export interface EmploymentsIdPutRequest { 
-    employment?: EmploymentsIdPutRequestEmployment;
+export interface CompanyAttributes { 
+    name: string;
+    description?: string;
 }
 

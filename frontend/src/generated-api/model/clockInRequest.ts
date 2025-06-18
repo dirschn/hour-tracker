@@ -13,6 +13,6 @@ export interface ClockInRequest {
     /**
      * ID of the employment to clock in for
      */
-    employment_id?: number;
+    employment_id: number;
 }
 

@@ -19,11 +19,11 @@ import { Observable }                                        from 'rxjs';
 // @ts-ignore
 import { Employment } from '../model/employment';
 // @ts-ignore
-import { EmploymentsIdPutRequest } from '../model/employmentsIdPutRequest';
+import { EmploymentCreateRequest } from '../model/employmentCreateRequest';
+// @ts-ignore
+import { EmploymentUpdateRequest } from '../model/employmentUpdateRequest';
 // @ts-ignore
 import { EmploymentsPost422Response } from '../model/employmentsPost422Response';
-// @ts-ignore
-import { EmploymentsPostRequest } from '../model/employmentsPostRequest';
 // @ts-ignore
 import { Shift } from '../model/shift';
 
@@ -320,16 +320,16 @@ export class EmploymentsService extends BaseService implements EmploymentsServic
      * update employment
      * Update an employment
      * @param id Employment ID
-     * @param employmentsIdPutRequest 
+     * @param employmentUpdateRequest 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public employmentsIdPut(id: string, employmentsIdPutRequest?: EmploymentsIdPutRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Employment>;
-    public employmentsIdPut(id: string, employmentsIdPutRequest?: EmploymentsIdPutRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Employment>>;
-    public employmentsIdPut(id: string, employmentsIdPutRequest?: EmploymentsIdPutRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Employment>>;
-    public employmentsIdPut(id: string, employmentsIdPutRequest?: EmploymentsIdPutRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public employmentsIdPatch(id: string, employmentUpdateRequest?: EmploymentUpdateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Employment>;
+    public employmentsIdPatch(id: string, employmentUpdateRequest?: EmploymentUpdateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Employment>>;
+    public employmentsIdPatch(id: string, employmentUpdateRequest?: EmploymentUpdateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Employment>>;
+    public employmentsIdPatch(id: string, employmentUpdateRequest?: EmploymentUpdateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling employmentsIdPut.');
+            throw new Error('Required parameter id was null or undefined when calling employmentsIdPatch.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -368,10 +368,10 @@ export class EmploymentsService extends BaseService implements EmploymentsServic
 
         let localVarPath = `/employments/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Employment>('put', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Employment>('patch', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: employmentsIdPutRequest,
+                body: employmentUpdateRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -385,14 +385,14 @@ export class EmploymentsService extends BaseService implements EmploymentsServic
     /**
      * create employment
      * Create a new employment
-     * @param employmentsPostRequest 
+     * @param employmentCreateRequest 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public employmentsPost(employmentsPostRequest?: EmploymentsPostRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Employment>;
-    public employmentsPost(employmentsPostRequest?: EmploymentsPostRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Employment>>;
-    public employmentsPost(employmentsPostRequest?: EmploymentsPostRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Employment>>;
-    public employmentsPost(employmentsPostRequest?: EmploymentsPostRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public employmentsPost(employmentCreateRequest?: EmploymentCreateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Employment>;
+    public employmentsPost(employmentCreateRequest?: EmploymentCreateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Employment>>;
+    public employmentsPost(employmentCreateRequest?: EmploymentCreateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Employment>>;
+    public employmentsPost(employmentCreateRequest?: EmploymentCreateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -433,7 +433,7 @@ export class EmploymentsService extends BaseService implements EmploymentsServic
         return this.httpClient.request<Employment>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: employmentsPostRequest,
+                body: employmentCreateRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

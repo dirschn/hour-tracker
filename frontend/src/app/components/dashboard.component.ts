@@ -14,16 +14,41 @@ import timeGridPlugin from '@fullcalendar/timegrid';
   imports: [CommonModule, RouterModule],
   template: `
     <div class="container py-4">
-      <h1 class="mb-3">Dashboard</h1>
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">Dashboard</h1>
+      </div>
+
       <div *ngIf="dashboardData; else loading">
         <div class="mb-5">
           <h2 class="mb-4">Active Employments</h2>
+
+          <div
+            *ngIf="dashboardData.active_employments.length === 0"
+            class="text-center py-5"
+          >
+            <div class="text-muted">
+              <i class="bi bi-briefcase display-1 mb-3"></i>
+              <h4>No Active Employments</h4>
+              <p>Get started by adding your first employment!</p>
+              <button
+                class="btn btn-primary btn-lg"
+                (click)="navigateTo('/employments/new')"
+              >
+                <i class="bi bi-plus-lg me-2"></i>
+                Add Your First Employment
+              </button>
+            </div>
+          </div>
+
           <div *ngFor="let emp of dashboardData.active_employments">
             <div class="card h-100 border-primary shadow mb-4">
-              <div class="card-header d-flex justify-content-between align-items-center user-select-none">
+              <div
+                class="card-header d-flex justify-content-between align-items-center user-select-none"
+              >
                 <div class="d-flex align-items-center gap-2">
-                  <!-- Caret icon removed -->
-                  <h5 class="card-title mb-0">{{ emp.position.title }} &#64; {{ emp.company.name }}</h5>
+                  <h5 class="card-title mb-0">
+                    {{ emp.position.title }} &#64; {{ emp.company.name }}
+                  </h5>
                 </div>
                 <div
                   class="badge bg-secondary fs-6 d-flex gap-2"
@@ -45,17 +70,21 @@ import timeGridPlugin from '@fullcalendar/timegrid';
                   </div>
                   <div>
                     Hours so far:
-                    {{
-                      getCurrentShiftHours(currentShift.start_time)
-                    }}
+                    {{ getCurrentShiftHours(currentShift.start_time) }}
                   </div>
                 </div>
 
                 <!-- Calendar always visible -->
                 <ng-container
-                  *ngIf="getWeeklyShiftsForEmployment(emp.id).length > 0; else noShifts"
+                  *ngIf="
+                    getWeeklyShiftsForEmployment(emp.id).length > 0;
+                    else noShifts
+                  "
                 >
-                  <div [id]="'calendar-container-' + emp.id" class="calendar-container"></div>
+                  <div
+                    [id]="'calendar-container-' + emp.id"
+                    class="calendar-container"
+                  ></div>
                 </ng-container>
                 <ng-template #noShifts>
                   <div class="text-muted">
@@ -64,10 +93,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
                 </ng-template>
 
                 <!-- Clock In button (if no current shift) -->
-                <div
-                  *ngIf="!getCurrentShiftForEmployment(emp.id)"
-                  class="mt-3"
-                >
+                <div *ngIf="!getCurrentShiftForEmployment(emp.id)" class="mt-3">
                   <button
                     class="btn btn-success"
                     (click)="clockIn(emp.id)"
@@ -89,10 +115,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
                 </div>
 
                 <!-- Clock Out button (if current shift is active) -->
-                <div
-                  *ngIf="getCurrentShiftForEmployment(emp.id)"
-                  class="mt-3"
-                >
+                <div *ngIf="getCurrentShiftForEmployment(emp.id)" class="mt-3">
                   <button
                     class="btn btn-danger"
                     (click)="clockOut(emp.id)"
@@ -122,11 +145,13 @@ import timeGridPlugin from '@fullcalendar/timegrid';
       </ng-template>
     </div>
   `,
-  styles: [`
-    .calendar-container {
-      min-height: 200px;
-    }
-  `],
+  styles: [
+    `
+      .calendar-container {
+        min-height: 200px;
+      }
+    `,
+  ],
 })
 export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   currentUser: AuthenticatedUser | null = null;
@@ -213,7 +238,11 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
-    console.log('Initializing calendars for', this.dashboardData.active_employments.length, 'employments');
+    console.log(
+      'Initializing calendars for',
+      this.dashboardData.active_employments.length,
+      'employments'
+    );
 
     // Use a longer timeout to ensure DOM is fully rendered
     setTimeout(() => {
@@ -239,21 +268,33 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
     const shifts = this.getWeeklyShiftsForEmployment(empId);
     if (shifts.length === 0) {
-      console.log('No shifts found for employment', empId, '- skipping calendar');
+      console.log(
+        'No shifts found for employment',
+        empId,
+        '- skipping calendar'
+      );
       return; // Don't render calendar if no shifts
     }
 
     // Wait for DOM to be ready and retry if container not found
     const attemptRender = (attempt: number = 1) => {
-      const calendarContainer = document.getElementById('calendar-container-' + empId);
+      const calendarContainer = document.getElementById(
+        'calendar-container-' + empId
+      );
 
       if (!calendarContainer) {
         if (attempt <= 5) {
-          console.log(`Calendar container not found for employment ${empId}, attempt ${attempt}/5, retrying...`);
+          console.log(
+            `Calendar container not found for employment ${empId}, attempt ${attempt}/5, retrying...`
+          );
           setTimeout(() => attemptRender(attempt + 1), 100);
           return;
         } else {
-          console.error('Calendar container not found for employment', empId, 'after 5 attempts');
+          console.error(
+            'Calendar container not found for employment',
+            empId,
+            'after 5 attempts'
+          );
           return;
         }
       }
@@ -283,7 +324,10 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       } as any;
 
       try {
-        this.weekCalendars[empId] = new Calendar(calendarContainer, calendarOptions);
+        this.weekCalendars[empId] = new Calendar(
+          calendarContainer,
+          calendarOptions
+        );
         this.weekCalendars[empId].render();
         console.log('Calendar successfully rendered for employment', empId);
       } catch (error) {
@@ -312,7 +356,8 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // Helper to get weekly hours for an employment
   getWeeklyHours(empId: number): string {
-    if (!this.dashboardData || !this.dashboardData.total_weekly_hours) return '0';
+    if (!this.dashboardData || !this.dashboardData.total_weekly_hours)
+      return '0';
     const hours = this.dashboardData.total_weekly_hours[empId];
     return hours !== undefined ? hours : '0';
   }
@@ -397,7 +442,8 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
         },
         error: (err) => {
           this.clockingOutEmploymentId = null;
-          this.clockOutError = err?.error?.errors?.[0] || 'Failed to clock out.';
+          this.clockOutError =
+            err?.error?.errors?.[0] || 'Failed to clock out.';
         },
       });
   }

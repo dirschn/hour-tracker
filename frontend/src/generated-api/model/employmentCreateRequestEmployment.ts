@@ -7,11 +7,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { PositionAttributes } from './positionAttributes';
 
 
-export interface EmploymentsIdPutRequestEmployment { 
+export interface EmploymentCreateRequestEmployment { 
     position_id?: number;
     start_date?: string;
     end_date?: string | null;
+    position_attributes?: PositionAttributes;
 }
 

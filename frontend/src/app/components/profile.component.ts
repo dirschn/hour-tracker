@@ -55,11 +55,14 @@ import { ProfilesService, ProfileResponse } from '../../generated-api';
 
             <!-- Employments Section -->
             <div class="card">
-              <div class="card-header">
+              <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">
                   <i class="bi bi-briefcase me-2"></i>
                   Employments ({{ profileData.user.employments.length }})
                 </h5>
+                <button type="button" class="btn btn-primary btn-sm" (click)="addEmployment()">
+                  <i class="bi bi-plus-lg me-2"></i>New Employment
+                </button>
               </div>
               <div class="card-body">
                 <div *ngIf="profileData.user.employments.length > 0; else noEmployments">
@@ -71,11 +74,20 @@ import { ProfilesService, ProfileResponse } from '../../generated-api';
                         <div class="card-body">
                           <div class="d-flex justify-content-between align-items-start mb-3">
                             <h6 class="card-title mb-0">{{ employment.position.title }}</h6>
-                            <span class="badge"
-                                  [class.bg-success]="isActiveEmployment(employment)"
-                                  [class.bg-secondary]="!isActiveEmployment(employment)">
-                              {{ isActiveEmployment(employment) ? 'Active' : 'Ended' }}
-                            </span>
+                            <div class="d-flex gap-2 align-items-center">
+                              <span class="badge"
+                                    [class.bg-success]="isActiveEmployment(employment)"
+                                    [class.bg-secondary]="!isActiveEmployment(employment)">
+                                {{ isActiveEmployment(employment) ? 'Active' : 'Ended' }}
+                              </span>
+                              <button
+                                type="button"
+                                class="btn btn-sm btn-outline-secondary"
+                                (click)="editEmployment(employment.id)"
+                                title="Edit Employment">
+                                <i class="bi bi-pencil"></i>
+                              </button>
+                            </div>
                           </div>
 
                           <div class="mb-2" title="Company">
@@ -106,7 +118,11 @@ import { ProfilesService, ProfileResponse } from '../../generated-api';
                 <ng-template #noEmployments>
                   <div class="text-center text-muted py-4">
                     <i class="bi bi-briefcase display-6 mb-3"></i>
-                    <p class="mb-0">No employments found</p>
+                    <p class="mb-3">No employments found</p>
+                    <button class="btn btn-primary" (click)="addEmployment()">
+                      <i class="bi bi-plus-lg me-2"></i>
+                      Add Your First Employment
+                    </button>
                   </div>
                 </ng-template>
               </div>
@@ -172,5 +188,13 @@ export class ProfileComponent implements OnInit {
   editProfile(): void {
     // Logic to navigate to the edit profile page
     this.router.navigate(['/profile/edit']);
+  }
+
+  addEmployment(): void {
+    this.router.navigate(['/employments/new']);
+  }
+
+  editEmployment(employmentId: number): void {
+    this.router.navigate(['/employments', employmentId, 'edit']);
   }
 }

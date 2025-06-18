@@ -7,10 +7,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { EmploymentsPostRequestEmployment } from './employmentsPostRequestEmployment';
+import { EmploymentUpdateRequestEmployment } from './employmentUpdateRequestEmployment';
 
 
-export interface EmploymentsPostRequest { 
-    employment?: EmploymentsPostRequestEmployment;
+export interface EmploymentUpdateRequest { 
+    employment: EmploymentUpdateRequestEmployment;
 }
 

@@ -12,9 +12,9 @@ import { HttpHeaders }                                       from '@angular/comm
 import { Observable }                                        from 'rxjs';
 
 import { Employment } from '../model/models';
-import { EmploymentsIdPutRequest } from '../model/models';
+import { EmploymentCreateRequest } from '../model/models';
+import { EmploymentUpdateRequest } from '../model/models';
 import { EmploymentsPost422Response } from '../model/models';
-import { EmploymentsPostRequest } from '../model/models';
 import { Shift } from '../model/models';
 
 
@@ -64,15 +64,15 @@ export interface EmploymentsServiceInterface {
      * update employment
      * Update an employment
      * @param id Employment ID
-     * @param employmentsIdPutRequest 
+     * @param employmentUpdateRequest 
      */
-    employmentsIdPut(id: string, employmentsIdPutRequest?: EmploymentsIdPutRequest, extraHttpRequestParams?: any): Observable<Employment>;
+    employmentsIdPatch(id: string, employmentUpdateRequest?: EmploymentUpdateRequest, extraHttpRequestParams?: any): Observable<Employment>;
 
     /**
      * create employment
      * Create a new employment
-     * @param employmentsPostRequest 
+     * @param employmentCreateRequest 
      */
-    employmentsPost(employmentsPostRequest?: EmploymentsPostRequest, extraHttpRequestParams?: any): Observable<Employment>;
+    employmentsPost(employmentCreateRequest?: EmploymentCreateRequest, extraHttpRequestParams?: any): Observable<Employment>;
 
 }

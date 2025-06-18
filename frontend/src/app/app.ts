@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
+import { RouterOutlet, RouterLink, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './services/auth.service';
 import { AuthenticatedUser } from '../generated-api';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule],
+  imports: [RouterOutlet, RouterLink, CommonModule],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

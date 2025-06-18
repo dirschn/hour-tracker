@@ -14,7 +14,10 @@ import { Shift } from './shift';
 export interface DashboardResponse { 
     shifts: Array<Shift>;
     active_employments: Array<EmploymentWithDetails>;
-    total_weekly_hours: number;
+    /**
+     * Object where each key is an employment ID (as a string) and each value is the total hours worked that week (float).
+     */
+    total_weekly_hours: { [key: string]: number; };
     current_shifts: Array<Shift>;
 }
 

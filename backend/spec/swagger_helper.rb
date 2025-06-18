@@ -247,6 +247,58 @@ RSpec.configure do |config|
               profile: { '$ref': '#/components/schemas/Profile' }
             },
             required: ['profile']
+          },
+          CompanyAttributes: {
+            type: :object,
+            properties: {
+              name: { type: :string },
+              description: { type: :string }
+            },
+            required: ['name']
+          },
+          PositionAttributes: {
+            type: :object,
+            properties: {
+              title: { type: :string },
+              description: { type: :string },
+              remote: { type: :boolean },
+              company_attributes: { '$ref': '#/components/schemas/CompanyAttributes' }
+            },
+            required: ['title', 'company_attributes']
+          },
+          EmploymentCreateRequest: {
+            type: :object,
+            properties: {
+              employment: {
+                type: :object,
+                properties: {
+                  position_id: { type: :integer },
+                  start_date: { type: :string, format: :date },
+                  end_date: { type: :string, format: :date, nullable: true },
+                  position_attributes: { '$ref': '#/components/schemas/PositionAttributes' }
+                },
+                anyOf: [
+                  { required: ['position_id', 'start_date'] },
+                  { required: ['position_attributes', 'start_date'] }
+                ]
+              }
+            },
+            required: ['employment']
+          },
+          EmploymentUpdateRequest: {
+            type: :object,
+            properties: {
+              employment: {
+                type: :object,
+                properties: {
+                  position_id: { type: :integer },
+                  start_date: { type: :string, format: :date },
+                  end_date: { type: :string, format: :date, nullable: true },
+                  position_attributes: { '$ref': '#/components/schemas/PositionAttributes' }
+                }
+              }
+            },
+            required: ['employment']
           }
         }
       },

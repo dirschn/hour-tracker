@@ -7,11 +7,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { EmploymentCreateRequestEmployment } from './employmentCreateRequestEmployment';
 
 
-export interface EmploymentsPostRequestEmployment { 
-    position_id: number;
-    start_date: string;
-    end_date?: string | null;
+export interface EmploymentCreateRequest { 
+    employment: EmploymentCreateRequestEmployment | null;
 }
 

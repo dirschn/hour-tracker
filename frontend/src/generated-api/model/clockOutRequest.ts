@@ -13,6 +13,6 @@ export interface ClockOutRequest {
     /**
      * ID of the employment to clock out of
      */
-    employment_id?: number;
+    employment_id: number;
 }
 

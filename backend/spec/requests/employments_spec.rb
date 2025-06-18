@@ -40,18 +40,7 @@ RSpec.describe 'Employments', type: :request do
       produces 'application/json'
 
       parameter name: :employment_params, in: :body, schema: {
-        type: :object,
-        properties: {
-          employment: {
-            type: :object,
-            properties: {
-              position_id: { type: :integer },
-              start_date: { type: :string, format: :date },
-              end_date: { type: :string, format: :date, nullable: true }
-            },
-            required: ['position_id', 'start_date']
-          }
-        }
+        '$ref': '#/components/schemas/EmploymentCreateRequest'
       }
 
       response(201, 'created') do
@@ -150,24 +139,14 @@ RSpec.describe 'Employments', type: :request do
       end
     end
 
-    put('update employment') do
+    patch('update employment') do
       tags 'Employments'
       description 'Update an employment'
       consumes 'application/json'
       produces 'application/json'
 
       parameter name: :employment_params, in: :body, schema: {
-        type: :object,
-        properties: {
-          employment: {
-            type: :object,
-            properties: {
-              position_id: { type: :integer },
-              start_date: { type: :string, format: :date },
-              end_date: { type: :string, format: :date, nullable: true }
-            }
-          }
-        }
+        '$ref': '#/components/schemas/EmploymentUpdateRequest'
       }
 
       response(200, 'successful') do
