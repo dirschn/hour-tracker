@@ -22,6 +22,13 @@ class ApplicationController < ActionController::API
     devise_parameter_sanitizer.permit(:sign_in, keys: [:username, :email, :password])
   end
 
+  # Override Devise's default behavior to return 401 instead of redirecting
+  def authenticate_user!
+    unless user_signed_in?
+      render json: { error: 'You need to sign in or sign up before continuing.' }, status: :unauthorized
+    end
+  end
+
   private
 
   def user_not_authorized

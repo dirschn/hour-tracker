@@ -1,5 +1,35 @@
 class EmploymentsController < ApplicationController
-  before_action :find_employment, only: %i[clock_in clock_out]
+  before_action :find_employment, only: %i[show update destroy clock_in clock_out]
+
+  def index
+    @employments = current_user.employments.includes(:position, position: :company)
+  end
+
+  def show; end
+
+  def create
+    @employment = current_user.employments.build(employment_params)
+
+    if @employment.save
+      render :show, status: :created
+    else
+      render json: { errors: @employment.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  def update
+    if @employment.update(employment_params)
+      render :show, status: :ok
+    else
+      render json: { errors: @employment.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @employment.destroy
+    head :no_content
+  end
+
   def clock_in
     if @employment.shifts.active.exists?
       render json: { errors: ['Already clocked in for this employment'] }, status: :unprocessable_entity
@@ -29,6 +59,10 @@ class EmploymentsController < ApplicationController
   private
 
   def find_employment
-    @employment = Employment.find(params[:id])
+    @employment = current_user.employments.find(params[:id])
+  end
+
+  def employment_params
+    params.require(:employment).permit(:position_id, :start_date, :end_date)
   end
 end

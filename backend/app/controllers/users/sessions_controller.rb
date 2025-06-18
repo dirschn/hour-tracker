@@ -17,6 +17,11 @@ class Users::SessionsController < Devise::SessionsController
 
   private
 
+  # Override flash to prevent errors in API mode
+  def flash
+    {}
+  end
+
   def respond_with(resource, _opts = {})
     if resource.persisted?
       render 'users/current', status: :ok

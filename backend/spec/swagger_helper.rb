@@ -79,11 +79,22 @@ RSpec.configure do |config|
               end_date: { type: :string, format: 'date', nullable: true, example: Faker::Date.forward(days: 30).to_s },
               active: { type: :boolean, example: true },
               created_at: { type: :string, format: 'date-time' },
-              updated_at: { type: :string, format: 'date-time' },
-              position: { '$ref': '#/components/schemas/Position' },
-              company: { '$ref': '#/components/schemas/Company' }
+              updated_at: { type: :string, format: 'date-time' }
             },
-            required: ['id', 'user_id', 'position_id', 'start_date', 'active', 'position', 'company']
+            required: ['id', 'user_id', 'position_id', 'start_date', 'active']
+          },
+          EmploymentWithDetails: {
+            allOf: [
+              { '$ref': '#/components/schemas/Employment' },
+              {
+                type: :object,
+                properties: {
+                  position: { '$ref': '#/components/schemas/Position' },
+                  company: { '$ref': '#/components/schemas/Company' }
+                },
+                required: ['position', 'company']
+              }
+            ]
           },
           Position: {
             type: :object,
@@ -118,14 +129,37 @@ RSpec.configure do |config|
             properties: {
               employment_id: { type: :integer, description: 'ID of the employment to clock in for' }
             },
-            required: ['id']
+            required: ['employment_id']
           },
           ClockOutRequest: {
             type: :object,
             properties: {
               employment_id: { type: :integer, description: 'ID of the employment to clock out of' }
             },
-            required: ['id']
+            required: ['employment_id']
+          },
+          DashboardResponse: {
+            type: :object,
+            properties: {
+              shifts: {
+                type: :array,
+                items: { '$ref': '#/components/schemas/Shift' }
+              },
+              active_employments: {
+                type: :array,
+                items: { '$ref': '#/components/schemas/EmploymentWithDetails' }
+              },
+              total_weekly_hours: {
+                type: :object,
+                description: 'Object where each key is an employment ID (as a string) and each value is the total hours worked that week (float).',
+                additionalProperties: { type: :number, format: 'float', example: 38.5 }
+              },
+              current_shifts: {
+                type: :array,
+                items: { '$ref': '#/components/schemas/Shift' }
+              }
+            },
+            required: ['shifts', 'active_employments', 'total_weekly_hours', 'current_shifts']
           },
           UserCreateRequest: {
             type: :object,

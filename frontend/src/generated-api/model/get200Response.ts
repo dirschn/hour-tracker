@@ -8,12 +8,12 @@
  * Do not edit the class manually.
  */
 import { Shift } from './shift';
-import { Employment } from './employment';
+import { DashboardResponse } from './dashboardResponse';
 
 
 export interface Get200Response { 
     shifts: Array<Shift>;
-    active_employments: Array<Employment>;
+    active_employments: Array<DashboardResponse>;
     /**
      * Object where each key is an employment ID (as a string) and each value is the total hours worked that week (float).
      */

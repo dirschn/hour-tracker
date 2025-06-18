@@ -90,7 +90,7 @@ paths:
                   active_employments:
                     type: array
                     items:
-                      "$ref": "#/components/schemas/Employment"
+                      "$ref": "#/components/schemas/DashboardResponse"
                   total_weekly_hours:
                     type: object
                     description: Object where each key is an employment ID (as a string)
@@ -108,6 +108,150 @@ paths:
                 - active_employments
                 - total_weekly_hours
                 - current_shifts
+  "/employments":
+    get:
+      summary: list employments
+      tags:
+      - Employments
+      description: Get all employments for the current user
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Employment"
+        '401':
+          description: unauthorized
+    post:
+      summary: create employment
+      tags:
+      - Employments
+      description: Create a new employment
+      parameters: []
+      responses:
+        '201':
+          description: created
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Employment"
+        '422':
+          description: unprocessable entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        '401':
+          description: unauthorized
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                employment:
+                  type: object
+                  properties:
+                    position_id:
+                      type: integer
+                    start_date:
+                      type: string
+                      format: date
+                    end_date:
+                      type: string
+                      format: date
+                      nullable: true
+                  required:
+                  - position_id
+                  - start_date
+  "/employments/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: Employment ID
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show employment
+      tags:
+      - Employments
+      description: Get a specific employment
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Employment"
+        '404':
+          description: not found
+        '401':
+          description: unauthorized
+    put:
+      summary: update employment
+      tags:
+      - Employments
+      description: Update an employment
+      parameters: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Employment"
+        '422':
+          description: unprocessable entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        '401':
+          description: unauthorized
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                employment:
+                  type: object
+                  properties:
+                    position_id:
+                      type: integer
+                    start_date:
+                      type: string
+                      format: date
+                    end_date:
+                      type: string
+                      format: date
+                      nullable: true
+    delete:
+      summary: delete employment
+      tags:
+      - Employments
+      description: Delete an employment
+      responses:
+        '204':
+          description: no content
+        '404':
+          description: not found
+        '401':
+          description: unauthorized
   "/employments/{id}/clock_in":
     post:
       summary: clock in employment
@@ -122,7 +266,7 @@ paths:
         schema:
           type: string
       responses:
-        '200':
+        '201':
           description: successful clock in
           content:
             application/json:
@@ -136,8 +280,9 @@ paths:
                 type: object
                 properties:
                   errors:
-                    type: string
-                    example: Already clocked in for this employment
+                    type: array
+                    items:
+                      type: string
         '401':
           description: unauthorized
   "/employments/{id}/clock_out":
@@ -168,8 +313,9 @@ paths:
                 type: object
                 properties:
                   errors:
-                    type: string
-                    example: No active shift to clock out of
+                    type: array
+                    items:
+                      type: string
         '401':
           description: unauthorized
   "/profile":
@@ -237,13 +383,13 @@ components:
       properties:
         id:
           type: integer
-          example: 66
+          example: 69
         name:
           type: string
-          example: Kilback-Walsh
+          example: Littel, Reynolds and Jacobi
         description:
           type: string
-          example: Visionary optimal architecture
+          example: Operative next generation hub
         created_at:
           type: string
           format: date-time
@@ -261,19 +407,22 @@ components:
           example: 1
         first_name:
           type: string
-          example: Mark
+          example: Krystin
         last_name:
           type: string
-          example: Batz
+          example: Romaguera
         username:
           type: string
-          example: frances_bayer
+          example: garnet_runolfsson
+          minLength: 3
+          maxLength: 20
         email:
           type: string
-          example: jeffry@purdy.test
+          format: email
+          example: emmanuel@kirlin.test
         name:
           type: string
-          example: Willis Kovacek
+          example: Tom Orn
         created_at:
           type: string
           format: date-time
@@ -291,16 +440,17 @@ components:
       properties:
         first_name:
           type: string
-          example: Billye
+          example: King
         last_name:
           type: string
-          example: Hickle
+          example: Sporer
         username:
           type: string
-          example: nathanael.effertz
+          example: collette.dicki
         email:
           type: string
-          example: reina_turcotte@schaefer.test
+          format: email
+          example: hiram@spencer.example
     AuthenticatedUser:
       type: object
       properties:
@@ -309,16 +459,17 @@ components:
           example: 1
         email:
           type: string
-          example: lois@brown-carroll.example
+          format: email
+          example: leandro@reinger.test
         first_name:
           type: string
-          example: Melonie
+          example: Leona
         last_name:
           type: string
-          example: Schulist
+          example: Morissette
         username:
           type: string
-          example: rudolph.quigley
+          example: moses_funk
       required:
       - id
       - email
@@ -327,21 +478,25 @@ components:
       properties:
         id:
           type: integer
-          example: 87
+          example: 92
         user_id:
           type: integer
-          example: 71
+          example: 43
         position_id:
           type: integer
-          example: 91
+          example: 92
         start_date:
           type: string
           format: date
-          example: '2025-06-02'
+          example: '2025-05-31'
         end_date:
           type: string
           format: date
-          example: '2025-06-27'
+          nullable: true
+          example: '2025-06-19'
+        active:
+          type: boolean
+          example: true
         created_at:
           type: string
           format: date-time
@@ -353,21 +508,34 @@ components:
       - user_id
       - position_id
       - start_date
+      - active
+    EmploymentWithDetails:
+      allOf:
+      - "$ref": "#/components/schemas/Employment"
+      - type: object
+        properties:
+          position:
+            "$ref": "#/components/schemas/Position"
+          company:
+            "$ref": "#/components/schemas/Company"
+        required:
+        - position
+        - company
     Position:
       type: object
       properties:
         id:
           type: integer
-          example: 89
+          example: 23
         title:
           type: string
-          example: Global Community-Services Analyst
+          example: Regional Technology Agent
         description:
           type: string
-          example: Intuitive motivating process improvement
+          example: Enhanced transitional analyzer
         company_id:
           type: integer
-          example: 58
+          example: 16
         remote:
           type: boolean
           example: true
@@ -386,26 +554,27 @@ components:
       properties:
         id:
           type: integer
-          example: 49
+          example: 20
         employment_id:
           type: integer
-          example: 11
+          example: 60
         date:
           type: string
           format: date
-          example: '2025-05-30'
+          example: '2025-05-19'
         start_time:
           type: string
           format: date-time
-          example: '2025-06-02 21:48:23 -0400'
+          example: '2025-06-02 00:54:45 -0400'
         end_time:
           type: string
           format: date-time
-          example: '2025-06-06 08:38:23 -0400'
+          nullable: true
+          example: '2025-06-08 21:25:19 -0400'
         hours:
           type: number
           format: float
-          example: 3.35
+          example: 6.33
         active:
           type: boolean
           example: true
@@ -436,6 +605,30 @@ components:
           description: ID of the employment to clock out of
       required:
       - id
+    DashboardResponse:
+      type: object
+      properties:
+        shifts:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Shift"
+        active_employments:
+          type: array
+          items:
+            "$ref": "#/components/schemas/EmploymentWithDetails"
+        total_weekly_hours:
+          type: number
+          format: float
+          example: 40.5
+        current_shifts:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Shift"
+      required:
+      - shifts
+      - active_employments
+      - total_weekly_hours
+      - current_shifts
     UserCreateRequest:
       type: object
       properties:
@@ -447,6 +640,7 @@ components:
           type: string
         email:
           type: string
+          format: email
         password:
           type: string
         password_confirmation:
@@ -469,6 +663,7 @@ components:
           type: string
         email:
           type: string
+          format: email
         password:
           type: string
         password_confirmation:
@@ -532,7 +727,7 @@ components:
       required:
       - profile
 servers:
-- url: https://{defaultHost}
-  variables:
-    defaultHost:
-      default: www.example.com
+- url: http://localhost:3000
+  description: Development server
+- url: https://api.nmd98.com
+  description: Production server

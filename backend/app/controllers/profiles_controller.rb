@@ -1,7 +1,6 @@
 class ProfilesController < ApplicationController
   before_action :set_user, only: [:show, :update]
 
-
   def show
     if @user.blank?
       render json: { error: 'User not found' }, status: :not_found

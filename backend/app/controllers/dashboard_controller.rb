@@ -1,6 +1,6 @@
 class DashboardController < ApplicationController
   def show
-    @active_employments = User.first.employments.active
+    @active_employments = User.find(current_user.id).employments.active.includes(position: :company)
 
     week_start = Date.current.beginning_of_week(:sunday)
     week_end = Date.current.end_of_week(:sunday)

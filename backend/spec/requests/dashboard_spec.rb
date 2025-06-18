@@ -16,7 +16,7 @@ RSpec.describe 'Dashboard', type: :request do
             },
             active_employments: {
               type: :array,
-              items: { '$ref': '#/components/schemas/Employment' }
+              items: { '$ref': '#/components/schemas/EmploymentWithDetails' }
             },
             total_weekly_hours: {
               type: :object,

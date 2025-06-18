@@ -7,9 +7,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Company } from './company';
+import { Position } from './position';
 
 
-export interface Employment { 
+export interface EmploymentWithDetails { 
     id: number;
     user_id: number;
     position_id: number;
@@ -18,5 +20,7 @@ export interface Employment {
     active: boolean;
     created_at?: string;
     updated_at?: string;
+    position: Position;
+    company: Company;
 }
 

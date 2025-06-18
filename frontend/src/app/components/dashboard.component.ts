@@ -23,7 +23,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
               <div class="card-header d-flex justify-content-between align-items-center user-select-none">
                 <div class="d-flex align-items-center gap-2">
                   <!-- Caret icon removed -->
-                  <h5 class="card-title mb-0">Employment #{{ emp.id }}</h5>
+                  <h5 class="card-title mb-0">{{ emp.position.title }} &#64; {{ emp.company.name }}</h5>
                 </div>
                 <div
                   class="badge bg-secondary fs-6 d-flex gap-2"
