@@ -40,30 +40,80 @@ import timeGridPlugin from '@fullcalendar/timegrid';
             </div>
           </div>
 
-          <div *ngFor="let emp of dashboardData.active_employments">
+          <div *ngFor="let emp of dashboardData.active_employments; trackBy: trackByEmploymentId">
             <div class="card h-100 border-primary shadow mb-4">
               <div
                 class="card-header d-flex justify-content-between align-items-center user-select-none"
+                (click)="toggleEmploymentCollapse(emp.id)"
+                style="cursor: pointer;"
               >
                 <div class="d-flex align-items-center gap-2">
+                  <i class="bi bi-chevron-right chevron-icon"
+                     [class.expanded]="isEmploymentExpanded(emp.id)"></i>
                   <h5 class="card-title mb-0">
                     {{ emp.position.title }} &#64; {{ emp.company.name }}
                   </h5>
                 </div>
-                <div
-                  class="badge bg-secondary fs-6 d-flex gap-2"
-                  title="Hours for this week"
-                >
-                  <i class="bi bi-clock"></i>
-                  <span>{{ getWeeklyHours(emp.id) }}</span>
+                <div class="d-flex align-items-center gap-3">
+                  <!-- Current shift status -->
+                  <div *ngIf="getCurrentShiftForEmployment(emp.id) as currentShift"
+                       class="badge bg-success d-flex align-items-center gap-1"
+                       title="Hours for current shift">
+                    <i class="bi bi-clock-fill"></i>
+                    <span>{{ getCurrentShiftHours(currentShift.start_time) }}h</span>
+                  </div>
+
+                  <!-- Clock In/Out Buttons -->
+                  <div class="d-flex gap-2" (click)="$event.stopPropagation()">
+                    <!-- Clock In button (if no current shift) -->
+                    <button
+                      *ngIf="!getCurrentShiftForEmployment(emp.id)"
+                      class="btn btn-success btn-sm"
+                      (click)="clockIn(emp.id)"
+                      [disabled]="clockingInEmploymentId === emp.id"
+                      title="Clock In"
+                    >
+                      <span *ngIf="clockingInEmploymentId === emp.id">
+                        <span class="spinner-border spinner-border-sm me-1"></span>
+                      </span>
+                      <i *ngIf="clockingInEmploymentId !== emp.id" class="bi bi-play-fill"></i>
+                      Clock In
+                    </button>
+
+                    <!-- Clock Out button (if current shift is active) -->
+                    <button
+                      *ngIf="getCurrentShiftForEmployment(emp.id)"
+                      class="btn btn-danger btn-sm"
+                      (click)="clockOut(emp.id)"
+                      [disabled]="clockingOutEmploymentId === emp.id"
+                      title="Clock Out"
+                    >
+                      <span *ngIf="clockingOutEmploymentId === emp.id">
+                        <span class="spinner-border spinner-border-sm me-1"></span>
+                      </span>
+                      <i *ngIf="clockingOutEmploymentId !== emp.id" class="bi bi-stop-fill"></i>
+                      Clock Out
+                    </button>
+                  </div>
+
+                  <!-- Weekly hours badge -->
+                  <div
+                    class="badge bg-secondary fs-6 d-flex gap-2"
+                    title="Hours for this week"
+                  >
+                    <i class="bi bi-clock"></i>
+                    <span>{{ getWeeklyHours(emp.id) }}</span>
+                  </div>
                 </div>
               </div>
-              <div class="card-body" [id]="'employment-body-' + emp.id">
+
+              <!-- Collapsible content -->
+              <div *ngIf="isEmploymentExpanded(emp.id)" class="card-body" [id]="'employment-body-' + emp.id">
                 <div
                   *ngIf="getCurrentShiftForEmployment(emp.id) as currentShift"
                   class="alert alert-success py-2 mb-3"
                 >
-                  <strong>Current Shift:</strong>
+                  <strong>Current Shift Details:</strong>
                   <div>Date: {{ currentShift.date | date }}</div>
                   <div>
                     Start: {{ currentShift.start_time | date : 'shortTime' }}
@@ -74,13 +124,14 @@ import timeGridPlugin from '@fullcalendar/timegrid';
                   </div>
                 </div>
 
-                <!-- Calendar always visible -->
+                <!-- Calendar always visible when expanded -->
                 <ng-container
                   *ngIf="
                     getWeeklyShiftsForEmployment(emp.id).length > 0;
                     else noShifts
                   "
                 >
+                  <h6 class="mb-3">This Week's Schedule:</h6>
                   <div
                     [id]="'calendar-container-' + emp.id"
                     class="calendar-container"
@@ -92,48 +143,20 @@ import timeGridPlugin from '@fullcalendar/timegrid';
                   </div>
                 </ng-template>
 
-                <!-- Clock In button (if no current shift) -->
-                <div *ngIf="!getCurrentShiftForEmployment(emp.id)" class="mt-3">
-                  <button
-                    class="btn btn-success"
-                    (click)="clockIn(emp.id)"
-                    [disabled]="clockingInEmploymentId === emp.id"
-                  >
-                    <span *ngIf="clockingInEmploymentId === emp.id"
-                      >Clocking in...</span
-                    >
-                    <span *ngIf="clockingInEmploymentId !== emp.id"
-                      >Clock In</span
-                    >
-                  </button>
-                  <div
-                    *ngIf="clockInError && clockingInEmploymentId === emp.id"
-                    class="text-danger mt-2"
-                  >
-                    {{ clockInError }}
-                  </div>
+                <!-- Error messages -->
+                <div
+                  *ngIf="clockInError && clockingInEmploymentId === emp.id"
+                  class="alert alert-danger mt-3"
+                >
+                  <i class="bi bi-exclamation-triangle me-2"></i>
+                  {{ clockInError }}
                 </div>
-
-                <!-- Clock Out button (if current shift is active) -->
-                <div *ngIf="getCurrentShiftForEmployment(emp.id)" class="mt-3">
-                  <button
-                    class="btn btn-danger"
-                    (click)="clockOut(emp.id)"
-                    [disabled]="clockingOutEmploymentId === emp.id"
-                  >
-                    <span *ngIf="clockingOutEmploymentId === emp.id"
-                      >Clocking out...</span
-                    >
-                    <span *ngIf="clockingOutEmploymentId !== emp.id"
-                      >Clock Out</span
-                    >
-                  </button>
-                  <div
-                    *ngIf="clockOutError && clockingOutEmploymentId === emp.id"
-                    class="text-danger mt-2"
-                  >
-                    {{ clockOutError }}
-                  </div>
+                <div
+                  *ngIf="clockOutError && clockingOutEmploymentId === emp.id"
+                  class="alert alert-danger mt-3"
+                >
+                  <i class="bi bi-exclamation-triangle me-2"></i>
+                  {{ clockOutError }}
                 </div>
               </div>
             </div>
@@ -141,7 +164,11 @@ import timeGridPlugin from '@fullcalendar/timegrid';
         </div>
       </div>
       <ng-template #loading>
-        <div>Loading dashboard data...</div>
+        <div class="d-flex justify-content-center py-5">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading dashboard data...</span>
+          </div>
+        </div>
       </ng-template>
     </div>
   `,
@@ -149,6 +176,34 @@ import timeGridPlugin from '@fullcalendar/timegrid';
     `
       .calendar-container {
         min-height: 200px;
+      }
+      .chevron-icon {
+        transition: transform 0.35s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        transform-origin: center;
+        will-change: transform;
+      }
+      .chevron-icon.expanded {
+        transform: rotate(90deg) scale(1.2);
+        animation: chevron-bounce 0.4s ease-out;
+      }
+      .chevron-icon:not(.expanded) {
+        transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+      @keyframes chevron-bounce {
+        0% { transform: rotate(0deg) scale(1); }
+        40% { transform: rotate(45deg) scale(1.4); }
+        70% { transform: rotate(110deg) scale(0.9); }
+        100% { transform: rotate(90deg) scale(1.2); }
+      }
+      .card-header:hover {
+        background-color: rgba(var(--bs-primary-rgb), 0.1);
+      }
+      .card-header:hover .chevron-icon {
+        transform: scale(1.2);
+        transition: transform 0.15s ease-out;
+      }
+      .card-header:hover .chevron-icon.expanded {
+        transform: rotate(90deg) scale(1.35);
       }
     `,
   ],
@@ -162,6 +217,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   clockOutError: string | null = null;
   public weekCalendars: { [empId: number]: Calendar } = {};
   private calendarsInitialized = false;
+  private expandedEmployments: Set<number> = new Set();
 
   constructor(
     private authService: AuthService,
@@ -244,14 +300,9 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       'employments'
     );
 
-    // Use a longer timeout to ensure DOM is fully rendered
-    setTimeout(() => {
-      this.dashboardData.active_employments.forEach((emp: any) => {
-        const empId = emp.id;
-        this.renderCalendarForEmployment(empId);
-      });
-      this.calendarsInitialized = true;
-    }, 200);
+    // Don't render calendars immediately since sections start collapsed
+    // They will be rendered when sections are expanded via setupCollapseListeners
+    this.calendarsInitialized = true;
   }
 
   // Add a new method to handle calendar rendering
@@ -299,6 +350,13 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       }
 
+      // Check if the container is visible (not in a collapsed section)
+      const collapseParent = document.getElementById(`collapse-${empId}`);
+      if (collapseParent && !collapseParent.classList.contains('show')) {
+        console.log(`Calendar container for employment ${empId} is not visible, skipping render`);
+        return;
+      }
+
       // Clear any existing content in the container
       calendarContainer.innerHTML = '';
 
@@ -321,6 +379,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
           end: this.getCurrentWeekEnd(),
         },
         allDaySlot: false,
+        height: 'auto',
       } as any;
 
       try {
@@ -336,6 +395,35 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     };
 
     attemptRender();
+  }
+
+  // Helper to track by employment ID
+  trackByEmploymentId(index: number, emp: any): number {
+    return emp.id;
+  }
+
+  // Toggle employment collapse state
+  toggleEmploymentCollapse(empId: number): void {
+    if (this.expandedEmployments.has(empId)) {
+      this.expandedEmployments.delete(empId);
+      // Clean up calendar when collapsing
+      if (this.weekCalendars[empId]) {
+        this.weekCalendars[empId].destroy();
+        delete this.weekCalendars[empId];
+        console.log(`Calendar destroyed for employment ${empId}`);
+      }
+    } else {
+      this.expandedEmployments.add(empId);
+      // Render calendar when expanding
+      setTimeout(() => {
+        this.renderCalendarForEmployment(empId);
+      }, 100);
+    }
+  }
+
+  // Check if employment is expanded
+  isEmploymentExpanded(empId: number): boolean {
+    return this.expandedEmployments.has(empId);
   }
 
   // Helper to get the start of the current week (Sunday)
