@@ -43,66 +43,80 @@ import timeGridPlugin from '@fullcalendar/timegrid';
           <div *ngFor="let emp of dashboardData.active_employments; trackBy: trackByEmploymentId">
             <div class="card h-100 border-primary shadow mb-4">
               <div
-                class="card-header d-flex justify-content-between align-items-center user-select-none"
+                class="card-header user-select-none"
                 (click)="toggleEmploymentCollapse(emp.id)"
                 style="cursor: pointer;"
               >
-                <div class="d-flex align-items-center gap-2">
-                  <i class="bi bi-chevron-right chevron-icon"
-                     [class.expanded]="isEmploymentExpanded(emp.id)"></i>
-                  <h5 class="card-title mb-0">
-                    {{ emp.position.title }} &#64; {{ emp.company.name }}
-                  </h5>
-                </div>
-                <div class="d-flex align-items-center gap-3">
-                  <!-- Current shift status -->
-                  <div *ngIf="getCurrentShiftForEmployment(emp.id) as currentShift"
-                       class="badge bg-success d-flex align-items-center gap-1"
-                       title="Hours for current shift">
-                    <i class="bi bi-clock-fill"></i>
-                    <span>{{ getCurrentShiftHours(currentShift.start_time) }}h</span>
+                <!-- Main header row -->
+                <div class="d-flex justify-content-between align-items-start">
+                  <div class="d-flex align-items-center gap-2 flex-grow-1">
+                    <i class="bi bi-chevron-right chevron-icon"
+                       [class.expanded]="isEmploymentExpanded(emp.id)"></i>
+                    <div class="employment-title">
+                      <h5 class="card-title mb-0">{{ emp.position.title }}</h5>
+                      <small class="text-muted">{{ emp.company.name }}</small>
+                    </div>
                   </div>
 
-                  <!-- Clock In/Out Buttons -->
-                  <div class="d-flex gap-2" (click)="$event.stopPropagation()">
+                  <!-- Clock button - always visible -->
+                  <div class="clock-button-container" (click)="$event.stopPropagation()">
                     <!-- Clock In button (if no current shift) -->
                     <button
                       *ngIf="!getCurrentShiftForEmployment(emp.id)"
-                      class="btn btn-success btn-sm"
+                      class="btn btn-success btn-sm d-flex align-items-center gap-1"
                       (click)="clockIn(emp.id)"
                       [disabled]="clockingInEmploymentId === emp.id"
                       title="Clock In"
                     >
                       <span *ngIf="clockingInEmploymentId === emp.id">
-                        <span class="spinner-border spinner-border-sm me-1"></span>
+                        <span class="spinner-border spinner-border-sm"></span>
                       </span>
                       <i *ngIf="clockingInEmploymentId !== emp.id" class="bi bi-play-fill"></i>
-                      Clock In
+                      <span class="d-none d-sm-inline">Clock In</span>
                     </button>
 
                     <!-- Clock Out button (if current shift is active) -->
                     <button
                       *ngIf="getCurrentShiftForEmployment(emp.id)"
-                      class="btn btn-danger btn-sm"
+                      class="btn btn-danger btn-sm d-flex align-items-center gap-1"
                       (click)="clockOut(emp.id)"
                       [disabled]="clockingOutEmploymentId === emp.id"
                       title="Clock Out"
                     >
                       <span *ngIf="clockingOutEmploymentId === emp.id">
-                        <span class="spinner-border spinner-border-sm me-1"></span>
+                        <span class="spinner-border spinner-border-sm"></span>
                       </span>
                       <i *ngIf="clockingOutEmploymentId !== emp.id" class="bi bi-stop-fill"></i>
-                      Clock Out
+                      <span class="d-none d-sm-inline">Clock Out</span>
                     </button>
                   </div>
+                </div>
 
-                  <!-- Weekly hours badge -->
-                  <div
-                    class="badge bg-secondary fs-6 d-flex gap-2"
-                    title="Hours for this week"
-                  >
-                    <i class="bi bi-clock"></i>
-                    <span>{{ getWeeklyHours(emp.id) }}</span>
+                <!-- Secondary info row - always visible but compact on mobile -->
+                <div class="secondary-info mt-2">
+                  <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between">
+                    <div class="d-flex flex-wrap gap-2 align-items-center">
+                      <!-- Current shift status -->
+                      <div *ngIf="getCurrentShiftForEmployment(emp.id) as currentShift"
+                           class="badge bg-success d-flex align-items-center gap-1"
+                           title="Hours for current shift">
+                        <i class="bi bi-clock-fill"></i>
+                        <span class="d-none d-sm-inline">{{ getCurrentShiftHours(currentShift.start_time) }}h active</span>
+                        <span class="d-sm-none">{{ getCurrentShiftHours(currentShift.start_time) }}h</span>
+                      </div>
+
+                      <!-- Weekly hours badge -->
+                      <div class="badge bg-secondary d-flex align-items-center gap-1" title="Hours for this week">
+                        <i class="bi bi-calendar-week"></i>
+                        <span class="d-none d-sm-inline">{{ getWeeklyHours(emp.id) }}h this week</span>
+                        <span class="d-sm-none">{{ getWeeklyHours(emp.id) }}h</span>
+                      </div>
+                    </div>
+
+                    <!-- Expand for more info hint (mobile only) -->
+                    <small class="text-muted d-sm-none" *ngIf="!isEmploymentExpanded(emp.id)">
+                      Tap to expand
+                    </small>
                   </div>
                 </div>
               </div>
@@ -181,6 +195,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
         transition: transform 0.35s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         transform-origin: center;
         will-change: transform;
+        flex-shrink: 0;
       }
       .chevron-icon.expanded {
         transform: rotate(90deg) scale(1.2);
@@ -204,6 +219,60 @@ import timeGridPlugin from '@fullcalendar/timegrid';
       }
       .card-header:hover .chevron-icon.expanded {
         transform: rotate(90deg) scale(1.35);
+      }
+
+      /* New styles for improved header layout */
+      .employment-title {
+        min-width: 0; /* Allow text to truncate */
+        flex: 1;
+      }
+
+      .employment-title h5 {
+        font-size: 1.1rem;
+        line-height: 1.3;
+        margin: 0;
+      }
+
+      .employment-title small {
+        font-size: 0.875rem;
+        line-height: 1.2;
+      }
+
+      .clock-button-container {
+        flex-shrink: 0;
+        margin-left: auto;
+      }
+
+      .secondary-info {
+        border-top: 1px solid rgba(var(--bs-border-color-rgb), 0.3);
+        padding-top: 0.5rem;
+        margin-top: 0.75rem !important;
+      }
+
+      .secondary-info .badge {
+        font-size: 0.75rem;
+        padding: 0.375rem 0.5rem;
+      }
+
+      /* Mobile optimizations */
+      @media (max-width: 576px) {
+        .employment-title h5 {
+          font-size: 1rem;
+        }
+
+        .employment-title small {
+          font-size: 0.8rem;
+        }
+
+        .secondary-info {
+          margin-top: 0.5rem !important;
+          padding-top: 0.375rem;
+        }
+
+        .secondary-info .badge {
+          font-size: 0.7rem;
+          padding: 0.25rem 0.375rem;
+        }
       }
     `,
   ],
