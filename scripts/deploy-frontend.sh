@@ -7,7 +7,8 @@ set -e
 
 # Configuration
 LOCAL_BUILD_DIR="/home/nick/Projects/hour-tracker/frontend/dist/frontend/browser"
-REMOTE_PATH="/var/www/hours.dirschn.com"
+REMOTE_REPO_PATH="/srv/hour-tracker"
+REMOTE_BUILD_PATH="/srv/hour-tracker/frontend/dist/frontend/browser"
 DEFAULT_SERVER="root@your-server-ip"  # Change this to your actual server
 
 # Use provided server or default
@@ -19,22 +20,19 @@ npm run build:prod
 
 echo "📦 Build completed. Files are in: $LOCAL_BUILD_DIR"
 
-echo "🚀 Deploying to $SERVER:$REMOTE_PATH"
+echo "🚀 Deploying to $SERVER:$REMOTE_REPO_PATH"
 
-# Create backup of current deployment (optional)
-echo "📋 Creating backup of current deployment..."
-ssh $SERVER "if [ -d $REMOTE_PATH ]; then cp -r $REMOTE_PATH ${REMOTE_PATH}.backup.$(date +%Y%m%d_%H%M%S); fi"
+# Update repository on server
+echo "📥 Updating repository on server..."
+ssh $SERVER "cd $REMOTE_REPO_PATH && git pull origin main"
 
-# Create directory if it doesn't exist
-ssh $SERVER "mkdir -p $REMOTE_PATH"
-
-# Copy files
-echo "📁 Copying files..."
-scp -r $LOCAL_BUILD_DIR/* $SERVER:$REMOTE_PATH/
+# Copy built files to server repository
+echo "📁 Copying built files to server repository..."
+scp -r $LOCAL_BUILD_DIR/* $SERVER:$REMOTE_BUILD_PATH/
 
 # Set proper permissions
 echo "🔐 Setting permissions..."
-ssh $SERVER "chown -R www-data:www-data $REMOTE_PATH && chmod -R 755 $REMOTE_PATH"
+ssh $SERVER "chown -R www-data:www-data $REMOTE_REPO_PATH && chmod -R 755 $REMOTE_BUILD_PATH"
 
 # Test nginx configuration and reload
 echo "🔄 Reloading Nginx..."
