@@ -453,13 +453,13 @@ components:
       properties:
         id:
           type: integer
-          example: 46
+          example: 94
         name:
           type: string
-          example: Stark LLC
+          example: Friesen and Sons
         description:
           type: string
-          example: Extended dedicated open architecture
+          example: Pre-emptive scalable help-desk
         created_at:
           type: string
           format: date-time
@@ -477,22 +477,22 @@ components:
           example: 1
         first_name:
           type: string
-          example: Samual
+          example: Mitchell
         last_name:
           type: string
-          example: Wyman
+          example: Pfannerstill
         username:
           type: string
-          example: antonio
+          example: neville
           minLength: 3
           maxLength: 20
         email:
           type: string
           format: email
-          example: lizeth_nader@klocko.test
+          example: billy.boyle@nicolas-harris.example
         name:
           type: string
-          example: Dr. Tori Brekke
+          example: Israel Corwin
         created_at:
           type: string
           format: date-time
@@ -510,17 +510,17 @@ components:
       properties:
         first_name:
           type: string
-          example: Brendon
+          example: Samual
         last_name:
           type: string
-          example: Kilback
+          example: Klocko
         username:
           type: string
-          example: billy_fay
+          example: idell
         email:
           type: string
           format: email
-          example: richard_pacocha@schmitt-heidenreich.example
+          example: jefferson.koss@kiehn.example
     AuthenticatedUser:
       type: object
       properties:
@@ -530,16 +530,16 @@ components:
         email:
           type: string
           format: email
-          example: antione@rohan.test
+          example: luke.kuphal@corkery.example
         first_name:
           type: string
-          example: Von
+          example: Murray
         last_name:
           type: string
-          example: Larson
+          example: Schaden
         username:
           type: string
-          example: moshe.lakin
+          example: preston_mckenzie
       required:
       - id
       - email
@@ -548,22 +548,22 @@ components:
       properties:
         id:
           type: integer
-          example: 78
+          example: 41
         user_id:
           type: integer
-          example: 54
+          example: 23
         position_id:
           type: integer
-          example: 36
+          example: 38
         start_date:
           type: string
           format: date
-          example: '2025-06-03'
+          example: '2025-06-10'
         end_date:
           type: string
           format: date
           nullable: true
-          example: '2025-07-29'
+          example: '2025-07-26'
         active:
           type: boolean
           example: true
@@ -600,19 +600,19 @@ components:
       properties:
         id:
           type: integer
-          example: 84
+          example: 13
         title:
           type: string
-          example: Marketing Director
+          example: Real-Estate Manager
         description:
           type: string
-          example: Programmable system-worthy productivity
+          example: Customer-focused optimizing intranet
         company_id:
           type: integer
-          example: 60
+          example: 22
         remote:
           type: boolean
-          example: true
+          example: false
         created_at:
           type: string
           format: date-time
@@ -628,36 +628,36 @@ components:
       properties:
         id:
           type: integer
-          example: 23
+          example: 91
         employment_id:
           type: integer
-          example: 72
+          example: 47
         date:
           type: string
           format: date
-          example: '2025-06-18'
+          example: '2025-06-22'
         start_time:
           type: string
           format: date-time
-          example: '2025-06-24 12:55:22 -0400'
+          example: '2025-06-27 12:04:42 -0400'
         end_time:
           type: string
           format: date-time
           nullable: true
-          example: '2025-06-22 18:16:11 -0400'
+          example: '2025-06-26 11:12:06 -0400'
         description:
           type: string
-          example: Molestiae rerum omnis aut.
+          example: In suscipit exercitationem neque.
         notes:
           type: string
-          example: Id autem molestiae. Quis ut nostrum. Dignissimos temporibus rerum.
+          example: Sed voluptatem error. Voluptatem fugiat velit. Vitae sunt alias.
         hours:
           type: number
           format: float
-          example: 0.58
+          example: 6.88
         active:
           type: boolean
-          example: true
+          example: false
         created_at:
           type: string
           format: date-time
@@ -926,5 +926,5 @@ components:
 servers:
 - url: http://localhost:3000
   description: Development server
-- url: https://api.nmd98.com
+- url: https://hoursapi.dirschn.com
   description: Production server

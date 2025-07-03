@@ -356,7 +356,7 @@ RSpec.configure do |config|
           description: 'Development server'
         },
         {
-          url: 'https://api.nmd98.com',
+          url: 'https://hoursapi.dirschn.com',
           description: 'Production server'
         }
       ]
