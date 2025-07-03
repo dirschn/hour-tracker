@@ -54,6 +54,7 @@ export const appConfig: ApplicationConfig = {
       provide: Configuration,
       useFactory: () => new Configuration({
         basePath: environment.apiUrl,
+        withCredentials: true  // Explicitly enable credentials for all API calls
       })
     }, provideServiceWorker('ngsw-worker.js', {
             enabled: !isDevMode(),
