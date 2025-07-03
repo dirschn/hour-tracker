@@ -1,5 +1,6 @@
 class ProfilesController < ApplicationController
   before_action :set_user, only: [:show, :update]
+  before_action :set_form_data, only: [:show]
 
   def show
     if @user.blank?
@@ -23,5 +24,10 @@ class ProfilesController < ApplicationController
 
   def set_user
     @user = User.includes(:employments, employments: [:position, position: :company]).find(current_user.id)
+  end
+
+  def set_form_data
+    @companies = Company.all.order(:name)
+    @positions = Position.all.order(:title)
   end
 end

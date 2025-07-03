@@ -81,7 +81,8 @@ RSpec.configure do |config|
               created_at: { type: :string, format: 'date-time' },
               updated_at: { type: :string, format: 'date-time' }
             },
-            required: ['id', 'user_id', 'position_id', 'start_date', 'active']
+            required: ['id', 'user_id', 'position_id', 'start_date', 'active'
+            ]
           },
           EmploymentWithDetails: {
             allOf: [
@@ -237,9 +238,23 @@ RSpec.configure do |config|
                     required: ['employments']
                   }
                 ]
+              },
+              form_data: {
+                type: :object,
+                properties: {
+                  companies: {
+                    type: :array,
+                    items: { '$ref': '#/components/schemas/Company' }
+                  },
+                  positions: {
+                    type: :array,
+                    items: { '$ref': '#/components/schemas/Position' }
+                  }
+                },
+                required: ['companies', 'positions']
               }
             },
-            required: ['user']
+            required: ['user', 'form_data']
           },
           ProfileUpdateRequest: {
             type: :object,

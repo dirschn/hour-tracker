@@ -50,6 +50,16 @@ import { AuthService } from '../services/auth.service';
                 </div>
               </div>
 
+              <div class="mb-3 form-check">
+                <input
+                  type="checkbox"
+                  id="remember_me"
+                  formControlName="remember_me"
+                  class="form-check-input"
+                />
+                <label for="remember_me" class="form-check-label">Keep me signed in</label>
+              </div>
+
               <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
                 <i class="bi bi-exclamation-triangle-fill me-2"></i>
                 {{ errorMessage }}
@@ -94,7 +104,8 @@ export class SignInComponent {
   ) {
     this.signInForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
+      remember_me: [false]
     });
   }
 
@@ -108,9 +119,9 @@ export class SignInComponent {
       this.isLoading = true;
       this.errorMessage = '';
 
-      const { email, password } = this.signInForm.value;
+      const { email, password, remember_me } = this.signInForm.value;
 
-      this.authService.signIn(email, password).subscribe({
+      this.authService.signIn(email, password, remember_me).subscribe({
         next: (user) => {
           this.isLoading = false;
           console.log('Sign in successful:', user);

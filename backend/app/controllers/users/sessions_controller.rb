@@ -33,4 +33,9 @@ class Users::SessionsController < Devise::SessionsController
   def respond_to_on_destroy
     render json: { message: 'Logged out successfully' }, status: :ok
   end
+
+  # Allow remember_me parameter
+  def sign_in_params
+    params.require(:user).permit(:email, :password, :remember_me)
+  end
 end

@@ -21,6 +21,7 @@ export * from './profileGet404Response';
 export * from './profilePatch200Response';
 export * from './profilePatch422Response';
 export * from './profileResponse';
+export * from './profileResponseFormData';
 export * from './profileResponseUser';
 export * from './profileResponseUserAllOfEmploymentsInner';
 export * from './profileUpdateRequest';

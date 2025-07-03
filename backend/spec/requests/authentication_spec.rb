@@ -15,7 +15,8 @@ RSpec.describe 'Authentication', type: :request do
             type: :object,
             properties: {
               email: { type: :string, example: 'user@example.com' },
-              password: { type: :string, example: 'password123' }
+              password: { type: :string, example: 'password123' },
+              remember_me: { type: :boolean, example: false }
             },
             required: ['email', 'password']
           }
@@ -26,7 +27,7 @@ RSpec.describe 'Authentication', type: :request do
       response(200, 'successful authentication') do
         schema '$ref': '#/components/schemas/LoginResponse'
 
-        let(:user_credentials) { { user: { email: 'test@example.com', password: 'password123' } } }
+        let(:user_credentials) { { user: { email: 'test@example.com', password: 'password123', remember_me: true } } }
 
         before do
           # Create a test user for authentication

@@ -8,9 +8,11 @@
  * Do not edit the class manually.
  */
 import { ProfileResponseUser } from './profileResponseUser';
+import { ProfileResponseFormData } from './profileResponseFormData';
 
 
 export interface ProfileResponse { 
     user: ProfileResponseUser;
+    form_data: ProfileResponseFormData;
 }
 

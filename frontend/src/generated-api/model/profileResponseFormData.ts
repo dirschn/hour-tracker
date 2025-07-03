@@ -7,11 +7,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Company } from './company';
+import { Position } from './position';
 
 
-export interface SignInPostRequestUser { 
-    email: string;
-    password: string;
-    remember_me?: boolean;
+export interface ProfileResponseFormData { 
+    companies: Array<Company>;
+    positions: Array<Position>;
 }
 

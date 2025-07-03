@@ -40,6 +40,7 @@ model/profileGet404Response.ts
 model/profilePatch200Response.ts
 model/profilePatch422Response.ts
 model/profileResponse.ts
+model/profileResponseFormData.ts
 model/profileResponseUser.ts
 model/profileResponseUserAllOfEmploymentsInner.ts
 model/profileUpdateRequest.ts

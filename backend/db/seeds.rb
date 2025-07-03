@@ -30,6 +30,15 @@ users = []
     password_confirmation: 'password'
   )
 end
+users << User.create!(
+  email: 'dirschn@gmail.com',
+  first_name: 'Nick',
+  last_name: 'Dirschel',
+  username: 'dirschn',
+  created_at: Faker::Time.between(from: 6.months.ago, to: 1.month.ago),
+  password: 'password',
+  password_confirmation: 'password'
+)
 
 # Create Companies
 puts 'Creating companies...'

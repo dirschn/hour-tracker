@@ -46,6 +46,9 @@ paths:
                     password:
                       type: string
                       example: password123
+                    remember_me:
+                      type: boolean
+                      example: false
                   required:
                   - email
                   - password
@@ -354,13 +357,13 @@ components:
       properties:
         id:
           type: integer
-          example: 60
+          example: 74
         name:
           type: string
-          example: Rolfson and Sons
+          example: Kuphal, Glover and Kerluke
         description:
           type: string
-          example: Open-source encompassing encoding
+          example: Fundamental local Graphical User Interface
         created_at:
           type: string
           format: date-time
@@ -378,22 +381,22 @@ components:
           example: 1
         first_name:
           type: string
-          example: Lan
+          example: Dexter
         last_name:
           type: string
-          example: Zboncak
+          example: Reynolds
         username:
           type: string
-          example: maria_oconnell
+          example: archie_hintz
           minLength: 3
           maxLength: 20
         email:
           type: string
           format: email
-          example: kip@terry.test
+          example: paula_johnson@jerde.test
         name:
           type: string
-          example: Christene Mueller
+          example: Jacques Doyle V
         created_at:
           type: string
           format: date-time
@@ -411,17 +414,17 @@ components:
       properties:
         first_name:
           type: string
-          example: Bryan
+          example: Manda
         last_name:
           type: string
-          example: Friesen
+          example: Pouros
         username:
           type: string
-          example: nicole
+          example: kaycee
         email:
           type: string
           format: email
-          example: jack_jakubowski@conn-batz.test
+          example: lourdes_beahan@feest-roberts.test
     AuthenticatedUser:
       type: object
       properties:
@@ -431,16 +434,16 @@ components:
         email:
           type: string
           format: email
-          example: beau@skiles-kozey.example
+          example: rich@johns-johns.example
         first_name:
           type: string
-          example: Jaimie
+          example: Ira
         last_name:
           type: string
-          example: Marvin
+          example: Mann
         username:
           type: string
-          example: faustina_mcclure
+          example: carolee.hartmann
       required:
       - id
       - email
@@ -449,22 +452,22 @@ components:
       properties:
         id:
           type: integer
-          example: 48
+          example: 80
         user_id:
           type: integer
-          example: 56
+          example: 67
         position_id:
           type: integer
-          example: 73
+          example: 44
         start_date:
           type: string
           format: date
-          example: '2025-06-11'
+          example: '2025-06-25'
         end_date:
           type: string
           format: date
           nullable: true
-          example: '2025-06-18'
+          example: '2025-07-10'
         active:
           type: boolean
           example: true
@@ -497,16 +500,16 @@ components:
       properties:
         id:
           type: integer
-          example: 21
+          example: 82
         title:
           type: string
-          example: Regional Government Associate
+          example: Administration Agent
         description:
           type: string
-          example: Reduced 24 hour functionalities
+          example: Inverse context-sensitive website
         company_id:
           type: integer
-          example: 13
+          example: 84
         remote:
           type: boolean
           example: false
@@ -525,27 +528,27 @@ components:
       properties:
         id:
           type: integer
-          example: 61
+          example: 18
         employment_id:
           type: integer
-          example: 56
+          example: 77
         date:
           type: string
           format: date
-          example: '2025-06-02'
+          example: '2025-06-29'
         start_time:
           type: string
           format: date-time
-          example: '2025-06-05 09:06:49 -0400'
+          example: '2025-06-23 01:49:05 -0400'
         end_time:
           type: string
           format: date-time
           nullable: true
-          example: '2025-06-07 05:54:39 -0400'
+          example: '2025-06-26 22:07:55 -0400'
         hours:
           type: number
           format: float
-          example: 8.41
+          example: 3.17
         active:
           type: boolean
           example: false
@@ -692,8 +695,23 @@ components:
                     - company
             required:
             - employments
+        form_data:
+          type: object
+          properties:
+            companies:
+              type: array
+              items:
+                "$ref": "#/components/schemas/Company"
+            positions:
+              type: array
+              items:
+                "$ref": "#/components/schemas/Position"
+          required:
+          - companies
+          - positions
       required:
       - user
+      - form_data
     ProfileUpdateRequest:
       type: object
       properties:

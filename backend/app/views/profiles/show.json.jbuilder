@@ -10,3 +10,13 @@ json.user do
     end
   end
 end
+
+json.form_data do
+  json.companies @companies do |company|
+    json.extract! company, :id, :name, :description
+  end
+
+  json.positions @positions do |position|
+    json.extract! position, :id, :title, :description, :remote, :company_id
+  end
+end

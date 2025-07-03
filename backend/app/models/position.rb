@@ -5,7 +5,7 @@ class Position < ApplicationRecord
   has_many :employees, through: :employments, source: :user
   has_many :shifts, through: :employments
 
-  accepts_nested_attributes_for :company, update_only: true
+  accepts_nested_attributes_for :company
 
   validates :title, presence: true, uniqueness: { scope: :company_id }
 end

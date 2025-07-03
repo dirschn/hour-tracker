@@ -27,11 +27,12 @@ export class AuthService {
     }
   }
 
-  signIn(email: string, password: string): Observable<AuthenticatedUser> {
+  signIn(email: string, password: string, rememberMe: boolean = false): Observable<AuthenticatedUser> {
     const signInRequest: SignInPostRequest = {
       user: {
         email,
-        password
+        password,
+        remember_me: rememberMe
       }
     };
 
