@@ -5,7 +5,9 @@ class EmploymentsController < ApplicationController
     @employments = current_user.employments.includes(:position, position: :company)
   end
 
-  def show; end
+  def show
+    @shifts = @employment.shifts
+  end
 
   def create
     @employment = current_user.employments.build(employment_params)

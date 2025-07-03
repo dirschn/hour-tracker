@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Shift } from './shift';
 import { Company } from './company';
 import { Position } from './position';
 
@@ -22,5 +23,6 @@ export interface EmploymentWithDetails {
     updated_at?: string;
     position: Position;
     company: Company;
+    shifts?: Array<Shift>;
 }
 

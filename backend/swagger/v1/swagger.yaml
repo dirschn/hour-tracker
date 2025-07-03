@@ -178,7 +178,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/Employment"
+                "$ref": "#/components/schemas/EmploymentResponse"
         '404':
           description: not found
         '401':
@@ -357,13 +357,13 @@ components:
       properties:
         id:
           type: integer
-          example: 74
+          example: 58
         name:
           type: string
-          example: Kuphal, Glover and Kerluke
+          example: Powlowski, Krajcik and Donnelly
         description:
           type: string
-          example: Fundamental local Graphical User Interface
+          example: Advanced homogeneous circuit
         created_at:
           type: string
           format: date-time
@@ -381,22 +381,22 @@ components:
           example: 1
         first_name:
           type: string
-          example: Dexter
+          example: Leon
         last_name:
           type: string
-          example: Reynolds
+          example: Schneider
         username:
           type: string
-          example: archie_hintz
+          example: elida
           minLength: 3
           maxLength: 20
         email:
           type: string
           format: email
-          example: paula_johnson@jerde.test
+          example: judson.koelpin@bruen.example
         name:
           type: string
-          example: Jacques Doyle V
+          example: Amb. Celsa Mosciski
         created_at:
           type: string
           format: date-time
@@ -414,17 +414,17 @@ components:
       properties:
         first_name:
           type: string
-          example: Manda
+          example: Jefferson
         last_name:
           type: string
-          example: Pouros
+          example: Harber
         username:
           type: string
-          example: kaycee
+          example: harold_cummerata
         email:
           type: string
           format: email
-          example: lourdes_beahan@feest-roberts.test
+          example: janelle_dickinson@waters.example
     AuthenticatedUser:
       type: object
       properties:
@@ -434,16 +434,16 @@ components:
         email:
           type: string
           format: email
-          example: rich@johns-johns.example
+          example: willis@anderson.test
         first_name:
           type: string
-          example: Ira
+          example: Lucio
         last_name:
           type: string
-          example: Mann
+          example: Lindgren
         username:
           type: string
-          example: carolee.hartmann
+          example: eldridge
       required:
       - id
       - email
@@ -452,17 +452,17 @@ components:
       properties:
         id:
           type: integer
-          example: 80
+          example: 93
         user_id:
           type: integer
-          example: 67
+          example: 81
         position_id:
           type: integer
           example: 44
         start_date:
           type: string
           format: date
-          example: '2025-06-25'
+          example: '2025-06-03'
         end_date:
           type: string
           format: date
@@ -492,6 +492,10 @@ components:
             "$ref": "#/components/schemas/Position"
           company:
             "$ref": "#/components/schemas/Company"
+          shifts:
+            type: array
+            items:
+              "$ref": "#/components/schemas/Shift"
         required:
         - position
         - company
@@ -500,16 +504,16 @@ components:
       properties:
         id:
           type: integer
-          example: 82
+          example: 48
         title:
           type: string
-          example: Administration Agent
+          example: Direct Consulting Analyst
         description:
           type: string
-          example: Inverse context-sensitive website
+          example: Networked needs-based portal
         company_id:
           type: integer
-          example: 84
+          example: 61
         remote:
           type: boolean
           example: false
@@ -528,30 +532,30 @@ components:
       properties:
         id:
           type: integer
-          example: 18
+          example: 71
         employment_id:
           type: integer
-          example: 77
+          example: 10
         date:
           type: string
           format: date
-          example: '2025-06-29'
+          example: '2025-06-22'
         start_time:
           type: string
           format: date-time
-          example: '2025-06-23 01:49:05 -0400'
+          example: '2025-06-18 16:46:16 -0400'
         end_time:
           type: string
           format: date-time
           nullable: true
-          example: '2025-06-26 22:07:55 -0400'
+          example: '2025-07-01 20:44:53 -0400'
         hours:
           type: number
           format: float
-          example: 3.17
+          example: 9.37
         active:
           type: boolean
-          example: false
+          example: true
         created_at:
           type: string
           format: date-time
@@ -785,6 +789,13 @@ components:
               nullable: true
             position_attributes:
               "$ref": "#/components/schemas/PositionAttributes"
+      required:
+      - employment
+    EmploymentResponse:
+      type: object
+      properties:
+        employment:
+          "$ref": "#/components/schemas/EmploymentWithDetails"
       required:
       - employment
 servers:

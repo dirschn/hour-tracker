@@ -13,6 +13,7 @@ import { Observable }                                        from 'rxjs';
 
 import { Employment } from '../model/models';
 import { EmploymentCreateRequest } from '../model/models';
+import { EmploymentResponse } from '../model/models';
 import { EmploymentUpdateRequest } from '../model/models';
 import { EmploymentsPost422Response } from '../model/models';
 import { Shift } from '../model/models';
@@ -58,7 +59,7 @@ export interface EmploymentsServiceInterface {
      * Get a specific employment
      * @param id Employment ID
      */
-    employmentsIdGet(id: string, extraHttpRequestParams?: any): Observable<Employment>;
+    employmentsIdGet(id: string, extraHttpRequestParams?: any): Observable<EmploymentResponse>;
 
     /**
      * update employment

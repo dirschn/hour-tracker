@@ -26,6 +26,7 @@ model/dashboardResponse.ts
 model/employment.ts
 model/employmentCreateRequest.ts
 model/employmentCreateRequestEmployment.ts
+model/employmentResponse.ts
 model/employmentUpdateRequest.ts
 model/employmentUpdateRequestEmployment.ts
 model/employmentWithDetails.ts

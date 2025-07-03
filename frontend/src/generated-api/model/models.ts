@@ -8,6 +8,7 @@ export * from './dashboardResponse';
 export * from './employment';
 export * from './employmentCreateRequest';
 export * from './employmentCreateRequestEmployment';
+export * from './employmentResponse';
 export * from './employmentUpdateRequest';
 export * from './employmentUpdateRequestEmployment';
 export * from './employmentWithDetails';

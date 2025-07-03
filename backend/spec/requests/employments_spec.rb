@@ -111,7 +111,7 @@ RSpec.describe 'Employments', type: :request do
       produces 'application/json'
 
       response(200, 'successful') do
-        schema '$ref': '#/components/schemas/Employment'
+        schema '$ref': '#/components/schemas/EmploymentResponse'
 
         let(:id) { employment.id }
 

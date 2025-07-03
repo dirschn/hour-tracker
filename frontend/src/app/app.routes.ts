@@ -23,6 +23,11 @@ export const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'employments/:id',
+    loadComponent: () => import('./components/employment.component').then(m => m.EmploymentComponent),
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'employments/:id/edit',
     loadComponent: () => import('./components/employment-form.component').then(m => m.EmploymentFormComponent),
     canActivate: [AuthGuard]

@@ -21,6 +21,8 @@ import { Employment } from '../model/employment';
 // @ts-ignore
 import { EmploymentCreateRequest } from '../model/employmentCreateRequest';
 // @ts-ignore
+import { EmploymentResponse } from '../model/employmentResponse';
+// @ts-ignore
 import { EmploymentUpdateRequest } from '../model/employmentUpdateRequest';
 // @ts-ignore
 import { EmploymentsPost422Response } from '../model/employmentsPost422Response';
@@ -268,9 +270,9 @@ export class EmploymentsService extends BaseService implements EmploymentsServic
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public employmentsIdGet(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Employment>;
-    public employmentsIdGet(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Employment>>;
-    public employmentsIdGet(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Employment>>;
+    public employmentsIdGet(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EmploymentResponse>;
+    public employmentsIdGet(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EmploymentResponse>>;
+    public employmentsIdGet(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EmploymentResponse>>;
     public employmentsIdGet(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling employmentsIdGet.');
@@ -303,7 +305,7 @@ export class EmploymentsService extends BaseService implements EmploymentsServic
 
         let localVarPath = `/employments/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Employment>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<EmploymentResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

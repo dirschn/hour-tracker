@@ -91,7 +91,11 @@ RSpec.configure do |config|
                 type: :object,
                 properties: {
                   position: { '$ref': '#/components/schemas/Position' },
-                  company: { '$ref': '#/components/schemas/Company' }
+                  company: { '$ref': '#/components/schemas/Company' },
+                  shifts: {
+                    type: :array,
+                    items: { '$ref': '#/components/schemas/Shift' }
+                  }
                 },
                 required: ['position', 'company']
               }
@@ -312,6 +316,13 @@ RSpec.configure do |config|
                   position_attributes: { '$ref': '#/components/schemas/PositionAttributes' }
                 }
               }
+            },
+            required: ['employment']
+          },
+          EmploymentResponse: {
+            type: :object,
+            properties: {
+              employment: { '$ref': '#/components/schemas/EmploymentWithDetails' }
             },
             required: ['employment']
           }
