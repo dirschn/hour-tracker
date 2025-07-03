@@ -4,6 +4,11 @@
 
 require 'faker'
 
+if Rails.env.production?
+  puts 'Seeding in production environment is not allowed!'
+  exit
+end
+
 puts 'Seeding database...'
 
 # Clear existing data in development
