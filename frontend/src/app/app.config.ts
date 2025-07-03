@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { AuthService } from './services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
+import { environment } from '../environments/environment';
 
 import { routes } from './app.routes';
 import { provideServiceWorker } from '@angular/service-worker';
@@ -47,12 +48,12 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor])),
-    // API Configuration
-    { provide: BASE_PATH, useValue: 'http://localhost:3000' },
+    // API Configuration - now uses environment
+    { provide: BASE_PATH, useValue: environment.apiUrl },
     {
       provide: Configuration,
       useFactory: () => new Configuration({
-        basePath: 'http://localhost:3000',
+        basePath: environment.apiUrl,
       })
     }, provideServiceWorker('ngsw-worker.js', {
             enabled: !isDevMode(),
