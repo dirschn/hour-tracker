@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://hours.nmd98.com'
+  apiUrl: 'https://hoursapi.dirschn.com'
 };
