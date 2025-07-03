@@ -2,13 +2,14 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChang
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors, HttpInterceptorFn } from '@angular/common/http';
 import { Configuration, BASE_PATH } from '../generated-api';
-import { inject } from '@angular/core';
+import { inject, isDevMode } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from './services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 
 import { routes } from './app.routes';
+import { provideServiceWorker } from '@angular/service-worker';
 
 // Create functional interceptor instead of class-based
 const authInterceptor: HttpInterceptorFn = (req, next) => {
@@ -53,6 +54,9 @@ export const appConfig: ApplicationConfig = {
       useFactory: () => new Configuration({
         basePath: 'http://localhost:3000',
       })
-    }
+    }, provideServiceWorker('ngsw-worker.js', {
+            enabled: !isDevMode(),
+            registrationStrategy: 'registerWhenStable:30000'
+          })
   ]
 };

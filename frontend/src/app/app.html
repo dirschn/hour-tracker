@@ -14,6 +14,14 @@
       </ul>
 
       <div class="navbar-nav">
+        <!-- Install App Button (only show if not standalone and install prompt is available) -->
+        <div class="nav-item me-2" *ngIf="showInstallPrompt && !isStandalone">
+          <button class="btn btn-outline-light btn-sm" (click)="installApp()" title="Install Hour Tracker as an app">
+            <i class="bi bi-download me-1"></i>
+            Install App
+          </button>
+        </div>
+
         <div class="nav-item dropdown">
           <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="bi bi-person-circle me-2"></i>
@@ -38,6 +46,44 @@
     </div>
   </div>
 </nav>
+
+<!-- PWA Install Banner (shown at top when install prompt is available) -->
+<div class="alert alert-info alert-dismissible m-0 rounded-0 border-0" *ngIf="showInstallPrompt && !isStandalone" role="alert">
+  <div class="container-fluid">
+    <div class="d-flex align-items-center">
+      <i class="bi bi-phone me-2"></i>
+      <div class="flex-grow-1">
+        <strong>Install Hour Tracker</strong> - Get quick access and work offline!
+        <br>
+        <small class="text-muted">{{ installInstructions }}</small>
+      </div>
+      <div class="ms-2">
+        <button type="button" class="btn btn-primary btn-sm me-2" (click)="installApp()">
+          <i class="bi bi-download me-1"></i>Install
+        </button>
+        <button type="button" class="btn-close" (click)="dismissInstallPrompt()" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PWA Update Banner (shown when update is available) -->
+<div class="alert alert-warning alert-dismissible m-0 rounded-0 border-0" *ngIf="showUpdatePrompt" role="alert">
+  <div class="container-fluid">
+    <div class="d-flex align-items-center">
+      <i class="bi bi-arrow-clockwise me-2"></i>
+      <div class="flex-grow-1">
+        <strong>Update Available</strong> - A new version of Hour Tracker is ready to install.
+      </div>
+      <div class="ms-2">
+        <button type="button" class="btn btn-warning btn-sm me-2" (click)="updateApp()">
+          <i class="bi bi-arrow-clockwise me-1"></i>Update Now
+        </button>
+        <button type="button" class="btn-close" (click)="dismissUpdatePrompt()" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <main>
   <!-- Error Display -->

@@ -2,12 +2,86 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Frontend</title>
+  <title>Hour Tracker</title>
   <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Standard meta tags -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <meta name="description" content="Track your work hours and manage time efficiently with Hour Tracker">
+  <meta name="keywords" content="time tracking, hours, work, productivity, timesheet">
+  <meta name="author" content="Hour Tracker">
+
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#007bff">
+  <meta name="background-color" content="#ffffff">
+
+  <!-- Apple Meta Tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Hour Tracker">
+  <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-192x192.png">
+
+  <!-- Microsoft Meta Tags -->
+  <meta name="msapplication-TileColor" content="#007bff">
+  <meta name="msapplication-TileImage" content="icons/icon-144x144.png">
+  <meta name="msapplication-navbutton-color" content="#007bff">
+  <meta name="msapplication-starturl" content="/">
+
+  <!-- Icons and Manifest -->
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512x512.png">
+  <link rel="manifest" href="manifest.webmanifest">
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+  <!-- Security -->
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
 </head>
 <body>
-  <app-root></app-root>
+  <app-root>
+    <!-- Loading screen -->
+    <div style="
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f8f9fa;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    ">
+      <div style="
+        width: 64px;
+        height: 64px;
+        border: 4px solid #007bff;
+        border-radius: 50%;
+        border-top-color: transparent;
+        animation: spin 1s linear infinite;
+        margin-bottom: 1rem;
+      "></div>
+      <h2 style="color: #007bff; margin: 0; font-weight: 600;">Hour Tracker</h2>
+      <p style="color: #6c757d; margin: 0.5rem 0 0 0;">Loading your workspace...</p>
+    </div>
+    <style>
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+    </style>
+  </app-root>
+  <noscript>
+    <div style="
+      padding: 2rem;
+      text-align: center;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    ">
+      <h2>JavaScript Required</h2>
+      <p>Hour Tracker requires JavaScript to function properly. Please enable JavaScript in your browser and reload the page.</p>
+    </div>
+  </noscript>
 </body>
 </html>
