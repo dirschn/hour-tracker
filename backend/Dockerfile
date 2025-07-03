@@ -45,8 +45,8 @@ COPY . .
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
-
-
+# Create volume for database persistence
+VOLUME ["/rails/storage"]
 
 # Final stage for app image
 FROM base

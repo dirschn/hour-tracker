@@ -10,12 +10,12 @@ servers:
     - 93.127.216.192
 
 # Disable kamal-proxy since we're using existing Nginx
-# proxy:
-#   ssl: true
-#   host: hours.nmd98.com
-#   app_port: 3069
-#   healthcheck:
-#     path: /up
+proxy:
+  ssl: false
+  host: hours.nmd98.com
+  app_port: 3069
+  healthcheck:
+    path: /up
 
 # Credentials for your image host.
 registry:
@@ -73,12 +73,36 @@ asset_path: /rails/public/assets
 builder:
   arch: amd64
 
-# Use a different ssh user than root
-ssh:
-  user: rails
+  # # Build image via remote server (useful for faster amd64 builds on arm64 computers)
+  # remote: ssh://docker@docker-builder-server
+  #
+  # # Pass arguments and secrets to the Docker build process
+  # args:
+  #   RUBY_VERSION: 3.2.2
+  # secrets:
+  #   - GITHUB_TOKEN
+  #   - RAILS_MASTER_KEY
 
-# Map Rails app to port 3000 internally, expose on 3069 for Nginx to proxy to
-docker:
-  options:
-    publish:
-      - "3069:3000"
+# Use accessory services (secrets come from .kamal/secrets).
+# accessories:
+#   db:
+#     image: mysql:8.0
+#     host: 192.168.0.2
+#     # Change to 3306 to expose port to the world instead of just local network.
+#     port: "127.0.0.1:3306:3306"
+#     env:
+#       clear:
+#         MYSQL_ROOT_HOST: '%'
+#       secret:
+#         - MYSQL_ROOT_PASSWORD
+#     files:
+#       - config/mysql/production.cnf:/etc/mysql/my.cnf
+#       - db/production.sql:/docker-entrypoint-initdb.d/setup.sql
+#     directories:
+#       - data:/var/lib/mysql
+#   redis:
+#     image: redis:7.0
+#     host: 192.168.0.2
+#     port: 6379
+#     directories:
+#       - data:/data
