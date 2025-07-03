@@ -10,4 +10,7 @@ export * from './employments.serviceInterface';
 export * from './profiles.service';
 import { ProfilesService } from './profiles.service';
 export * from './profiles.serviceInterface';
-export const APIS = [AuthenticationService, DashboardService, EmploymentsService, ProfilesService];
+export * from './shifts.service';
+import { ShiftsService } from './shifts.service';
+export * from './shifts.serviceInterface';
+export const APIS = [AuthenticationService, DashboardService, EmploymentsService, ProfilesService, ShiftsService];

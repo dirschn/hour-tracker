@@ -350,6 +350,102 @@ paths:
           application/json:
             schema:
               "$ref": "#/components/schemas/ProfileUpdateRequest"
+  "/shifts/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: Shift ID
+      required: true
+      schema:
+        type: integer
+    get:
+      summary: show shift
+      tags:
+      - Shifts
+      description: Show a specific shift
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ShiftResponse"
+        '404':
+          description: not found
+        '401':
+          description: unauthorized
+    patch:
+      summary: update shift
+      tags:
+      - Shifts
+      description: Update a shift
+      parameters: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Shift"
+        '422':
+          description: unprocessable entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '401':
+          description: unauthorized
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                shift:
+                  type: object
+                  properties:
+                    date:
+                      type: string
+                      format: date
+                    start_time:
+                      type: string
+                      format: date-time
+                    end_time:
+                      type: string
+                      format: date-time
+                      nullable: true
+                    employment_id:
+                      type: integer
+                    description:
+                      type: string
+              required:
+              - shift
+    delete:
+      summary: delete shift
+      tags:
+      - Shifts
+      description: Delete a shift
+      responses:
+        '204':
+          description: no content
+        '404':
+          description: not found
+        '401':
+          description: unauthorized
 components:
   schemas:
     Company:
@@ -357,13 +453,13 @@ components:
       properties:
         id:
           type: integer
-          example: 58
+          example: 46
         name:
           type: string
-          example: Powlowski, Krajcik and Donnelly
+          example: Stark LLC
         description:
           type: string
-          example: Advanced homogeneous circuit
+          example: Extended dedicated open architecture
         created_at:
           type: string
           format: date-time
@@ -381,22 +477,22 @@ components:
           example: 1
         first_name:
           type: string
-          example: Leon
+          example: Samual
         last_name:
           type: string
-          example: Schneider
+          example: Wyman
         username:
           type: string
-          example: elida
+          example: antonio
           minLength: 3
           maxLength: 20
         email:
           type: string
           format: email
-          example: judson.koelpin@bruen.example
+          example: lizeth_nader@klocko.test
         name:
           type: string
-          example: Amb. Celsa Mosciski
+          example: Dr. Tori Brekke
         created_at:
           type: string
           format: date-time
@@ -414,17 +510,17 @@ components:
       properties:
         first_name:
           type: string
-          example: Jefferson
+          example: Brendon
         last_name:
           type: string
-          example: Harber
+          example: Kilback
         username:
           type: string
-          example: harold_cummerata
+          example: billy_fay
         email:
           type: string
           format: email
-          example: janelle_dickinson@waters.example
+          example: richard_pacocha@schmitt-heidenreich.example
     AuthenticatedUser:
       type: object
       properties:
@@ -434,16 +530,16 @@ components:
         email:
           type: string
           format: email
-          example: willis@anderson.test
+          example: antione@rohan.test
         first_name:
           type: string
-          example: Lucio
+          example: Von
         last_name:
           type: string
-          example: Lindgren
+          example: Larson
         username:
           type: string
-          example: eldridge
+          example: moshe.lakin
       required:
       - id
       - email
@@ -452,13 +548,13 @@ components:
       properties:
         id:
           type: integer
-          example: 93
+          example: 78
         user_id:
           type: integer
-          example: 81
+          example: 54
         position_id:
           type: integer
-          example: 44
+          example: 36
         start_date:
           type: string
           format: date
@@ -467,7 +563,7 @@ components:
           type: string
           format: date
           nullable: true
-          example: '2025-07-10'
+          example: '2025-07-29'
         active:
           type: boolean
           example: true
@@ -504,19 +600,19 @@ components:
       properties:
         id:
           type: integer
-          example: 48
+          example: 84
         title:
           type: string
-          example: Direct Consulting Analyst
+          example: Marketing Director
         description:
           type: string
-          example: Networked needs-based portal
+          example: Programmable system-worthy productivity
         company_id:
           type: integer
-          example: 61
+          example: 60
         remote:
           type: boolean
-          example: false
+          example: true
         created_at:
           type: string
           format: date-time
@@ -532,27 +628,33 @@ components:
       properties:
         id:
           type: integer
-          example: 71
+          example: 23
         employment_id:
           type: integer
-          example: 10
+          example: 72
         date:
           type: string
           format: date
-          example: '2025-06-22'
+          example: '2025-06-18'
         start_time:
           type: string
           format: date-time
-          example: '2025-06-18 16:46:16 -0400'
+          example: '2025-06-24 12:55:22 -0400'
         end_time:
           type: string
           format: date-time
           nullable: true
-          example: '2025-07-01 20:44:53 -0400'
+          example: '2025-06-22 18:16:11 -0400'
+        description:
+          type: string
+          example: Molestiae rerum omnis aut.
+        notes:
+          type: string
+          example: Id autem molestiae. Quis ut nostrum. Dignissimos temporibus rerum.
         hours:
           type: number
           format: float
-          example: 9.37
+          example: 0.58
         active:
           type: boolean
           example: true
@@ -798,6 +900,29 @@ components:
           "$ref": "#/components/schemas/EmploymentWithDetails"
       required:
       - employment
+    ShiftResponse:
+      type: object
+      properties:
+        shift:
+          allOf:
+          - "$ref": "#/components/schemas/Shift"
+          - type: object
+            properties:
+              employment:
+                "$ref": "#/components/schemas/EmploymentWithDetails"
+              hours:
+                type: number
+                format: float
+                example: 8.0
+              active:
+                type: boolean
+                example: true
+            required:
+            - employment
+            - hours
+            - active
+      required:
+      - shift
 servers:
 - url: http://localhost:3000
   description: Development server

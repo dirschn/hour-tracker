@@ -7,9 +7,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { EmploymentWithDetails } from './employmentWithDetails';
 
 
-export interface Shift { 
+export interface ShiftResponseShift { 
     id: number;
     employment_id: number;
     date: string;
@@ -17,9 +18,10 @@ export interface Shift {
     end_time?: string | null;
     description?: string;
     notes?: string;
-    hours?: number;
-    active?: boolean;
+    hours: number;
+    active: boolean;
     created_at?: string;
     updated_at?: string;
+    employment: EmploymentWithDetails;
 }
 

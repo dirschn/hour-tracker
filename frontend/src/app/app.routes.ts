@@ -33,6 +33,16 @@ export const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'shifts/:id',
+    loadComponent: () => import('./components/shift.component').then(m => m.ShiftComponent),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'shifts/:id/edit',
+    loadComponent: () => import('./components/shift-edit.component').then(m => m.ShiftEditComponent),
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'sign_in',
     loadComponent: () => import('./components/sign-in.component').then(m => m.SignInComponent)
   },

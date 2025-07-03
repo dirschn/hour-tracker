@@ -9,17 +9,11 @@
  */
 
 
-export interface Shift { 
-    id: number;
-    employment_id: number;
-    date: string;
-    start_time: string;
+export interface ShiftsIdPatchRequestShift { 
+    date?: string;
+    start_time?: string;
     end_time?: string | null;
+    employment_id?: number;
     description?: string;
-    notes?: string;
-    hours?: number;
-    active?: boolean;
-    created_at?: string;
-    updated_at?: string;
 }
 

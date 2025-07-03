@@ -12,6 +12,8 @@ api/employments.service.ts
 api/employments.serviceInterface.ts
 api/profiles.service.ts
 api/profiles.serviceInterface.ts
+api/shifts.service.ts
+api/shifts.serviceInterface.ts
 configuration.ts
 encoder.ts
 git_push.sh
@@ -46,6 +48,11 @@ model/profileResponseUser.ts
 model/profileResponseUserAllOfEmploymentsInner.ts
 model/profileUpdateRequest.ts
 model/shift.ts
+model/shiftResponse.ts
+model/shiftResponseShift.ts
+model/shiftsIdPatch404Response.ts
+model/shiftsIdPatchRequest.ts
+model/shiftsIdPatchRequestShift.ts
 model/signInPost401Response.ts
 model/signInPostRequest.ts
 model/signInPostRequestUser.ts

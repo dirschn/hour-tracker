@@ -65,12 +65,12 @@ class EmploymentsController < ApplicationController
   end
 
   def employment_params
-    params.require(:employment).permit(
+    params.expect(employment: [
       :position_id, :start_date, :end_date,
       position_attributes: [
         :id, :title, :description, :remote,
         company_attributes: [:id, :name, :description]
       ]
-    )
+    ])
   end
 end

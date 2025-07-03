@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     end
   end
   resource :profile, only: [:show, :update]
+  resources :shifts, only: [:show, :update, :destroy]
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

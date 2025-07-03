@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { DashboardService, EmploymentsService } from '../../generated-api';
 import { AuthenticatedUser } from '../../generated-api';
@@ -11,10 +12,48 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   template: `
     <div class="container-fluid py-4">
       <div *ngIf="dashboardData; else loading">
+        <!-- Single Calendar Section -->
+        <div *ngIf="getFilteredShifts().length > 0" class="mb-4">
+          <div class="card shadow">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="bi bi-calendar-week me-2"></i>
+                This Week's Schedule
+                <span *ngIf="getVisibleEmploymentCount() < dashboardData.active_employments.length" class="badge bg-info ms-2">
+                  {{ getVisibleEmploymentCount() }} of {{ dashboardData.active_employments.length }} shown
+                </span>
+              </h5>
+            </div>
+            <div class="card-body">
+              <div id="main-calendar" class="calendar-container"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- No calendar shifts message when filtered -->
+        <div *ngIf="getAllShifts().length > 0 && getFilteredShifts().length === 0" class="mb-4">
+          <div class="card shadow">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="bi bi-calendar-week me-2"></i>
+                This Week's Schedule
+                <span class="badge bg-warning ms-2">All filtered out</span>
+              </h5>
+            </div>
+            <div class="card-body text-center py-4">
+              <div class="text-muted">
+                <i class="bi bi-funnel display-1 mb-3"></i>
+                <h4>No Shifts Visible</h4>
+                <p>All shifts are hidden. Toggle the calendar visibility on employment cards to show shifts.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div>
           <div
             *ngIf="dashboardData.active_employments.length === 0"
@@ -36,24 +75,35 @@ import timeGridPlugin from '@fullcalendar/timegrid';
           <div class="row row-cols-1 row-cols-xl-2 row-cols-xxl-3 g-4">
             <div *ngFor="let emp of dashboardData.active_employments; trackBy: trackByEmploymentId">
               <div class="card col border-primary shadow">
-                <div
-                  class="card-header user-select-none hover-highlight"
-                  (click)="toggleEmploymentCollapse(emp.id)"
-                  style="cursor: pointer;"
-                >
+                <div class="card-header" [style.border-left]="'4px solid ' + getEmploymentColor(emp.id)">
                   <!-- Main header row -->
                   <div class="d-flex justify-content-between align-items-start mb-2">
                     <div class="d-flex align-items-center gap-2 flex-grow-1 text-truncate">
-                      <i class="bi bi-chevron-right chevron-icon flex-shrink-0"
-                        [class.expanded]="isEmploymentExpanded(emp.id)"></i>
                       <div class="flex-fill text-truncate">
                         <h5 class="card-title mb-0 fs-6 lh-sm">{{ emp.position.title }}</h5>
                         <small class="text-muted">{{ emp.company.name }}</small>
                       </div>
                     </div>
 
-                    <!-- Clock button - always visible -->
-                    <div class="flex-shrink-0 ms-auto" (click)="$event.stopPropagation()">
+                    <!-- Calendar filter toggle -->
+                    <div class="flex-shrink-0 me-2">
+                      <div class="form-check form-switch">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          [id]="'calendar-toggle-' + emp.id"
+                          [(ngModel)]="employmentFilters[emp.id]"
+                          (change)="onFilterChange()"
+                          title="Show/hide shifts in calendar"
+                        >
+                        <label class="form-check-label" [for]="'calendar-toggle-' + emp.id">
+                          <i class="bi bi-calendar-week text-muted"></i>
+                        </label>
+                      </div>
+                    </div>
+
+                    <!-- Clock button -->
+                    <div class="flex-shrink-0">
                       <!-- Clock In button (if no current shift) -->
                       <button
                         *ngIf="!getCurrentShiftForEmployment(emp.id)"
@@ -86,7 +136,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
                     </div>
                   </div>
 
-                  <!-- Secondary info row - always visible but compact on mobile -->
+                  <!-- Secondary info row -->
                   <div class="border-top border-opacity-25 pt-2">
                     <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between">
                       <div class="d-flex flex-wrap gap-2 align-items-center">
@@ -106,17 +156,12 @@ import timeGridPlugin from '@fullcalendar/timegrid';
                           <span class="d-sm-none">{{ getWeeklyHours(emp.id) }}h</span>
                         </div>
                       </div>
-
-                      <!-- Expand for more info hint (mobile only) -->
-                      <small class="text-muted d-sm-none" *ngIf="!isEmploymentExpanded(emp.id)">
-                        Tap to expand
-                      </small>
                     </div>
                   </div>
                 </div>
 
-                <!-- Collapsible content -->
-                <div *ngIf="isEmploymentExpanded(emp.id)" class="card-body" [id]="'employment-body-' + emp.id">
+                <!-- Card body with current shift details and link -->
+                <div class="card-body">
                   <div
                     *ngIf="getCurrentShiftForEmployment(emp.id) as currentShift"
                     class="alert alert-success py-2 mb-3"
@@ -132,24 +177,22 @@ import timeGridPlugin from '@fullcalendar/timegrid';
                     </div>
                   </div>
 
-                  <!-- Calendar always visible when expanded -->
-                  <ng-container
-                    *ngIf="
-                      getWeeklyShiftsForEmployment(emp.id).length > 0;
-                      else noShifts
-                    "
-                  >
-                    <h6 class="mb-3">This Week's Schedule:</h6>
-                    <div
-                      [id]="'calendar-container-' + emp.id"
-                      class="calendar-container"
-                    ></div>
-                  </ng-container>
-                  <ng-template #noShifts>
-                    <div class="text-muted">
-                      No shifts for this employment this week.
+                  <!-- Employment details and link -->
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="text-muted small">
+                      {{ getWeeklyShiftsForEmployment(emp.id).length }} shift(s) this week
+                      <span *ngIf="!employmentFilters[emp.id]" class="text-warning">
+                        (hidden from calendar)
+                      </span>
                     </div>
-                  </ng-template>
+                    <a
+                      [routerLink]="['/employments', emp.id]"
+                      class="btn btn-outline-primary btn-sm"
+                    >
+                      <i class="bi bi-eye me-1"></i>
+                      View Details
+                    </a>
+                  </div>
 
                   <!-- Error messages -->
                   <div
@@ -184,35 +227,11 @@ import timeGridPlugin from '@fullcalendar/timegrid';
   styles: [
     `
       .calendar-container {
-        min-height: 200px;
+        min-height: 400px;
       }
-      .chevron-icon {
-        transition: transform 0.35s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        transform-origin: center;
-        will-change: transform;
-      }
-      .chevron-icon.expanded {
-        transform: rotate(90deg) scale(1.2);
-        animation: chevron-bounce 0.4s ease-out;
-      }
-      .chevron-icon:not(.expanded) {
-        transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      }
-      @keyframes chevron-bounce {
-        0% { transform: rotate(0deg) scale(1); }
-        40% { transform: rotate(45deg) scale(1.4); }
-        70% { transform: rotate(110deg) scale(0.9); }
-        100% { transform: rotate(90deg) scale(1.2); }
-      }
-      .hover-highlight:hover {
-        background-color: rgba(var(--bs-primary-rgb), 0.1);
-      }
-      .hover-highlight:hover .chevron-icon {
-        transform: scale(1.2);
-        transition: transform 0.15s ease-out;
-      }
-      .hover-highlight:hover .chevron-icon.expanded {
-        transform: rotate(90deg) scale(1.35);
+      .employment-filter-label {
+        padding-left: 8px;
+        font-size: 0.875rem;
       }
     `,
   ],
@@ -224,9 +243,12 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   clockInError: string | null = null;
   clockingOutEmploymentId: number | null = null;
   clockOutError: string | null = null;
-  public weekCalendars: { [empId: number]: Calendar } = {};
-  private calendarsInitialized = false;
-  private expandedEmployments: Set<number> = new Set();
+  private mainCalendar: Calendar | null = null;
+  private calendarInitialized = false;
+
+  // Filter state
+  employmentFilters: { [employmentId: number]: boolean } = {};
+  private employmentColors: { [employmentId: number]: string } = {};
 
   constructor(
     private authService: AuthService,
@@ -243,9 +265,10 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     this.dashboardService.rootGet().subscribe({
       next: (data) => {
         this.dashboardData = data;
-        // Initialize calendars after data is loaded if view is ready
-        if (!this.calendarsInitialized) {
-          setTimeout(() => this.initializeCalendars(), 0);
+        this.initializeFilters();
+        // Initialize calendar after data is loaded if view is ready
+        if (!this.calendarInitialized) {
+          setTimeout(() => this.initializeMainCalendar(), 0);
         }
       },
       error: (err) => {
@@ -256,39 +279,48 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    // Initialize calendars if data is already loaded
-    if (this.dashboardData && !this.calendarsInitialized) {
-      setTimeout(() => this.initializeCalendars(), 0);
+    // Initialize calendar if data is already loaded
+    if (this.dashboardData && !this.calendarInitialized) {
+      setTimeout(() => this.initializeMainCalendar(), 0);
     }
   }
 
   ngOnDestroy(): void {
-    // Clean up calendars when component is destroyed
-    Object.values(this.weekCalendars).forEach((calendar) => {
-      if (calendar) {
-        calendar.destroy();
-      }
-    });
-    this.weekCalendars = {};
-    this.calendarsInitialized = false;
+    // Clean up calendar when component is destroyed
+    if (this.mainCalendar) {
+      this.mainCalendar.destroy();
+      this.mainCalendar = null;
+    }
+    this.calendarInitialized = false;
   }
 
   // Refresh dashboard data
   refreshDashboard(): void {
-    // Destroy existing calendars before refreshing data
-    Object.values(this.weekCalendars).forEach((calendar) => {
-      if (calendar) {
-        calendar.destroy();
-      }
-    });
-    this.weekCalendars = {};
-    this.calendarsInitialized = false;
+    // Destroy existing calendar before refreshing data
+    if (this.mainCalendar) {
+      this.mainCalendar.destroy();
+      this.mainCalendar = null;
+    }
+    this.calendarInitialized = false;
+
+    // Store current filter state
+    const currentFilters = { ...this.employmentFilters };
 
     this.dashboardService.rootGet().subscribe({
       next: (data) => {
         this.dashboardData = data;
-        // Recreate calendars after data refresh
-        setTimeout(() => this.initializeCalendars(), 100);
+
+        // Restore filter state for existing employments
+        this.initializeFilters();
+        Object.keys(currentFilters).forEach(empId => {
+          const empIdNum = parseInt(empId);
+          if (this.employmentFilters.hasOwnProperty(empIdNum)) {
+            this.employmentFilters[empIdNum] = currentFilters[empIdNum];
+          }
+        });
+
+        // Recreate calendar after data refresh
+        setTimeout(() => this.initializeMainCalendar(), 100);
       },
       error: (err) => {
         console.error('Failed to load dashboard data', err);
@@ -297,145 +329,177 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  // Initialize all calendars
-  private initializeCalendars(): void {
-    if (!this.dashboardData?.active_employments || this.calendarsInitialized) {
-      return;
-    }
+  // Initialize employment filters - all visible by default
+  private initializeFilters(): void {
+    if (!this.dashboardData?.active_employments) return;
 
-    console.log(
-      'Initializing calendars for',
-      this.dashboardData.active_employments.length,
-      'employments'
+    // Initialize all filters to true (visible)
+    this.employmentFilters = {};
+    this.dashboardData.active_employments.forEach((emp: any) => {
+      this.employmentFilters[emp.id] = true;
+    });
+
+    // Initialize colors
+    this.initializeEmploymentColors();
+  }
+
+  // Initialize consistent colors for employments
+  private initializeEmploymentColors(): void {
+    if (!this.dashboardData?.active_employments) return;
+
+    const colors = [
+      '#3788d8', '#28a745', '#dc3545', '#ffc107', '#6f42c1',
+      '#fd7e14', '#20c997', '#e83e8c', '#6c757d', '#17a2b8'
+    ];
+
+    this.employmentColors = {};
+    this.dashboardData.active_employments.forEach((emp: any, index: number) => {
+      this.employmentColors[emp.id] = colors[index % colors.length];
+    });
+  }
+
+  // Get color for an employment
+  getEmploymentColor(employmentId: number): string {
+    return this.employmentColors[employmentId] || '#3788d8';
+  }
+
+  // Get filtered employments based on filter state
+  getFilteredEmployments(): any[] {
+    if (!this.dashboardData?.active_employments) return [];
+
+    return this.dashboardData.active_employments.filter((emp: any) =>
+      this.employmentFilters[emp.id] === true
     );
-
-    // Don't render calendars immediately since sections start collapsed
-    // They will be rendered when sections are expanded via setupCollapseListeners
-    this.calendarsInitialized = true;
   }
 
-  // Add a new method to handle calendar rendering
-  private renderCalendars(): void {
-    this.initializeCalendars();
+  // Get filtered shifts based on employment filters
+  getFilteredShifts(): any[] {
+    if (!this.dashboardData?.shifts) return [];
+
+    const weekStart = new Date();
+    weekStart.setDate(weekStart.getDate() - weekStart.getDay()); // Sunday
+    weekStart.setHours(0, 0, 0, 0);
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekStart.getDate() + 6);
+    weekEnd.setHours(23, 59, 59, 999);
+
+    return this.dashboardData.shifts.filter((shift: any) => {
+      const shiftDate = new Date(shift.date);
+      const isInWeek = shiftDate >= weekStart && shiftDate <= weekEnd;
+      const isEmploymentVisible = this.employmentFilters[shift.employment_id] === true;
+      return isInWeek && isEmploymentVisible;
+    });
   }
 
-  // Extract calendar creation logic into a separate method
-  private renderCalendarForEmployment(empId: number): void {
-    // Don't create calendar if it already exists
-    if (this.weekCalendars[empId]) {
+  // Get count of visible employments
+  getVisibleEmploymentCount(): number {
+    return Object.values(this.employmentFilters).filter(visible => visible).length;
+  }
+
+  // Toggle all filters on/off
+  toggleAllFilters(visible: boolean): void {
+    Object.keys(this.employmentFilters).forEach(empId => {
+      this.employmentFilters[parseInt(empId)] = visible;
+    });
+    this.onFilterChange();
+  }
+
+  // Handle filter change
+  onFilterChange(): void {
+    // Refresh calendar with new filter settings
+    if (this.mainCalendar) {
+      this.mainCalendar.destroy();
+      this.mainCalendar = null;
+    }
+    this.calendarInitialized = false;
+
+    // Recreate calendar with filtered data
+    setTimeout(() => this.initializeMainCalendar(), 0);
+  }
+
+  // Initialize the main calendar (updated to use filtered shifts)
+  private initializeMainCalendar(): void {
+    if (!this.dashboardData || this.calendarInitialized || this.mainCalendar) {
       return;
     }
 
-    const shifts = this.getWeeklyShiftsForEmployment(empId);
-    if (shifts.length === 0) {
-      console.log(
-        'No shifts found for employment',
-        empId,
-        '- skipping calendar'
-      );
-      return; // Don't render calendar if no shifts
+    const filteredShifts = this.getFilteredShifts();
+    if (filteredShifts.length === 0) {
+      console.log('No filtered shifts found - skipping calendar initialization');
+      return;
     }
 
-    // Wait for DOM to be ready and retry if container not found
-    const attemptRender = (attempt: number = 1) => {
-      const calendarContainer = document.getElementById(
-        'calendar-container-' + empId
+    const calendarContainer = document.getElementById('main-calendar');
+    if (!calendarContainer) {
+      console.log('Calendar container not found, retrying...');
+      setTimeout(() => this.initializeMainCalendar(), 100);
+      return;
+    }
+
+    // Clear any existing content
+    calendarContainer.innerHTML = '';
+
+    // Create events with different colors for different employments
+    const events = filteredShifts.map((shift: any) => {
+      const employment = this.dashboardData.active_employments.find(
+        (emp: any) => emp.id === shift.employment_id
       );
 
-      if (!calendarContainer) {
-        if (attempt <= 5) {
-          console.log(
-            `Calendar container not found for employment ${empId}, attempt ${attempt}/5, retrying...`
-          );
-          setTimeout(() => attemptRender(attempt + 1), 100);
-          return;
-        } else {
-          console.error(
-            'Calendar container not found for employment',
-            empId,
-            'after 5 attempts'
-          );
-          return;
-        }
-      }
+      const color = this.getEmploymentColor(shift.employment_id);
 
-      // Check if the container is visible (not in a collapsed section)
-      const collapseParent = document.getElementById(`collapse-${empId}`);
-      if (collapseParent && !collapseParent.classList.contains('show')) {
-        console.log(`Calendar container for employment ${empId} is not visible, skipping render`);
-        return;
-      }
-
-      // Clear any existing content in the container
-      calendarContainer.innerHTML = '';
-
-      const events = shifts.map((shift: any) => ({
-        title: shift.position_title || 'Shift',
+      return {
+        title: `${employment?.position?.title || 'Shift'} - ${employment?.company?.name || ''}`,
         start: shift.start_time || shift.date,
         end: shift.end_time || Date.now(),
         allDay: false,
+        backgroundColor: color,
+        borderColor: color,
         extendedProps: shift,
-      }));
+      };
+    });
 
-      const calendarOptions = {
-        plugins: [timeGridPlugin],
-        initialView: 'timeGridWeek',
-        events,
-        headerToolbar: false,
-        navLinks: false,
-        validRange: {
-          start: this.getCurrentWeekStart(),
-          end: this.getCurrentWeekEnd(),
-        },
-        allDaySlot: false,
-        height: 500,
-        scrollTime: '09:00:00',
-        slotDuration: '00:30:00',
-        slotLabelInterval: '01:00:00',
-      } as any;
-
-      try {
-        this.weekCalendars[empId] = new Calendar(
-          calendarContainer,
-          calendarOptions
-        );
-        this.weekCalendars[empId].render();
-        console.log('Calendar successfully rendered for employment', empId);
-      } catch (error) {
-        console.error('Error rendering calendar for employment', empId, error);
+    const calendarOptions = {
+      plugins: [timeGridPlugin],
+      initialView: 'timeGridWeek',
+      events,
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'timeGridWeek,timeGridDay'
+      },
+      validRange: {
+        start: this.getCurrentWeekStart(),
+        end: this.getCurrentWeekEnd(),
+      },
+      allDaySlot: false,
+      height: 600,
+      scrollTime: '09:00:00',
+      slotDuration: '00:30:00',
+      slotLabelInterval: '01:00:00',
+      eventClick: (info: any) => {
+        // Navigate to shift details when clicking on a shift
+        this.navigateTo(`/shifts/${info.event.extendedProps.id}`);
       }
-    };
+    } as any;
 
-    attemptRender();
+    try {
+      this.mainCalendar = new Calendar(calendarContainer, calendarOptions);
+      this.mainCalendar.render();
+      this.calendarInitialized = true;
+      console.log('Main calendar successfully rendered with', events.length, 'filtered events');
+    } catch (error) {
+      console.error('Error rendering main calendar', error);
+    }
+  }
+
+  // Get all shifts from all employments (updated for backward compatibility)
+  getAllShifts(): any[] {
+    return this.getFilteredShifts();
   }
 
   // Helper to track by employment ID
   trackByEmploymentId(index: number, emp: any): number {
     return emp.id;
-  }
-
-  // Toggle employment collapse state
-  toggleEmploymentCollapse(empId: number): void {
-    if (this.expandedEmployments.has(empId)) {
-      this.expandedEmployments.delete(empId);
-      // Clean up calendar when collapsing
-      if (this.weekCalendars[empId]) {
-        this.weekCalendars[empId].destroy();
-        delete this.weekCalendars[empId];
-        console.log(`Calendar destroyed for employment ${empId}`);
-      }
-    } else {
-      this.expandedEmployments.add(empId);
-      // Render calendar when expanding
-      setTimeout(() => {
-        this.renderCalendarForEmployment(empId);
-      }, 100);
-    }
-  }
-
-  // Check if employment is expanded
-  isEmploymentExpanded(empId: number): boolean {
-    return this.expandedEmployments.has(empId);
   }
 
   // Helper to get the start of the current week (Sunday)

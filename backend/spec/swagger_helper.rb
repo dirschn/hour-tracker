@@ -122,6 +122,8 @@ RSpec.configure do |config|
               date: { type: :string, format: 'date', example: Faker::Date.backward(days: 30).to_s },
               start_time: { type: :string, format: 'date-time', example: Faker::Time.backward(days: 30) },
               end_time: { type: :string, format: 'date-time', nullable: true, example: Faker::Time.backward(days: 29) },
+              description: { type: :string, example: Faker::Lorem.sentence },
+              notes: { type: :string, example: Faker::Lorem.paragraph },
               hours: { type: :number, format: 'float', example: Faker::Number.decimal(l_digits: 1, r_digits: 2) },
               active: { type: :boolean, example: Faker::Boolean.boolean },
               created_at: { type: :string, format: 'date-time' },
@@ -325,6 +327,26 @@ RSpec.configure do |config|
               employment: { '$ref': '#/components/schemas/EmploymentWithDetails' }
             },
             required: ['employment']
+          },
+          ShiftResponse: {
+            type: :object,
+            properties: {
+              shift: {
+                allOf: [
+                  { '$ref': '#/components/schemas/Shift' },
+                  {
+                    type: :object,
+                    properties: {
+                      employment: { '$ref': '#/components/schemas/EmploymentWithDetails' },
+                      hours: { type: :number, format: 'float', example: 8.0 },
+                      active: { type: :boolean, example: true }
+                    },
+                    required: ['employment', 'hours', 'active']
+                  }
+                ]
+              }
+            },
+            required: ['shift']
           }
         }
       },
