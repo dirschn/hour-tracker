@@ -35,7 +35,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
         </div>
 
         <!-- No calendar shifts message when filtered -->
-        <div *ngIf="getAllShifts().length > 0 && getFilteredShifts().length === 0" class="mb-4">
+        <div *ngIf="this.dashboardData?.shifts.length > 0 && getFilteredShifts().length === 0" class="mb-4">
           <div class="card shadow">
             <div class="card-header">
               <h5 class="mb-0">
@@ -376,18 +376,9 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   getFilteredShifts(): any[] {
     if (!this.dashboardData?.shifts) return [];
 
-    const weekStart = new Date();
-    weekStart.setDate(weekStart.getDate() - weekStart.getDay()); // Sunday
-    weekStart.setHours(0, 0, 0, 0);
-    const weekEnd = new Date(weekStart);
-    weekEnd.setDate(weekStart.getDate() + 6);
-    weekEnd.setHours(23, 59, 59, 999);
-
     return this.dashboardData.shifts.filter((shift: any) => {
-      const shiftDate = new Date(shift.date);
-      const isInWeek = shiftDate >= weekStart && shiftDate <= weekEnd;
       const isEmploymentVisible = this.employmentFilters[shift.employment_id] === true;
-      return isInWeek && isEmploymentVisible;
+      return isEmploymentVisible;
     });
   }
 
@@ -425,13 +416,11 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
     const filteredShifts = this.getFilteredShifts();
     if (filteredShifts.length === 0) {
-      console.log('No filtered shifts found - skipping calendar initialization');
       return;
     }
 
     const calendarContainer = document.getElementById('main-calendar');
     if (!calendarContainer) {
-      console.log('Calendar container not found, retrying...');
       setTimeout(() => this.initializeMainCalendar(), 100);
       return;
     }
@@ -492,10 +481,6 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  // Get all shifts from all employments (updated for backward compatibility)
-  getAllShifts(): any[] {
-    return this.getFilteredShifts();
-  }
 
   // Helper to track by employment ID
   trackByEmploymentId(index: number, emp: any): number {
@@ -628,4 +613,5 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   navigateTo(path: string): void {
     this.router.navigate([path]);
   }
+
 }
