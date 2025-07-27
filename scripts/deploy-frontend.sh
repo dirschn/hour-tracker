@@ -9,7 +9,7 @@ set -e
 LOCAL_BUILD_DIR="/home/nick/Projects/hour-tracker/frontend/dist/frontend/browser"
 REMOTE_REPO_PATH="/srv/hour-tracker"
 REMOTE_BUILD_PATH="/srv/hour-tracker/frontend/dist/frontend/browser"
-DEFAULT_SERVER="root@your-server-ip"  # Change this to your actual server
+DEFAULT_SERVER="rails@hours.dirschn.com"  # Change this to your actual server
 
 # Use provided server or default
 SERVER=${1:-$DEFAULT_SERVER}
@@ -29,14 +29,6 @@ ssh $SERVER "cd $REMOTE_REPO_PATH && git pull origin main"
 # Copy built files to server repository
 echo "📁 Copying built files to server repository..."
 scp -r $LOCAL_BUILD_DIR/* $SERVER:$REMOTE_BUILD_PATH/
-
-# Set proper permissions
-echo "🔐 Setting permissions..."
-ssh $SERVER "chown -R www-data:www-data $REMOTE_REPO_PATH && chmod -R 755 $REMOTE_BUILD_PATH"
-
-# Test nginx configuration and reload
-echo "🔄 Reloading Nginx..."
-ssh $SERVER "nginx -t && systemctl reload nginx"
 
 echo "✅ Deployment completed successfully!"
 echo "🌐 Your app should be available at: https://hours.dirschn.com"
