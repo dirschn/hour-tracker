@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { EmploymentsService, EmploymentResponse } from '../../generated-api';
+import { EmploymentsService, EmploymentResponse, ShiftsService } from '../../generated-api';
 
 import { Calendar } from '@fullcalendar/core';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -73,27 +73,55 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 
             <!-- Weekly Table -->
             <div class="table-responsive">
-              <table class="table table-striped" #weeklyTable>
+              <table class="table table-striped table-hover" #weeklyTable>
                 <thead>
                   <tr>
-                    <th>Date</th>
-                    <th>Hours</th>
-                    <th>Times</th>
-                    <th>Notes</th>
+                    <th class="align-middle">Date</th>
+                    <th class="align-middle">Hours</th>
+                    <th class="align-middle">Times</th>
+                    <th class="align-middle">Notes</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let day of weeklyTableData">
-                    <td>{{ day.date | date:'MMM d' }}</td>
-                    <td>{{ day.hours }}</td>
-                    <td>{{ day.times }}</td>
-                    <td>{{ day.notes }}</td>
+                  <tr *ngFor="let day of weeklyTableData; index as i">
+                    <td class="align-middle">{{ day.date | date:'MMM d' }}</td>
+                    <td class="align-middle">{{ day.hours }}</td>
+                    <td class="align-middle">{{ day.times }}</td>
+                    <td class="align-middle position-relative" style="min-width: 200px; cursor: pointer;"
+                        (click)="startEditingNotes(day)"
+                        [class.table-warning]="day.isEditing">
+                      <div *ngIf="!day.isEditing" class="p-1 rounded" [title]="day.notes"
+                           [class.text-muted]="!day.notes" [class.fst-italic]="!day.notes">
+                        {{ day.notes || 'Click to add notes...' }}
+                      </div>
+                      <div *ngIf="day.isEditing" class="p-2">
+                        <textarea
+                          #notesTextarea
+                          [(ngModel)]="day.editingNotes"
+                          class="form-control form-control-sm"
+                          style="resize: vertical; min-height: 60px;"
+                          (blur)="saveNotes(day)"
+                          (keydown)="onNotesKeydown($event, day)"
+                          placeholder="Add notes for this day..."
+                          rows="2">
+                        </textarea>
+                        <div class="d-flex align-items-center flex-wrap mt-1">
+                          <button type="button" class="btn btn-sm btn-success me-1" (click)="saveNotes(day)">
+                            <i class="bi bi-check"></i>
+                          </button>
+                          <button type="button" class="btn btn-sm btn-secondary" (click)="cancelEditingNotes(day)">
+                            <i class="bi bi-x"></i>
+                          </button>
+                          <small class="text-muted ms-2">Ctrl+Enter to save, Esc to cancel</small>
+                        </div>
+                      </div>
+                    </td>
                   </tr>
                   <tr class="table-primary fw-bold">
-                    <td>Total</td>
-                    <td>{{ getTotalHours() }}</td>
-                    <td>-</td>
-                    <td>-</td>
+                    <td class="align-middle">Total</td>
+                    <td class="align-middle">{{ getTotalHours() }}</td>
+                    <td class="align-middle">-</td>
+                    <td class="align-middle">-</td>
                   </tr>
                 </tbody>
               </table>
@@ -124,10 +152,6 @@ import timeGridPlugin from '@fullcalendar/timegrid';
         min-height: 400px;
       }
 
-      .table th, .table td {
-        vertical-align: middle;
-      }
-
       .weekly-table-container {
         max-height: 500px;
         overflow-y: auto;
@@ -145,6 +169,7 @@ export class EmploymentComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private employmentsService: EmploymentsService,
+    private shiftsService: ShiftsService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -295,7 +320,9 @@ export class EmploymentComponent implements OnInit, AfterViewInit, OnDestroy {
           date: new Date(currentDate),
           hours: totalHours,
           times: times,
-          notes: notes
+          notes: notes,
+          isEditing: false,
+          editingNotes: ''
         });
       }
 
@@ -431,5 +458,97 @@ export class EmploymentComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       });
     }
+  }
+
+  startEditingNotes(day: any): void {
+    // Don't start editing if already editing
+    if (day.isEditing) {
+      return;
+    }
+
+    day.isEditing = true;
+    day.editingNotes = day.notes || '';
+
+    // Focus the textarea after a short delay to ensure it's rendered
+    setTimeout(() => {
+      const textarea = document.querySelector('.notes-textarea') as HTMLTextAreaElement;
+      if (textarea) {
+        textarea.focus();
+        textarea.select();
+      }
+    }, 50);
+  }
+
+  cancelEditingNotes(day: any): void {
+    day.isEditing = false;
+    day.editingNotes = '';
+  }
+
+  onNotesKeydown(event: KeyboardEvent, day: any): void {
+    if (event.key === 'Enter' && event.ctrlKey) {
+      event.preventDefault();
+      this.saveNotes(day);
+    } else if (event.key === 'Escape') {
+      event.preventDefault();
+      this.cancelEditingNotes(day);
+    }
+  }
+
+  saveNotes(day: any): void {
+    if (!this.employmentData?.employment.shifts) {
+      return;
+    }
+
+    const newNotes = (day.editingNotes || '').trim();
+
+    // Find all shifts for this day
+    const dayShifts = this.employmentData.employment.shifts.filter((shift: any) => {
+      return shift.date === day.date.toISOString().slice(0, 10);
+    });
+
+    if (dayShifts.length === 0) {
+      // No shifts for this day, cannot save notes
+      this.cancelEditingNotes(day);
+      return;
+    }
+
+    // Update the first shift's description for this day
+    const targetShift = dayShifts[0];
+    const shiftId = targetShift.id;
+
+    if (!shiftId) {
+      console.error('Shift ID not found');
+      this.cancelEditingNotes(day);
+      return;
+    }
+
+    // Prepare the update payload
+    const updatePayload = {
+      shift: {
+        description: newNotes
+      }
+    };
+
+    // Call the shifts service to update the shift
+    this.shiftsService.shiftsIdPatch(shiftId, updatePayload).subscribe({
+      next: (response) => {
+        // Update the local data
+        targetShift.description = newNotes;
+        day.notes = newNotes;
+        day.isEditing = false;
+        day.editingNotes = '';
+
+        // Refresh the weekly table to reflect changes
+        this.updateWeeklyTable();
+
+        console.log('Notes updated successfully');
+      },
+      error: (error) => {
+        console.error('Error updating notes:', error);
+        // Reset editing state on error
+        this.cancelEditingNotes(day);
+        // You might want to show a user-friendly error message here
+      }
+    });
   }
 }
