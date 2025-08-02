@@ -312,8 +312,11 @@ export class EmploymentComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
 
-    const hours = totalMinutes / 60;
-    return hours > 0 ? hours.toFixed(2) : '0';
+    let hours = totalMinutes / 60;
+    if (hours < 0) hours = 0;
+    // Round to nearest quarter hour (same as dashboard)
+    hours = Math.round(hours * 4) / 4;
+    return hours.toFixed(2);
   }
 
   formatDayTimes(shifts: any[]): string {
