@@ -466,8 +466,10 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       slotDuration: '00:30:00',
       slotLabelInterval: '01:00:00',
       eventClick: (info: any) => {
-        // Navigate to shift details when clicking on a shift
-        this.navigateTo(`/shifts/${info.event.extendedProps.id}`);
+        // Navigate directly to shift edit when clicking on a shift
+        this.router.navigate([`/shifts/${info.event.extendedProps.id}/edit`], {
+          queryParams: { returnUrl: '/' }
+        });
       }
     } as any;
 

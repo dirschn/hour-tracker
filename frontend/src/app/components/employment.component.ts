@@ -235,8 +235,11 @@ export class EmploymentComponent implements OnInit, AfterViewInit, OnDestroy {
       slotDuration: '00:30:00',
       slotLabelInterval: '01:00:00',
       eventClick: (info: any) => {
-        // Navigate to shift details when clicking on a shift
-        this.router.navigate([`/shifts/${info.event.extendedProps.id}`]);
+        // Navigate directly to shift edit when clicking on a shift
+        const currentPath = this.router.url.split('?')[0]; // Remove any existing query params
+        this.router.navigate([`/shifts/${info.event.extendedProps.id}/edit`], {
+          queryParams: { returnUrl: currentPath }
+        });
       }
     } as any;
 

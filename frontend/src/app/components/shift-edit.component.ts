@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 import { ShiftsService, ShiftResponse, ShiftsIdPatchRequest } from '../../generated-api';
 
 @Component({
@@ -15,7 +16,7 @@ import { ShiftsService, ShiftResponse, ShiftsIdPatchRequest } from '../../genera
           <div class="d-flex justify-content-between align-items-center mb-4">
             <h1>Edit Shift</h1>
             <button type="button" class="btn btn-outline-secondary" (click)="goBack()">
-              <i class="bi bi-arrow-left me-2"></i>Back to Shift
+              <i class="bi bi-arrow-left me-2"></i>Back
             </button>
           </div>
 
@@ -148,6 +149,7 @@ export class ShiftEditComponent implements OnInit {
   shiftForm: FormGroup;
   shiftData: ShiftResponse | null = null;
   shiftId!: number; // Use definite assignment assertion
+  returnUrl: string = '/';
   loading = true;
   saving = false;
   successMessage: string | null = null;
@@ -157,7 +159,8 @@ export class ShiftEditComponent implements OnInit {
     private fb: FormBuilder,
     private shiftsService: ShiftsService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private location: Location
   ) {
     this.shiftForm = this.createForm();
   }
@@ -165,6 +168,9 @@ export class ShiftEditComponent implements OnInit {
   ngOnInit(): void {
     const shiftIdParam = this.route.snapshot.params['id'];
     this.shiftId = parseInt(shiftIdParam, 10);
+
+    // Get the returnUrl from query parameters
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
 
     if (isNaN(this.shiftId)) {
       this.errorMessage = 'Invalid shift ID';
@@ -282,9 +288,14 @@ export class ShiftEditComponent implements OnInit {
         this.saving = false;
         this.successMessage = 'Shift updated successfully!';
 
-        // Navigate back to shift view after a short delay
+        // Navigate back to the return URL after a short delay
         setTimeout(() => {
-          this.router.navigate(['/shifts', this.shiftId]);
+          if (this.isValidReturnUrl(this.returnUrl)) {
+            this.router.navigate([this.returnUrl]);
+          } else {
+            // Fallback to dashboard if returnUrl is invalid
+            this.router.navigate(['/']);
+          }
         }, 1500);
       },
       error: (error) => {
@@ -320,6 +331,17 @@ export class ShiftEditComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/shifts', this.shiftId]);
+    // Validate the return URL before navigating
+    if (this.isValidReturnUrl(this.returnUrl)) {
+      this.router.navigate([this.returnUrl]);
+    } else {
+      // Fallback to dashboard if returnUrl is invalid
+      this.router.navigate(['/']);
+    }
+  }
+
+  private isValidReturnUrl(url: string): boolean {
+    // Basic validation to ensure the URL is safe for internal navigation
+    return url.startsWith('/') && !url.includes('//') && !url.includes('javascript:');
   }
 }

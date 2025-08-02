@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { ShiftsService, ShiftResponse } from '../../generated-api';
 
 @Component({
@@ -55,7 +55,11 @@ import { ShiftsService, ShiftResponse } from '../../generated-api';
 export class ShiftComponent implements OnInit {
   shiftData: ShiftResponse | null = null;
 
-  constructor(private shiftsService: ShiftsService, private router: Router) {}
+  constructor(
+    private shiftsService: ShiftsService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.loadShiftDetails();
@@ -81,8 +85,34 @@ export class ShiftComponent implements OnInit {
 
   editShift(): void {
     if (this.shiftData?.shift.id) {
-      this.router.navigate(['/shifts', this.shiftData.shift.id, 'edit']);
+      // Get the returnUrl from query params, or use current route's referrer
+      const returnUrl = this.route.snapshot.queryParams['returnUrl'] || this.getReturnUrl();
+
+      this.router.navigate(['/shifts', this.shiftData.shift.id, 'edit'], {
+        queryParams: { returnUrl }
+      });
     }
+  }
+
+  private getReturnUrl(): string {
+    // Try to determine where the user came from based on the referrer
+    const referrer = document.referrer;
+    const currentOrigin = window.location.origin;
+
+    if (referrer.startsWith(currentOrigin)) {
+      const referrerPath = new URL(referrer).pathname;
+
+      // Check if it's from dashboard or employment page
+      if (referrerPath === '/' || referrerPath === '/dashboard') {
+        return '/';
+      }
+      if (referrerPath.startsWith('/employments/') && !referrerPath.includes('/edit')) {
+        return referrerPath;
+      }
+    }
+
+    // Default fallback to dashboard
+    return '/';
   }
 
   deleteShift(): void {
