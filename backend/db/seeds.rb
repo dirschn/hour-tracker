@@ -77,8 +77,8 @@ end
 puts 'Creating employments...'
 employments = []
 users.each do |user|
-  # Each user has 1-3 positions
-  selected_positions = positions.sample(rand(1..3))
+  # Each user has 2-4 positions
+  selected_positions = positions.sample(rand(2..4))
 
   selected_positions.each_with_index do |position, index|
     start_date = Faker::Date.between(from: 8.months.ago, to: 4.months.ago)
