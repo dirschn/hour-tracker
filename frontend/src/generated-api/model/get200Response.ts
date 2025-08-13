@@ -18,6 +18,10 @@ export interface Get200Response {
      * Object where each key is an employment ID (as a string) and each value is the total hours worked that week (float).
      */
     total_weekly_hours: { [key: string]: number; };
+    /**
+     * Object where each key is a date and employment ID (format \"YYYY-MM-DD_EMPLOYMENT_ID\") and each value is the total hours worked that day (float).
+     */
+    daily_hours: { [key: string]: number; };
     current_shifts: Array<Shift>;
 }
 

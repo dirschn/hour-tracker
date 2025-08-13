@@ -294,6 +294,10 @@ export class EmploymentFormComponent implements OnInit {
     this.isEditMode = !!this.employmentId;
 
     this.loadFormData();
+
+    if (this.isEditMode) {
+      this.loadEmployment();
+    }
   }
 
   private createForm(): FormGroup {
@@ -315,11 +319,6 @@ export class EmploymentFormComponent implements OnInit {
           this.formData = response.form_data;
           this.filteredCompanies = [...this.formData.companies];
           this.filteredPositions = [...this.formData.positions];
-          
-          // Load employment data after form data is loaded
-          if (this.isEditMode) {
-            this.loadEmployment();
-          }
         }
       },
       error: (error) => {
@@ -448,9 +447,7 @@ export class EmploymentFormComponent implements OnInit {
 
     this.isLoading = true;
     this.employmentsService.employmentsIdGet(this.employmentId).subscribe({
-      next: (response: any) => {
-        const employment = response.employment || response;
-        
+      next: (employment: any) => {
         this.employmentForm.patchValue({
           start_date: employment.start_date,
           end_date: employment.end_date || '',
@@ -461,24 +458,13 @@ export class EmploymentFormComponent implements OnInit {
           isRemote: employment.position?.remote !== undefined ? employment.position.remote : false
         });
 
-        // Find and set selected company and position from form data
+        // Set selected company and position for editing
         if (employment.company) {
-          // Try to find the company in the form data by ID first, then by name
-          this.selectedCompany = this.formData.companies.find(c => 
-            c.id === employment.company.id || c.name === employment.company.name
-          ) || employment.company;
+          this.selectedCompany = employment.company;
         }
-        
         if (employment.position) {
-          // Try to find the position in the form data by ID first, then by title and company
-          this.selectedPosition = this.formData.positions.find(p => 
-            p.id === employment.position.id || 
-            (p.title === employment.position.title && p.company_id === employment.company?.id)
-          ) || employment.position;
+          this.selectedPosition = employment.position;
         }
-
-        // Update filtered options based on selections
-        this.updatePositionOptions();
 
         this.isLoading = false;
       },

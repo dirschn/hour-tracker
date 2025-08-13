@@ -77,7 +77,7 @@ paths:
       tags:
       - Dashboard
       description: Retrieve dashboard data including active employments, shifts, total
-        weekly hours, and current shifts
+        weekly hours, daily hours per employment, and current shifts
       responses:
         '200':
           description: successful
@@ -102,6 +102,15 @@ paths:
                       type: number
                       format: float
                       example: 38.5
+                  daily_hours:
+                    type: object
+                    description: Object where each key is a date and employment ID
+                      (format "YYYY-MM-DD_EMPLOYMENT_ID") and each value is the total
+                      hours worked that day (float).
+                    additionalProperties:
+                      type: number
+                      format: float
+                      example: 8.0
                   current_shifts:
                     type: array
                     items:
@@ -110,6 +119,7 @@ paths:
                 - shifts
                 - active_employments
                 - total_weekly_hours
+                - daily_hours
                 - current_shifts
   "/employments":
     get:
@@ -453,13 +463,13 @@ components:
       properties:
         id:
           type: integer
-          example: 94
+          example: 57
         name:
           type: string
-          example: Friesen and Sons
+          example: Hackett, Doyle and Feeney
         description:
           type: string
-          example: Pre-emptive scalable help-desk
+          example: Organized incremental solution
         created_at:
           type: string
           format: date-time
@@ -477,22 +487,22 @@ components:
           example: 1
         first_name:
           type: string
-          example: Mitchell
+          example: Isabell
         last_name:
           type: string
-          example: Pfannerstill
+          example: Schuster
         username:
           type: string
-          example: neville
+          example: jason.kozey
           minLength: 3
           maxLength: 20
         email:
           type: string
           format: email
-          example: billy.boyle@nicolas-harris.example
+          example: paul@conn.example
         name:
           type: string
-          example: Israel Corwin
+          example: Ms. Abigail Kilback
         created_at:
           type: string
           format: date-time
@@ -510,17 +520,17 @@ components:
       properties:
         first_name:
           type: string
-          example: Samual
+          example: Wilford
         last_name:
           type: string
-          example: Klocko
+          example: Grimes
         username:
           type: string
-          example: idell
+          example: freddy_mitchell
         email:
           type: string
           format: email
-          example: jefferson.koss@kiehn.example
+          example: luciano_jakubowski@wisoky-hessel.example
     AuthenticatedUser:
       type: object
       properties:
@@ -530,16 +540,16 @@ components:
         email:
           type: string
           format: email
-          example: luke.kuphal@corkery.example
+          example: jude@mitchell-hessel.example
         first_name:
           type: string
-          example: Murray
+          example: Trinidad
         last_name:
           type: string
-          example: Schaden
+          example: Schinner
         username:
           type: string
-          example: preston_mckenzie
+          example: renae_oconnell
       required:
       - id
       - email
@@ -548,22 +558,22 @@ components:
       properties:
         id:
           type: integer
-          example: 41
+          example: 17
         user_id:
           type: integer
-          example: 23
+          example: 51
         position_id:
           type: integer
-          example: 38
+          example: 95
         start_date:
           type: string
           format: date
-          example: '2025-06-10'
+          example: '2025-08-05'
         end_date:
           type: string
           format: date
           nullable: true
-          example: '2025-07-26'
+          example: '2025-08-21'
         active:
           type: boolean
           example: true
@@ -600,19 +610,19 @@ components:
       properties:
         id:
           type: integer
-          example: 13
+          example: 29
         title:
           type: string
-          example: Real-Estate Manager
+          example: Manufacturing Liaison
         description:
           type: string
-          example: Customer-focused optimizing intranet
+          example: Universal discrete toolset
         company_id:
           type: integer
-          example: 22
+          example: 46
         remote:
           type: boolean
-          example: false
+          example: true
         created_at:
           type: string
           format: date-time
@@ -628,36 +638,36 @@ components:
       properties:
         id:
           type: integer
-          example: 91
+          example: 20
         employment_id:
           type: integer
-          example: 47
+          example: 84
         date:
           type: string
           format: date
-          example: '2025-06-22'
+          example: '2025-08-05'
         start_time:
           type: string
           format: date-time
-          example: '2025-06-27 12:04:42 -0400'
+          example: '2025-08-08 13:52:20 -0400'
         end_time:
           type: string
           format: date-time
           nullable: true
-          example: '2025-06-26 11:12:06 -0400'
+          example: '2025-08-10 13:34:21 -0400'
         description:
           type: string
-          example: In suscipit exercitationem neque.
+          example: Qui porro ut facilis.
         notes:
           type: string
-          example: Sed voluptatem error. Voluptatem fugiat velit. Vitae sunt alias.
+          example: Quia atque tempora. Nihil voluptas quia. Accusantium alias voluptatibus.
         hours:
           type: number
           format: float
-          example: 6.88
+          example: 7.97
         active:
           type: boolean
-          example: false
+          example: true
         created_at:
           type: string
           format: date-time

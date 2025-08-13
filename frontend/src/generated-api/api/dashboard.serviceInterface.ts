@@ -24,7 +24,7 @@ export interface DashboardServiceInterface {
 
     /**
      * show dashboard
-     * Retrieve dashboard data including active employments, shifts, total weekly hours, and current shifts
+     * Retrieve dashboard data including active employments, shifts, total weekly hours, daily hours per employment, and current shifts
      */
     rootGet(extraHttpRequestParams?: any): Observable<Get200Response>;
 

@@ -40,7 +40,7 @@ export class DashboardService extends BaseService implements DashboardServiceInt
 
     /**
      * show dashboard
-     * Retrieve dashboard data including active employments, shifts, total weekly hours, and current shifts
+     * Retrieve dashboard data including active employments, shifts, total weekly hours, daily hours per employment, and current shifts
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
