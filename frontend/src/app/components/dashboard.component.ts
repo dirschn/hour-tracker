@@ -6,13 +6,14 @@ import { AuthService } from '../services/auth.service';
 import { DashboardService, EmploymentsService } from '../../generated-api';
 import { AuthenticatedUser } from '../../generated-api';
 
-import { Calendar } from '@fullcalendar/core';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { CalendarOptions, EventClickArg } from '@fullcalendar/core';
 import timeGridPlugin from '@fullcalendar/timegrid';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, FullCalendarModule],
   template: `
     <div class="container-fluid py-4">
       <div *ngIf="dashboardData; else loading">
@@ -29,7 +30,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
               </h5>
             </div>
             <div class="card-body">
-              <div id="main-calendar" class="calendar-container"></div>
+              <full-calendar [options]="calendarOptions"></full-calendar>
             </div>
           </div>
         </div>
@@ -236,15 +237,29 @@ import timeGridPlugin from '@fullcalendar/timegrid';
     `,
   ],
 })
-export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
+export class DashboardComponent implements OnInit {
   currentUser: AuthenticatedUser | null = null;
   dashboardData: any = null;
   clockingInEmploymentId: number | null = null;
   clockInError: string | null = null;
   clockingOutEmploymentId: number | null = null;
   clockOutError: string | null = null;
-  private mainCalendar: Calendar | null = null;
-  private calendarInitialized = false;
+  calendarOptions: CalendarOptions = {
+    plugins: [timeGridPlugin],
+    initialView: 'timeGridWeek',
+    events: [],
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'timeGridWeek,timeGridDay'
+    },
+    allDaySlot: false,
+    height: 600,
+    scrollTime: '09:00:00',
+    slotDuration: '00:30:00',
+    slotLabelInterval: '01:00:00',
+    eventClick: this.handleEventClick.bind(this)
+  };
 
   // Filter state
   employmentFilters: { [employmentId: number]: boolean } = {};
@@ -266,10 +281,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       next: (data) => {
         this.dashboardData = data;
         this.initializeFilters();
-        // Initialize calendar after data is loaded if view is ready
-        if (!this.calendarInitialized) {
-          setTimeout(() => this.initializeMainCalendar(), 0);
-        }
+        this.updateCalendarEvents();
       },
       error: (err) => {
         console.error('Failed to load dashboard data', err);
@@ -278,31 +290,8 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  ngAfterViewInit(): void {
-    // Initialize calendar if data is already loaded
-    if (this.dashboardData && !this.calendarInitialized) {
-      setTimeout(() => this.initializeMainCalendar(), 0);
-    }
-  }
-
-  ngOnDestroy(): void {
-    // Clean up calendar when component is destroyed
-    if (this.mainCalendar) {
-      this.mainCalendar.destroy();
-      this.mainCalendar = null;
-    }
-    this.calendarInitialized = false;
-  }
-
   // Refresh dashboard data
   refreshDashboard(): void {
-    // Destroy existing calendar before refreshing data
-    if (this.mainCalendar) {
-      this.mainCalendar.destroy();
-      this.mainCalendar = null;
-    }
-    this.calendarInitialized = false;
-
     // Store current filter state
     const currentFilters = { ...this.employmentFilters };
 
@@ -319,8 +308,8 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         });
 
-        // Recreate calendar after data refresh
-        setTimeout(() => this.initializeMainCalendar(), 100);
+        // Update calendar events after data refresh
+        this.updateCalendarEvents();
       },
       error: (err) => {
         console.error('Failed to load dashboard data', err);
@@ -397,36 +386,27 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // Handle filter change
   onFilterChange(): void {
-    // Refresh calendar with new filter settings
-    if (this.mainCalendar) {
-      this.mainCalendar.destroy();
-      this.mainCalendar = null;
-    }
-    this.calendarInitialized = false;
-
-    // Recreate calendar with filtered data
-    setTimeout(() => this.initializeMainCalendar(), 0);
+    this.updateCalendarEvents();
   }
 
-  // Initialize the main calendar (updated to use filtered shifts)
-  private initializeMainCalendar(): void {
-    if (!this.dashboardData || this.calendarInitialized || this.mainCalendar) {
+  // Update calendar events based on filtered data
+  updateCalendarEvents(): void {
+    if (!this.dashboardData) {
+      this.calendarOptions = {
+        ...this.calendarOptions,
+        events: []
+      };
       return;
     }
 
     const filteredShifts = this.getFilteredShifts();
     if (filteredShifts.length === 0) {
+      this.calendarOptions = {
+        ...this.calendarOptions,
+        events: []
+      };
       return;
     }
-
-    const calendarContainer = document.getElementById('main-calendar');
-    if (!calendarContainer) {
-      setTimeout(() => this.initializeMainCalendar(), 100);
-      return;
-    }
-
-    // Clear any existing content
-    calendarContainer.innerHTML = '';
 
     // Create events with different colors for different employments
     const events = filteredShifts.map((shift: any) => {
@@ -447,40 +427,23 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       };
     });
 
-    const calendarOptions = {
-      plugins: [timeGridPlugin],
-      initialView: 'timeGridWeek',
-      events,
-      headerToolbar: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'timeGridWeek,timeGridDay'
-      },
+    this.calendarOptions = {
+      ...this.calendarOptions,
+      events: events,
       validRange: {
         start: this.getCurrentWeekStart(),
         end: this.getCurrentWeekEnd(),
-      },
-      allDaySlot: false,
-      height: 600,
-      scrollTime: '09:00:00',
-      slotDuration: '00:30:00',
-      slotLabelInterval: '01:00:00',
-      eventClick: (info: any) => {
-        // Navigate directly to shift edit when clicking on a shift
-        this.router.navigate([`/shifts/${info.event.extendedProps.id}/edit`], {
-          queryParams: { returnUrl: '/' }
-        });
       }
-    } as any;
+    };
 
-    try {
-      this.mainCalendar = new Calendar(calendarContainer, calendarOptions);
-      this.mainCalendar.render();
-      this.calendarInitialized = true;
-      console.log('Main calendar successfully rendered with', events.length, 'filtered events');
-    } catch (error) {
-      console.error('Error rendering main calendar', error);
-    }
+    console.log('Main calendar events updated with', events.length, 'filtered events');
+  }
+
+  handleEventClick(info: EventClickArg): void {
+    // Navigate directly to shift edit when clicking on a shift
+    this.router.navigate([`/shifts/${info.event.extendedProps['id']}/edit`], {
+      queryParams: { returnUrl: '/' }
+    });
   }
 
 

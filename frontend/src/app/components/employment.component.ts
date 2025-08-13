@@ -4,13 +4,14 @@ import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { EmploymentsService, EmploymentResponse, ShiftsService } from '../../generated-api';
 
-import { Calendar } from '@fullcalendar/core';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { CalendarOptions, EventClickArg } from '@fullcalendar/core';
 import timeGridPlugin from '@fullcalendar/timegrid';
 
 @Component({
   selector: 'app-employment',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, FullCalendarModule],
   template: `
     <div class="container py-4">
       <div *ngIf="employmentData; else loading">
@@ -42,7 +43,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
             </h5>
           </div>
           <div class="card-body">
-            <div id="employment-calendar" class="calendar-container"></div>
+            <full-calendar [options]="calendarOptions"></full-calendar>
           </div>
         </div>
 
@@ -159,9 +160,24 @@ import timeGridPlugin from '@fullcalendar/timegrid';
     `
   ]
 })
-export class EmploymentComponent implements OnInit, AfterViewInit, OnDestroy {
+export class EmploymentComponent implements OnInit {
   employmentData: EmploymentResponse | null = null;
-  calendar: Calendar | null = null;
+  calendarOptions: CalendarOptions = {
+    plugins: [timeGridPlugin],
+    initialView: 'timeGridWeek',
+    events: [],
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'timeGridWeek,timeGridDay'
+    },
+    allDaySlot: false,
+    height: 600,
+    scrollTime: '09:00:00',
+    slotDuration: '00:30:00',
+    slotLabelInterval: '01:00:00',
+    eventClick: this.handleEventClick.bind(this)
+  };
   startDate: string = '';
   endDate: string = '';
   weeklyTableData: any[] = [];
@@ -184,16 +200,6 @@ export class EmploymentComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  ngAfterViewInit(): void {
-    // Calendar will be initialized after data is loaded
-  }
-
-  ngOnDestroy(): void {
-    if (this.calendar) {
-      this.calendar.destroy();
-    }
-  }
-
   setDefaultDateRange(): void {
     const now = new Date();
     const startOfWeek = new Date(now);
@@ -211,7 +217,7 @@ export class EmploymentComponent implements OnInit, AfterViewInit, OnDestroy {
         next: (response) => {
           this.employmentData = response;
           this.updateWeeklyTable();
-          setTimeout(() => this.initializeCalendar(), 100);
+          this.updateCalendarEvents();
         },
         error: (error) => {
           console.error('Error loading employment details:', error);
@@ -220,19 +226,14 @@ export class EmploymentComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  initializeCalendar(): void {
+  updateCalendarEvents(): void {
     if (!this.employmentData?.employment.shifts || this.employmentData.employment.shifts.length === 0) {
+      this.calendarOptions = {
+        ...this.calendarOptions,
+        events: []
+      };
       return;
     }
-
-    const calendarContainer = document.getElementById('employment-calendar');
-    if (!calendarContainer) {
-      setTimeout(() => this.initializeCalendar(), 100);
-      return;
-    }
-
-    // Clear any existing content
-    calendarContainer.innerHTML = '';
 
     // Convert shifts to calendar events
     const events = this.employmentData.employment.shifts.map((shift: any) => ({
@@ -245,36 +246,20 @@ export class EmploymentComponent implements OnInit, AfterViewInit, OnDestroy {
       extendedProps: shift,
     }));
 
-    const calendarOptions = {
-      plugins: [timeGridPlugin],
-      initialView: 'timeGridWeek',
-      events,
-      headerToolbar: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'timeGridWeek,timeGridDay'
-      },
-      allDaySlot: false,
-      height: 600,
-      scrollTime: '09:00:00',
-      slotDuration: '00:30:00',
-      slotLabelInterval: '01:00:00',
-      eventClick: (info: any) => {
-        // Navigate directly to shift edit when clicking on a shift
-        const currentPath = this.router.url.split('?')[0]; // Remove any existing query params
-        this.router.navigate([`/shifts/${info.event.extendedProps.id}/edit`], {
-          queryParams: { returnUrl: currentPath }
-        });
-      }
-    } as any;
+    this.calendarOptions = {
+      ...this.calendarOptions,
+      events: events
+    };
 
-    try {
-      this.calendar = new Calendar(calendarContainer, calendarOptions);
-      this.calendar.render();
-      console.log('Calendar successfully rendered with', events.length, 'events');
-    } catch (error) {
-      console.error('Error rendering calendar', error);
-    }
+    console.log('Calendar events updated with', events.length, 'events');
+  }
+
+  handleEventClick(info: EventClickArg): void {
+    // Navigate directly to shift edit when clicking on a shift
+    const currentPath = this.router.url.split('?')[0]; // Remove any existing query params
+    this.router.navigate([`/shifts/${info.event.extendedProps['id']}/edit`], {
+      queryParams: { returnUrl: currentPath }
+    });
   }
 
   updateWeeklyTable(): void {
