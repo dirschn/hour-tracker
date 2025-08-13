@@ -24,7 +24,7 @@ echo "🚀 Deploying to $SERVER:$REMOTE_REPO_PATH"
 
 # Update repository on server
 echo "📥 Updating repository on server..."
-ssh $SERVER "cd $REMOTE_REPO_PATH && git pull origin main"
+ssh $SERVER "cd $REMOTE_REPO_PATH && git restore . && git pull origin main"
 
 # Copy built files to server repository
 echo "📁 Copying built files to server repository..."
