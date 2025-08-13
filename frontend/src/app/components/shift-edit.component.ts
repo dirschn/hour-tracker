@@ -109,14 +109,15 @@ import { ShiftsService, ShiftResponse, ShiftsIdPatchRequest } from '../../genera
 
                   <!-- Form Actions -->
                   <div class="d-flex justify-content-between">
-                    <button type="button" class="btn btn-secondary" (click)="goBack()">
-                      <i class="bi bi-arrow-left me-2"></i>
-                      Cancel
+                    <button type="button" class="btn btn-danger" (click)="deleteShift()" [disabled]="saving || deleting">
+                      <span *ngIf="deleting" class="spinner-border spinner-border-sm me-2" role="status"></span>
+                      <i *ngIf="!deleting" class="bi bi-trash me-2"></i>
+                      {{ deleting ? 'Deleting...' : 'Delete' }}
                     </button>
                     <button
                       type="submit"
                       class="btn btn-primary"
-                      [disabled]="saving || shiftForm.invalid">
+                      [disabled]="saving || shiftForm.invalid || deleting">
                       <span *ngIf="saving" class="spinner-border spinner-border-sm me-2" role="status"></span>
                       <i *ngIf="!saving" class="bi bi-check-lg me-2"></i>
                       {{ saving ? 'Saving...' : 'Save Changes' }}
@@ -152,6 +153,7 @@ export class ShiftEditComponent implements OnInit {
   returnUrl: string = '/';
   loading = true;
   saving = false;
+  deleting = false;
   successMessage: string | null = null;
   errorMessage: string | null = null;
 
@@ -306,6 +308,42 @@ export class ShiftEditComponent implements OnInit {
           this.errorMessage = error.error.errors.join(', ');
         } else {
           this.errorMessage = error?.error?.error || 'Failed to update shift';
+        }
+      }
+    });
+  }
+
+  deleteShift(): void {
+    if (!confirm('Are you sure you want to delete this shift? This action cannot be undone.')) {
+      return;
+    }
+
+    this.deleting = true;
+    this.clearMessages();
+
+    this.shiftsService.shiftsIdDelete(this.shiftId).subscribe({
+      next: () => {
+        this.deleting = false;
+        this.successMessage = 'Shift deleted successfully!';
+
+        // Navigate back to the return URL after a short delay
+        setTimeout(() => {
+          if (this.isValidReturnUrl(this.returnUrl)) {
+            this.router.navigate([this.returnUrl]);
+          } else {
+            // Fallback to dashboard if returnUrl is invalid
+            this.router.navigate(['/']);
+          }
+        }, 1500);
+      },
+      error: (error) => {
+        console.error('Failed to delete shift:', error);
+        this.deleting = false;
+
+        if (error?.error?.errors && Array.isArray(error.error.errors)) {
+          this.errorMessage = error.error.errors.join(', ');
+        } else {
+          this.errorMessage = error?.error?.error || 'Failed to delete shift';
         }
       }
     });
