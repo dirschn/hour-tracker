@@ -10,6 +10,10 @@ class DashboardController < ApplicationController
       shifts.sum { |shift| shift.hours_worked }
     end
 
+    # Calculate daily totals per employment
+    @daily_hours = @shifts.group_by { |shift| [shift.date, shift.employment_id] }
+                          .transform_values { |shifts| shifts.sum(&:hours_worked) }
+
     @current_shifts = @shifts.active
   end
 end

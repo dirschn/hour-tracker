@@ -15,6 +15,12 @@ end
 
 json.total_weekly_hours @total_weekly_hours
 
+json.daily_hours do
+  @daily_hours.each do |(date, employment_id), hours|
+    json.set! "#{date}_#{employment_id}", hours
+  end
+end
+
 json.current_shifts @current_shifts do |shift|
   json.partial! 'shifts/shift', shift: shift
 end

@@ -156,6 +156,13 @@ import timeGridPlugin from '@fullcalendar/timegrid';
                           <span class="d-none d-sm-inline">{{ getWeeklyHours(emp.id) }}h this week</span>
                           <span class="d-sm-none">{{ getWeeklyHours(emp.id) }}h</span>
                         </div>
+
+                        <!-- Today's hours badge -->
+                        <div *ngIf="getTodayHours(emp.id) > 0" class="badge bg-info d-flex align-items-center gap-1 fs-6 py-2 px-2" title="Hours for today">
+                          <i class="bi bi-calendar-day"></i>
+                          <span class="d-none d-sm-inline">{{ getTodayHours(emp.id) }}h today</span>
+                          <span class="d-sm-none">{{ getTodayHours(emp.id) }}h</span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -253,8 +260,9 @@ export class DashboardComponent implements OnInit {
       center: 'title',
       right: 'timeGridWeek,timeGridDay'
     },
-    allDaySlot: false,
-    height: 600,
+    allDaySlot: true,
+    allDayText: 'Daily Total',
+    height: 650,
     scrollTime: '09:00:00',
     slotDuration: '00:30:00',
     slotLabelInterval: '01:00:00',
@@ -400,16 +408,9 @@ export class DashboardComponent implements OnInit {
     }
 
     const filteredShifts = this.getFilteredShifts();
-    if (filteredShifts.length === 0) {
-      this.calendarOptions = {
-        ...this.calendarOptions,
-        events: []
-      };
-      return;
-    }
 
-    // Create events with different colors for different employments
-    const events = filteredShifts.map((shift: any) => {
+    // Create shift events
+    const shiftEvents = filteredShifts.map((shift: any) => {
       const employment = this.dashboardData.active_employments.find(
         (emp: any) => emp.id === shift.employment_id
       );
@@ -427,19 +428,139 @@ export class DashboardComponent implements OnInit {
       };
     });
 
+    // Create daily hour summary events
+    const dailyEvents = this.createDailyHourEvents();
+
+    // Combine both types of events
+    const allEvents = [...shiftEvents, ...dailyEvents];
+
     this.calendarOptions = {
       ...this.calendarOptions,
-      events: events,
+      events: allEvents,
       validRange: {
         start: this.getCurrentWeekStart(),
         end: this.getCurrentWeekEnd(),
       }
     };
 
-    console.log('Main calendar events updated with', events.length, 'filtered events');
+    console.log('Calendar events updated with', shiftEvents.length, 'shift events and', dailyEvents.length, 'daily summary events');
+  }
+
+  // Create daily hour summary events (all-day events)
+  createDailyHourEvents(): any[] {
+    if (!this.dashboardData?.daily_hours) {
+      return [];
+    }
+
+    const dailyEvents: any[] = [];
+
+    // Group daily hours by date to handle multiple employments per day
+    const eventsByDate: { [date: string]: any[] } = {};
+
+    Object.keys(this.dashboardData.daily_hours).forEach(key => {
+      const [date, employmentId] = key.split('_');
+      const empId = parseInt(employmentId);
+      const hours = this.dashboardData.daily_hours[key];
+
+      // Only include if employment is visible in filter
+      if (!this.employmentFilters[empId] || hours === 0) {
+        return;
+      }
+
+      const employment = this.dashboardData.active_employments.find(
+        (emp: any) => emp.id === empId
+      );
+
+      if (!employment) return;
+
+      if (!eventsByDate[date]) {
+        eventsByDate[date] = [];
+      }
+
+      eventsByDate[date].push({
+        employment,
+        hours,
+        empId
+      });
+    });
+
+    // Create events for each date
+    Object.keys(eventsByDate).forEach(date => {
+      const dayEmployments = eventsByDate[date];
+
+      if (dayEmployments.length === 1) {
+        // Single employment for this day
+        const emp = dayEmployments[0];
+        const color = this.getEmploymentColor(emp.empId);
+
+        dailyEvents.push({
+          title: `${emp.hours}h - ${emp.employment.position.title}`,
+          start: date,
+          allDay: true,
+          backgroundColor: this.lightenColor(color, 0.7),
+          borderColor: color,
+          textColor: '#333',
+          extendedProps: {
+            type: 'daily-summary',
+            employmentId: emp.empId,
+            hours: emp.hours,
+            date: date
+          }
+        });
+      } else {
+        // Multiple employments for this day - show total
+        const totalHours = dayEmployments.reduce((sum, emp) => sum + emp.hours, 0);
+        const titles = dayEmployments.map(emp =>
+          `${emp.employment.position.title}: ${emp.hours}h`
+        ).join(', ');
+
+        dailyEvents.push({
+          title: `${totalHours}h total`,
+          start: date,
+          allDay: true,
+          backgroundColor: '#f8f9fa',
+          borderColor: '#dee2e6',
+          textColor: '#333',
+          extendedProps: {
+            type: 'daily-summary',
+            multiEmployment: true,
+            totalHours: totalHours,
+            details: titles,
+            date: date
+          }
+        });
+      }
+    });
+
+    return dailyEvents;
+  }
+
+  // Helper to lighten a color
+  private lightenColor(color: string, factor: number): string {
+    // Convert hex to RGB
+    const hex = color.replace('#', '');
+    const r = parseInt(hex.substr(0, 2), 16);
+    const g = parseInt(hex.substr(2, 2), 16);
+    const b = parseInt(hex.substr(4, 2), 16);
+
+    // Lighten
+    const newR = Math.round(r + (255 - r) * factor);
+    const newG = Math.round(g + (255 - g) * factor);
+    const newB = Math.round(b + (255 - b) * factor);
+
+    // Convert back to hex
+    return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
   }
 
   handleEventClick(info: EventClickArg): void {
+    // Handle daily summary events differently
+    if (info.event.extendedProps['type'] === 'daily-summary') {
+      // For daily summary events, maybe show a tooltip or navigate to day view
+      // For now, we'll just prevent the navigation
+      console.log('Daily summary clicked:', info.event.extendedProps);
+      return;
+    }
+
     // Navigate directly to shift edit when clicking on a shift
     this.router.navigate([`/shifts/${info.event.extendedProps['id']}/edit`], {
       queryParams: { returnUrl: '/' }
@@ -466,6 +587,18 @@ export class DashboardComponent implements OnInit {
     now.setDate(now.getDate() - now.getDay() + 6);
     now.setHours(23, 59, 59, 999);
     return now.toISOString().slice(0, 10);
+  }
+
+  // Helper to get today's hours for an employment
+  getTodayHours(empId: number): number {
+    if (!this.dashboardData?.daily_hours) {
+      return 0;
+    }
+
+    const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+    const key = `${today}_${empId}`;
+    const hours = this.dashboardData.daily_hours[key];
+    return hours || 0;
   }
 
   // Helper to get weekly hours for an employment
