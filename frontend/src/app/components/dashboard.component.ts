@@ -454,9 +454,7 @@ export class DashboardComponent implements OnInit {
 
     const dailyEvents: any[] = [];
 
-    // Group daily hours by date to handle multiple employments per day
-    const eventsByDate: { [date: string]: any[] } = {};
-
+    // Create separate events for each employment on each day
     Object.keys(this.dashboardData.daily_hours).forEach(key => {
       const [date, employmentId] = key.split('_');
       const empId = parseInt(employmentId);
@@ -473,63 +471,23 @@ export class DashboardComponent implements OnInit {
 
       if (!employment) return;
 
-      if (!eventsByDate[date]) {
-        eventsByDate[date] = [];
-      }
+      const color = this.getEmploymentColor(empId);
 
-      eventsByDate[date].push({
-        employment,
-        hours,
-        empId
+      dailyEvents.push({
+        title: `${hours}h - ${employment.position.title}`,
+        start: date,
+        allDay: true,
+        backgroundColor: this.lightenColor(color, 0.7),
+        borderColor: color,
+        textColor: '#333',
+        extendedProps: {
+          type: 'daily-summary',
+          employmentId: empId,
+          hours: hours,
+          date: date,
+          employment: employment
+        }
       });
-    });
-
-    // Create events for each date
-    Object.keys(eventsByDate).forEach(date => {
-      const dayEmployments = eventsByDate[date];
-
-      if (dayEmployments.length === 1) {
-        // Single employment for this day
-        const emp = dayEmployments[0];
-        const color = this.getEmploymentColor(emp.empId);
-
-        dailyEvents.push({
-          title: `${emp.hours}h - ${emp.employment.position.title}`,
-          start: date,
-          allDay: true,
-          backgroundColor: this.lightenColor(color, 0.7),
-          borderColor: color,
-          textColor: '#333',
-          extendedProps: {
-            type: 'daily-summary',
-            employmentId: emp.empId,
-            hours: emp.hours,
-            date: date
-          }
-        });
-      } else {
-        // Multiple employments for this day - show total
-        const totalHours = dayEmployments.reduce((sum, emp) => sum + emp.hours, 0);
-        const titles = dayEmployments.map(emp =>
-          `${emp.employment.position.title}: ${emp.hours}h`
-        ).join(', ');
-
-        dailyEvents.push({
-          title: `${totalHours}h total`,
-          start: date,
-          allDay: true,
-          backgroundColor: '#f8f9fa',
-          borderColor: '#dee2e6',
-          textColor: '#333',
-          extendedProps: {
-            type: 'daily-summary',
-            multiEmployment: true,
-            totalHours: totalHours,
-            details: titles,
-            date: date
-          }
-        });
-      }
     });
 
     return dailyEvents;
