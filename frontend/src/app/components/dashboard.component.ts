@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
-import { DashboardService, EmploymentsService } from '../../generated-api';
+import { DashboardService, EmploymentsService, ShiftsService, ShiftsIdPatchRequest } from '../../generated-api';
 import { AuthenticatedUser } from '../../generated-api';
 
 import { FullCalendarModule } from '@fullcalendar/angular';
@@ -183,6 +183,69 @@ import timeGridPlugin from '@fullcalendar/timegrid';
                       Hours so far:
                       {{ getCurrentShiftHours(currentShift.start_time) }}
                     </div>
+
+                    <!-- Description editing section -->
+                    <div class="mt-2">
+                      <strong>Description:</strong>
+
+                      <!-- View mode -->
+                      <div *ngIf="editingShiftId !== currentShift.id" class="d-flex align-items-start gap-2 mt-1">
+                        <div class="flex-grow-1">
+                          <span *ngIf="currentShift.description; else noDescription" class="text-muted">
+                            {{ currentShift.description }}
+                          </span>
+                          <ng-template #noDescription>
+                            <span class="text-muted fst-italic">No description</span>
+                          </ng-template>
+                        </div>
+                        <button
+                          class="btn btn-sm btn-outline-secondary"
+                          (click)="startEditingDescription(currentShift.id, currentShift.description)"
+                          title="Edit description">
+                          <i class="bi bi-pencil"></i>
+                        </button>
+                      </div>
+
+                      <!-- Edit mode -->
+                      <div *ngIf="editingShiftId === currentShift.id" class="mt-1">
+                        <div class="input-group input-group-sm">
+                          <textarea
+                            [(ngModel)]="editingDescription"
+                            class="form-control"
+                            rows="2"
+                            placeholder="Enter shift description..."
+                            [disabled]="savingDescription"
+                            (keydown)="onDescriptionKeydown($event, currentShift.id)">
+                          </textarea>
+                          <button
+                            class="btn btn-success"
+                            (click)="saveShiftDescription(currentShift.id)"
+                            [disabled]="savingDescription"
+                            title="Save description (Ctrl+Enter)">
+                            <span *ngIf="savingDescription" class="spinner-border spinner-border-sm"></span>
+                            <i *ngIf="!savingDescription" class="bi bi-check-lg"></i>
+                          </button>
+                          <button
+                            class="btn btn-outline-secondary"
+                            (click)="cancelEditingDescription()"
+                            [disabled]="savingDescription"
+                            title="Cancel editing (Esc)">
+                            <i class="bi bi-x-lg"></i>
+                          </button>
+                        </div>
+                        <small class="text-muted d-block mt-1">
+                          Press Ctrl+Enter to save, Esc to cancel
+                        </small>
+
+                        <!-- Error message for description editing -->
+                        <div *ngIf="descriptionError && editingShiftId === currentShift.id" class="alert alert-danger py-1 mt-2 mb-0">
+                          <small>
+                            <i class="bi bi-exclamation-triangle me-1"></i>
+                            {{ descriptionError }}
+                          </small>
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
                   <!-- Employment details and link -->
@@ -273,11 +336,18 @@ export class DashboardComponent implements OnInit {
   employmentFilters: { [employmentId: number]: boolean } = {};
   private employmentColors: { [employmentId: number]: string } = {};
 
+  // Inline editing state for shift descriptions
+  editingShiftId: number | null = null;
+  editingDescription: string = '';
+  savingDescription: boolean = false;
+  descriptionError: string | null = null;
+
   constructor(
     private authService: AuthService,
     private router: Router,
     private dashboardService: DashboardService,
-    private employmentsService: EmploymentsService
+    private employmentsService: EmploymentsService,
+    private shiftsService: ShiftsService
   ) {
     this.authService.currentUser$.subscribe((user) => {
       this.currentUser = user;
@@ -670,4 +740,71 @@ export class DashboardComponent implements OnInit {
     this.router.navigate([path]);
   }
 
+  // Methods for inline description editing
+  startEditingDescription(shiftId: number, currentDescription: string = ''): void {
+    this.editingShiftId = shiftId;
+    this.editingDescription = currentDescription;
+    this.descriptionError = null;
+  }
+
+  cancelEditingDescription(): void {
+    this.editingShiftId = null;
+    this.editingDescription = '';
+    this.descriptionError = null;
+  }
+
+  saveShiftDescription(shiftId: number): void {
+    if (this.savingDescription) return;
+
+    this.savingDescription = true;
+    this.descriptionError = null;
+
+    // Find the shift data
+    const currentShift = this.dashboardData.current_shifts.find((shift: any) => shift.id === shiftId);
+    if (!currentShift) {
+      this.descriptionError = 'Shift not found';
+      this.savingDescription = false;
+      return;
+    }
+
+    const updateRequest: ShiftsIdPatchRequest = {
+      shift: {
+        date: currentShift.date,
+        start_time: currentShift.start_time,
+        end_time: currentShift.end_time,
+        employment_id: currentShift.employment_id,
+        description: this.editingDescription.trim()
+      }
+    };
+
+    this.shiftsService.shiftsIdPatch(shiftId, updateRequest).subscribe({
+      next: () => {
+        this.savingDescription = false;
+        this.editingShiftId = null;
+        this.editingDescription = '';
+
+        // Update the local shift data immediately for better UX
+        const shiftIndex = this.dashboardData.current_shifts.findIndex((shift: any) => shift.id === shiftId);
+        if (shiftIndex !== -1) {
+          this.dashboardData.current_shifts[shiftIndex].description = updateRequest.shift.description;
+        }
+
+        // Optionally refresh dashboard data to ensure consistency
+        // this.refreshDashboard();
+      },
+      error: (err) => {
+        this.savingDescription = false;
+        this.descriptionError = err?.error?.errors?.[0] || 'Failed to update description.';
+      }
+    });
+  }
+
+  onDescriptionKeydown(event: KeyboardEvent, shiftId: number): void {
+    if (event.key === 'Escape') {
+      this.cancelEditingDescription();
+    } else if (event.key === 'Enter' && event.ctrlKey) {
+      event.preventDefault();
+      this.saveShiftDescription(shiftId);
+    }
+  }
 }
