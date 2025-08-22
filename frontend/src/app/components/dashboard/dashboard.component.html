@@ -1,0 +1,377 @@
+<div class="container-fluid py-4">
+  <div *ngIf="dashboardData; else loading">
+    <!-- Single Calendar Section -->
+    <div *ngIf="getFilteredShifts().length > 0" class="mb-4">
+      <div class="card shadow">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="bi bi-calendar-week me-2"></i>
+            This Week's Schedule
+            <span
+              *ngIf="
+                getVisibleEmploymentCount() <
+                dashboardData.active_employments.length
+              "
+              class="badge bg-info ms-2"
+            >
+              {{ getVisibleEmploymentCount() }} of
+              {{ dashboardData.active_employments.length }} shown
+            </span>
+          </h5>
+        </div>
+        <div class="card-body">
+          <full-calendar [options]="calendarOptions"></full-calendar>
+        </div>
+      </div>
+    </div>
+
+    <!-- No calendar shifts message when filtered -->
+    <div
+      *ngIf="
+        this.dashboardData?.shifts.length > 0 &&
+        getFilteredShifts().length === 0
+      "
+      class="mb-4"
+    >
+      <div class="card shadow">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="bi bi-calendar-week me-2"></i>
+            This Week's Schedule
+            <span class="badge bg-warning ms-2">All filtered out</span>
+          </h5>
+        </div>
+        <div class="card-body text-center py-4">
+          <div class="text-muted">
+            <i class="bi bi-funnel display-1 mb-3"></i>
+            <h4>No Shifts Visible</h4>
+            <p>
+              All shifts are hidden. Toggle the calendar visibility on
+              employment cards to show shifts.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div
+        *ngIf="dashboardData.active_employments.length === 0"
+        class="text-center py-5"
+      >
+        <div class="text-muted">
+          <i class="bi bi-briefcase display-1 mb-3"></i>
+          <h4>No Active Employments</h4>
+          <p>Get started by adding your first employment!</p>
+          <button
+            class="btn btn-primary btn-lg"
+            (click)="navigateTo('/employments/new')"
+          >
+            <i class="bi bi-plus-lg me-2"></i>
+            Add Your First Employment
+          </button>
+        </div>
+      </div>
+      <div class="row row-cols-1 row-cols-xl-2 row-cols-xxl-3 g-4">
+        <div
+          *ngFor="
+            let emp of dashboardData.active_employments;
+            trackBy: trackByEmploymentId
+          "
+        >
+          <div class="card col border-primary shadow">
+            <div
+              class="card-header"
+              [style.border-left]="'4px solid ' + getEmploymentColor(emp.id)"
+            >
+              <!-- Main header row -->
+              <div
+                class="d-flex justify-content-between align-items-start mb-2"
+              >
+                <div
+                  class="d-flex align-items-center gap-2 flex-grow-1 text-truncate"
+                >
+                  <div class="flex-fill text-truncate">
+                    <h5 class="card-title mb-0 fs-6 lh-sm">
+                      {{ emp.position.title }}
+                    </h5>
+                    <small class="text-muted">{{ emp.company.name }}</small>
+                  </div>
+                </div>
+
+                <!-- Calendar filter toggle -->
+                <div class="flex-shrink-0 me-2">
+                  <div class="form-check form-switch">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      [id]="'calendar-toggle-' + emp.id"
+                      [(ngModel)]="employmentFilters[emp.id]"
+                      (change)="onFilterChange()"
+                      title="Show/hide shifts in calendar"
+                    />
+                    <label
+                      class="form-check-label"
+                      [for]="'calendar-toggle-' + emp.id"
+                    >
+                      <i class="bi bi-calendar-week text-muted"></i>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Clock button -->
+                <div class="flex-shrink-0">
+                  <!-- Clock In button (if no current shift) -->
+                  <button
+                    *ngIf="!getCurrentShiftForEmployment(emp.id)"
+                    class="btn btn-success btn-sm d-flex align-items-center gap-1"
+                    (click)="clockIn(emp.id)"
+                    [disabled]="clockingInEmploymentId === emp.id"
+                    title="Clock In"
+                  >
+                    <span *ngIf="clockingInEmploymentId === emp.id">
+                      <span class="spinner-border spinner-border-sm"></span>
+                    </span>
+                    <i
+                      *ngIf="clockingInEmploymentId !== emp.id"
+                      class="bi bi-play-fill"
+                    ></i>
+                    <span class="d-none d-sm-inline">Clock In</span>
+                  </button>
+
+                  <!-- Clock Out button (if current shift is active) -->
+                  <button
+                    *ngIf="getCurrentShiftForEmployment(emp.id)"
+                    class="btn btn-danger btn-sm d-flex align-items-center gap-1"
+                    (click)="clockOut(emp.id)"
+                    [disabled]="clockingOutEmploymentId === emp.id"
+                    title="Clock Out"
+                  >
+                    <span *ngIf="clockingOutEmploymentId === emp.id">
+                      <span class="spinner-border spinner-border-sm"></span>
+                    </span>
+                    <i
+                      *ngIf="clockingOutEmploymentId !== emp.id"
+                      class="bi bi-stop-fill"
+                    ></i>
+                    <span class="d-none d-sm-inline">Clock Out</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Secondary info row -->
+              <div class="border-top border-opacity-25 pt-2">
+                <div
+                  class="d-flex flex-wrap gap-2 align-items-center justify-content-between"
+                >
+                  <div class="d-flex flex-wrap gap-2 align-items-center">
+                    <!-- Current shift status -->
+                    <div
+                      *ngIf="
+                        getCurrentShiftForEmployment(emp.id) as currentShift
+                      "
+                      class="badge bg-success d-flex align-items-center gap-1 fs-6 py-2 px-2"
+                      title="Hours for current shift"
+                    >
+                      <i class="bi bi-clock-fill"></i>
+                      <span class="d-none d-sm-inline"
+                        >{{ getCurrentShiftHours(currentShift.start_time) }}h
+                        active</span
+                      >
+                      <span class="d-sm-none"
+                        >{{
+                          getCurrentShiftHours(currentShift.start_time)
+                        }}h</span
+                      >
+                    </div>
+
+                    <!-- Weekly hours badge -->
+                    <div
+                      class="badge bg-secondary d-flex align-items-center gap-1 fs-6 py-2 px-2"
+                      title="Hours for this week"
+                    >
+                      <i class="bi bi-calendar-week"></i>
+                      <span class="d-none d-sm-inline"
+                        >{{ getWeeklyHours(emp.id) }}h this week</span
+                      >
+                      <span class="d-sm-none"
+                        >{{ getWeeklyHours(emp.id) }}h</span
+                      >
+                    </div>
+
+                    <!-- Today's hours badge -->
+                    <div
+                      *ngIf="getTodayHours(emp.id) > 0"
+                      class="badge bg-info d-flex align-items-center gap-1 fs-6 py-2 px-2"
+                      title="Hours for today"
+                    >
+                      <i class="bi bi-calendar-day"></i>
+                      <span class="d-none d-sm-inline"
+                        >{{ getTodayHours(emp.id) }}h today</span
+                      >
+                      <span class="d-sm-none"
+                        >{{ getTodayHours(emp.id) }}h</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card body with current shift details and link -->
+            <div class="card-body">
+              <div
+                *ngIf="getCurrentShiftForEmployment(emp.id) as currentShift"
+                class="alert alert-success py-2 mb-3"
+              >
+                <strong>Current Shift Details:</strong>
+                <div>Date: {{ currentShift.date | date }}</div>
+                <div>
+                  Start: {{ currentShift.start_time | date : "shortTime" }}
+                </div>
+                <div>
+                  Hours so far:
+                  {{ getCurrentShiftHours(currentShift.start_time) }}
+                </div>
+
+                <!-- Description editing section -->
+                <div class="mt-2">
+                  <strong>Description:</strong>
+
+                  <!-- View mode -->
+                  <div
+                    *ngIf="editingShiftId !== currentShift.id"
+                    class="d-flex align-items-start gap-2 mt-1"
+                  >
+                    <div class="flex-grow-1">
+                      <span
+                        *ngIf="currentShift.description; else noDescription"
+                        class="text-muted"
+                      >
+                        {{ currentShift.description }}
+                      </span>
+                      <ng-template #noDescription>
+                        <span class="text-muted fst-italic"
+                          >No description</span
+                        >
+                      </ng-template>
+                    </div>
+                    <button
+                      class="btn btn-sm btn-outline-secondary"
+                      (click)="
+                        startEditingDescription(
+                          currentShift.id,
+                          currentShift.description
+                        )
+                      "
+                      title="Edit description"
+                    >
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                  </div>
+
+                  <!-- Edit mode -->
+                  <div *ngIf="editingShiftId === currentShift.id" class="mt-1">
+                    <div class="input-group input-group-sm">
+                      <textarea
+                        [(ngModel)]="editingDescription"
+                        class="form-control"
+                        rows="2"
+                        placeholder="Enter shift description..."
+                        [disabled]="savingDescription"
+                        (keydown)="
+                          onDescriptionKeydown($event, currentShift.id)
+                        "
+                      >
+                      </textarea>
+                      <button
+                        class="btn btn-success"
+                        (click)="saveShiftDescription(currentShift.id)"
+                        [disabled]="savingDescription"
+                        title="Save description (Ctrl+Enter)"
+                      >
+                        <span
+                          *ngIf="savingDescription"
+                          class="spinner-border spinner-border-sm"
+                        ></span>
+                        <i
+                          *ngIf="!savingDescription"
+                          class="bi bi-check-lg"
+                        ></i>
+                      </button>
+                      <button
+                        class="btn btn-outline-secondary"
+                        (click)="cancelEditingDescription()"
+                        [disabled]="savingDescription"
+                        title="Cancel editing (Esc)"
+                      >
+                        <i class="bi bi-x-lg"></i>
+                      </button>
+                    </div>
+                    <small class="text-muted d-block mt-1">
+                      Press Ctrl+Enter to save, Esc to cancel
+                    </small>
+
+                    <!-- Error message for description editing -->
+                    <div
+                      *ngIf="
+                        descriptionError && editingShiftId === currentShift.id
+                      "
+                      class="alert alert-danger py-1 mt-2 mb-0"
+                    >
+                      <small>
+                        <i class="bi bi-exclamation-triangle me-1"></i>
+                        {{ descriptionError }}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Employment details and link -->
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="text-muted small">
+                  {{ getWeeklyShiftsForEmployment(emp.id).length }} shift(s)
+                  this week
+                  <span *ngIf="!employmentFilters[emp.id]" class="text-warning">
+                    (hidden from calendar)
+                  </span>
+                </div>
+                <a
+                  [routerLink]="['/employments', emp.id]"
+                  class="btn btn-outline-primary btn-sm"
+                >
+                  <i class="bi bi-eye me-1"></i>
+                  View Details
+                </a>
+              </div>
+
+              <!-- Error messages -->
+              <div
+                *ngIf="clockInError && clockingInEmploymentId === emp.id"
+                class="alert alert-danger mt-3"
+              >
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                {{ clockInError }}
+              </div>
+              <div
+                *ngIf="clockOutError && clockingOutEmploymentId === emp.id"
+                class="alert alert-danger mt-3"
+              >
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                {{ clockOutError }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #loading>
+    <div class="d-flex justify-content-center py-5">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading dashboard data...</span>
+      </div>
+    </div>
+  </ng-template>
+</div>
