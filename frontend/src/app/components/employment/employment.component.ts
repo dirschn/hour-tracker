@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { EmploymentsService, EmploymentResponse, ShiftsService } from '../../generated-api';
+import { EmploymentsService, EmploymentResponse, ShiftsService } from '../../../generated-api';
 
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions, EventClickArg } from '@fullcalendar/core';
@@ -12,153 +12,8 @@ import timeGridPlugin from '@fullcalendar/timegrid';
   selector: 'app-employment',
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule, FullCalendarModule],
-  template: `
-    <div class="container py-4">
-      <div *ngIf="employmentData; else loading">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-          <h1 class="h3">{{ employmentData.employment.position.title }} &#64; {{ employmentData.employment.company.name }}</h1>
-        </div>
-
-        <!-- Employment Information Card -->
-        <div class="card mb-4">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">
-              <i class="bi bi-briefcase me-2"></i>
-              Employment Information
-            </h5>
-          </div>
-          <div class="card-body">
-            <p><strong>Start Date:</strong> {{ employmentData.employment.start_date | date:'longDate' }}</p>
-            <p *ngIf="employmentData.employment.end_date"><strong>End Date:</strong> {{ employmentData.employment.end_date | date:'longDate' }}</p>
-            <p><strong>Status:</strong> {{ employmentData.employment.active ? 'Active' : 'Inactive' }}</p>
-          </div>
-        </div>
-
-        <!-- Calendar Section -->
-        <div *ngIf="employmentData.employment.shifts && employmentData.employment.shifts.length > 0" class="card mb-4">
-          <div class="card-header">
-            <h5 class="mb-0">
-              <i class="bi bi-calendar-week me-2"></i>
-              Shifts Calendar
-            </h5>
-          </div>
-          <div class="card-body">
-            <full-calendar [options]="calendarOptions"></full-calendar>
-          </div>
-        </div>
-
-        <!-- Weekly Table Section -->
-        <div class="card mb-4">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">
-              <i class="bi bi-table me-2"></i>
-              Weekly Summary
-            </h5>
-            <button class="btn btn-sm btn-outline-secondary" (click)="copyTableToClipboard()" title="Copy table to clipboard">
-              <i class="bi bi-clipboard me-1"></i>
-              Copy
-            </button>
-          </div>
-          <div class="card-body">
-            <!-- Date Range Selection -->
-            <div class="row mb-3">
-              <div class="col-md-6">
-                <label for="startDate" class="form-label">Start Date</label>
-                <input type="date" id="startDate" class="form-control" [(ngModel)]="startDate" (change)="updateWeeklyTable()">
-              </div>
-              <div class="col-md-6">
-                <label for="endDate" class="form-label">End Date</label>
-                <input type="date" id="endDate" class="form-control" [(ngModel)]="endDate" (change)="updateWeeklyTable()">
-              </div>
-            </div>
-
-            <!-- Weekly Table -->
-            <div class="table-responsive">
-              <table class="table table-striped table-hover" #weeklyTable>
-                <thead>
-                  <tr>
-                    <th class="align-middle">Date</th>
-                    <th class="align-middle">Hours</th>
-                    <th class="align-middle">Times</th>
-                    <th class="align-middle">Notes</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let day of weeklyTableData; index as i">
-                    <td class="align-middle">{{ day.date | date:'MMM d' }}</td>
-                    <td class="align-middle">{{ day.hours }}</td>
-                    <td class="align-middle">{{ day.times }}</td>
-                    <td class="align-middle position-relative" style="min-width: 200px; cursor: pointer;"
-                        (click)="startEditingNotes(day)"
-                        [class.table-warning]="day.isEditing">
-                      <div *ngIf="!day.isEditing" class="p-1 rounded" [title]="day.notes"
-                           [class.text-muted]="!day.notes" [class.fst-italic]="!day.notes">
-                        {{ day.notes || 'Click to add notes...' }}
-                      </div>
-                      <div *ngIf="day.isEditing" class="p-2">
-                        <textarea
-                          #notesTextarea
-                          [(ngModel)]="day.editingNotes"
-                          class="form-control form-control-sm"
-                          style="resize: vertical; min-height: 60px;"
-                          (blur)="saveNotes(day)"
-                          (keydown)="onNotesKeydown($event, day)"
-                          placeholder="Add notes for this day..."
-                          rows="2">
-                        </textarea>
-                        <div class="d-flex align-items-center flex-wrap mt-1">
-                          <button type="button" class="btn btn-sm btn-success me-1" (click)="saveNotes(day)">
-                            <i class="bi bi-check"></i>
-                          </button>
-                          <button type="button" class="btn btn-sm btn-secondary" (click)="cancelEditingNotes(day)">
-                            <i class="bi bi-x"></i>
-                          </button>
-                          <small class="text-muted ms-2">Ctrl+Enter to save, Esc to cancel</small>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="table-primary fw-bold">
-                    <td class="align-middle">Total</td>
-                    <td class="align-middle">{{ getTotalHours() }}</td>
-                    <td class="align-middle">-</td>
-                    <td class="align-middle">-</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- Actions -->
-        <div class="d-flex justify-content-end mb-3">
-          <button type="button" class="btn btn-primary me-2" (click)="editEmployment()">
-            <i class="bi bi-pencil me-2"></i>Edit
-          </button>
-          <button type="button" class="btn btn-danger" (click)="deleteEmployment()">
-            <i class="bi bi-trash me-2"></i>Delete
-          </button>
-        </div>
-      </div>
-
-      <!-- Loading State -->
-      <ng-template #loading>
-        <p>Loading employment details...</p>
-      </ng-template>
-    </div>
-  `,
-  styles: [
-    `
-      .calendar-container {
-        min-height: 400px;
-      }
-
-      .weekly-table-container {
-        max-height: 500px;
-        overflow-y: auto;
-      }
-    `
-  ]
+  templateUrl: './employment.component.html',
+  styleUrls: ['./employment.component.css']
 })
 export class EmploymentComponent implements OnInit {
   employmentData: EmploymentResponse | null = null;

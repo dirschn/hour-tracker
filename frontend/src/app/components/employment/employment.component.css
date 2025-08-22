@@ -1,0 +1,8 @@
+.calendar-container {
+  min-height: 400px;
+}
+
+.weekly-table-container {
+  max-height: 500px;
+  overflow-y: auto;
+}

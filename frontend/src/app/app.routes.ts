@@ -24,7 +24,7 @@ export const routes: Routes = [
   },
   {
     path: 'employments/:id',
-    loadComponent: () => import('./components/employment.component').then(m => m.EmploymentComponent),
+    loadComponent: () => import('./components/employment/employment.component').then(m => m.EmploymentComponent),
     canActivate: [AuthGuard]
   },
   {
