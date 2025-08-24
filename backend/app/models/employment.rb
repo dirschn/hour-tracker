@@ -14,4 +14,7 @@ class Employment < ApplicationRecord
   def active?
     end_date.nil? || end_date >= Date.today
   end
+
+  # Delegate rounding logic to position
+  delegate :calculate_hours, to: :position, prefix: false
 end

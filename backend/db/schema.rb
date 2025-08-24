@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_12_160100) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_22_231817) do
   create_table "companies", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -55,6 +55,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_12_160100) do
     t.boolean "remote", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "rounding_rule", default: 0, null: false
+    t.integer "rounding_interval", default: 5
     t.index ["company_id"], name: "index_positions_on_company_id"
     t.index ["title", "company_id"], name: "index_positions_on_title_and_company_id", unique: true
   end
