@@ -1,7 +1,7 @@
 <div class="container-fluid py-4">
   <div *ngIf="dashboardData; else loading">
     <!-- Single Calendar Section -->
-    <div *ngIf="getFilteredShifts().length > 0" class="mb-4">
+    <div class="mb-4">
       <div class="card shadow">
         <div class="card-header">
           <h5 class="mb-0">
@@ -21,35 +21,6 @@
         </div>
         <div class="card-body">
           <full-calendar [options]="calendarOptions"></full-calendar>
-        </div>
-      </div>
-    </div>
-
-    <!-- No calendar shifts message when filtered -->
-    <div
-      *ngIf="
-        this.dashboardData?.shifts.length > 0 &&
-        getFilteredShifts().length === 0
-      "
-      class="mb-4"
-    >
-      <div class="card shadow">
-        <div class="card-header">
-          <h5 class="mb-0">
-            <i class="bi bi-calendar-week me-2"></i>
-            This Week's Schedule
-            <span class="badge bg-warning ms-2">All filtered out</span>
-          </h5>
-        </div>
-        <div class="card-body text-center py-4">
-          <div class="text-muted">
-            <i class="bi bi-funnel display-1 mb-3"></i>
-            <h4>No Shifts Visible</h4>
-            <p>
-              All shifts are hidden. Toggle the calendar visibility on
-              employment cards to show shifts.
-            </p>
-          </div>
         </div>
       </div>
     </div>
