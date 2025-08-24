@@ -1,5 +1,6 @@
 <!-- Navigation Bar - Only show when authenticated -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm" *ngIf="isAuthenticated" aria-label="Main navigation">
+@if (isAuthenticated) {
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm" aria-label="Main navigation">
   <div class="container-fluid">
     <a class="navbar-brand fw-bold" routerLink="/">
       <i class="bi bi-clock-history me-2"></i>
@@ -15,17 +16,21 @@
 
       <div class="navbar-nav">
         <!-- Install App Button (only show if not standalone and install prompt is available) -->
-        <div class="nav-item me-2" *ngIf="showInstallPrompt && !isStandalone">
-          <button class="btn btn-outline-light btn-sm" (click)="installApp()" title="Install Hour Tracker as an app">
-            <i class="bi bi-download me-1"></i>
-            Install App
-          </button>
-        </div>
+        @if (showInstallPrompt && !isStandalone) {
+          <div class="nav-item me-2">
+            <button class="btn btn-outline-light btn-sm" (click)="installApp()" title="Install Hour Tracker as an app">
+              <i class="bi bi-download me-1"></i>
+              Install App
+            </button>
+          </div>
+        }
 
         <div class="nav-item dropdown">
           <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="bi bi-person-circle me-2"></i>
-            <span *ngIf="currentUser">{{ currentUser.first_name }} {{ currentUser.last_name }}</span>
+            @if (currentUser) {
+              <span>{{ currentUser.first_name }} {{ currentUser.last_name }}</span>
+            }
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
             <li><h6 class="dropdown-header">{{ currentUser?.email }}</h6></li>
@@ -46,9 +51,11 @@
     </div>
   </div>
 </nav>
+}
 
 <!-- PWA Install Banner (shown at top when install prompt is available) -->
-<div class="alert alert-info alert-dismissible m-0 rounded-0 border-0" *ngIf="showInstallPrompt && !isStandalone" role="alert">
+@if (showInstallPrompt && !isStandalone) {
+  <div class="alert alert-info alert-dismissible m-0 rounded-0 border-0" role="alert">
   <div class="container-fluid">
     <div class="d-flex align-items-center">
       <i class="bi bi-phone me-2"></i>
@@ -65,10 +72,12 @@
       </div>
     </div>
   </div>
-</div>
+  </div>
+}
 
 <!-- PWA Update Banner (shown when update is available) -->
-<div class="alert alert-warning alert-dismissible m-0 rounded-0 border-0" *ngIf="showUpdatePrompt" role="alert">
+@if (showUpdatePrompt) {
+  <div class="alert alert-warning alert-dismissible m-0 rounded-0 border-0" role="alert">
   <div class="container-fluid">
     <div class="d-flex align-items-center">
       <i class="bi bi-arrow-clockwise me-2"></i>
@@ -83,15 +92,18 @@
       </div>
     </div>
   </div>
-</div>
+  </div>
+}
 
 <main>
   <!-- Error Display -->
-  <div class="container mt-3" *ngIf="errorMessage">
-    <div class="alert alert-danger" role="alert">
-      {{ errorMessage }}
+  @if (errorMessage) {
+    <div class="container mt-3">
+      <div class="alert alert-danger" role="alert">
+        {{ errorMessage }}
+      </div>
     </div>
-  </div>
+  }
 
   <!-- Router Outlet for components -->
   <router-outlet></router-outlet>

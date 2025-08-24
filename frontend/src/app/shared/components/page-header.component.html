@@ -5,5 +5,7 @@
       <ng-content></ng-content>
     </div>
   </div>
-  <hr *ngIf="showDivider"/>
+  @if (showDivider) {
+    <hr/>
+  }
 </div>

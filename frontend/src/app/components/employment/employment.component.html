@@ -1,5 +1,5 @@
 <div class="container py-4">
-  <div *ngIf="employmentData; else loading">
+  @if (employmentData) {
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h1 class="h3">{{ employmentData.employment.position.title }} &#64; {{ employmentData.employment.company.name }}</h1>
     </div>
@@ -14,13 +14,16 @@
       </div>
       <div class="card-body">
         <p><strong>Start Date:</strong> {{ employmentData.employment.start_date | date:'longDate' }}</p>
-        <p *ngIf="employmentData.employment.end_date"><strong>End Date:</strong> {{ employmentData.employment.end_date | date:'longDate' }}</p>
+        @if (employmentData.employment.end_date) {
+          <p><strong>End Date:</strong> {{ employmentData.employment.end_date | date:'longDate' }}</p>
+        }
         <p><strong>Status:</strong> {{ employmentData.employment.active ? 'Active' : 'Inactive' }}</p>
       </div>
     </div>
 
     <!-- Calendar Section -->
-    <div *ngIf="employmentData.employment.shifts && employmentData.employment.shifts.length > 0" class="card mb-4">
+    @if (employmentData.employment.shifts && employmentData.employment.shifts.length > 0) {
+      <div class="card mb-4">
       <div class="card-header">
         <h5 class="mb-0">
           <i class="bi bi-calendar-week me-2"></i>
@@ -31,6 +34,7 @@
         <full-calendar [options]="calendarOptions"></full-calendar>
       </div>
     </div>
+    }
 
     <!-- Weekly Table Section -->
     <div class="card mb-4">
@@ -76,11 +80,14 @@
                 <td class="align-middle position-relative" style="min-width: 200px; cursor: pointer;"
                     (click)="startEditingNotes(day)"
                     [class.table-warning]="day.isEditing">
-                  <div *ngIf="!day.isEditing" class="p-1 rounded" [title]="day.notes"
-                       [class.text-muted]="!day.notes" [class.fst-italic]="!day.notes">
-                    {{ day.notes || 'Click to add notes...' }}
-                  </div>
-                  <div *ngIf="day.isEditing" class="p-2">
+                  @if (!day.isEditing) {
+                    <div class="p-1 rounded" [title]="day.notes"
+                         [class.text-muted]="!day.notes" [class.fst-italic]="!day.notes">
+                      {{ day.notes || 'Click to add notes...' }}
+                    </div>
+                  }
+                  @if (day.isEditing) {
+                    <div class="p-2">
                     <textarea
                       #notesTextarea
                       [(ngModel)]="day.editingNotes"
@@ -100,7 +107,8 @@
                       </button>
                       <small class="text-muted ms-2">Ctrl+Enter to save, Esc to cancel</small>
                     </div>
-                  </div>
+                    </div>
+                  }
                 </td>
               </tr>
               <tr class="table-primary fw-bold">
@@ -124,10 +132,8 @@
         <i class="bi bi-trash me-2"></i>Delete
       </button>
     </div>
-  </div>
-
-  <!-- Loading State -->
-  <ng-template #loading>
+  } @else {
+    <!-- Loading State -->
     <p>Loading employment details...</p>
-  </ng-template>
+  }
 </div>
