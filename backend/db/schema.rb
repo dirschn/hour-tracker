@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_12_160100) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_24_190944) do
   create_table "companies", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -25,6 +25,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_12_160100) do
     t.date "end_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "round_mode", default: 0, null: false
+    t.integer "round_interval"
     t.index ["position_id"], name: "index_employments_on_position_id"
     t.index ["user_id"], name: "index_employments_on_user_id"
   end

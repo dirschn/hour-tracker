@@ -78,6 +78,8 @@ RSpec.configure do |config|
               start_date: { type: :string, format: 'date', example: Faker::Date.backward(days: 30).to_s },
               end_date: { type: :string, format: 'date', nullable: true, example: Faker::Date.forward(days: 30).to_s },
               active: { type: :boolean, example: true },
+              round_mode: { type: :string, enum: %w[exact quarter_hour half_hour custom], description: '0: exact, 1: quarter_hour, 2: half_hour, 3: custom', example: 'exact' },
+              round_interval: { type: :integer, nullable: true, description: 'Rounding interval in minutes, required if round_mode is custom (3)', example: 20 },
               created_at: { type: :string, format: 'date-time' },
               updated_at: { type: :string, format: 'date-time' }
             },
@@ -296,6 +298,8 @@ RSpec.configure do |config|
                   position_id: { type: :integer },
                   start_date: { type: :string, format: :date },
                   end_date: { type: :string, format: :date, nullable: true },
+                  round_mode: { type: :string, description: '0: exact, 1: quarter_hour, 2: half_hour, 3: custom', example: 'exact' },
+                  round_interval: { type: :integer, nullable: true, description: 'Rounding interval in minutes, required if round_mode is custom (3)', example: 20 },
                   position_attributes: { '$ref': '#/components/schemas/PositionAttributes' }
                 },
                 anyOf: [
@@ -315,6 +319,8 @@ RSpec.configure do |config|
                   position_id: { type: :integer },
                   start_date: { type: :string, format: :date },
                   end_date: { type: :string, format: :date, nullable: true },
+                  round_mode: { type: :string, description: '0: exact, 1: quarter_hour, 2: half_hour, 3: custom', example: 'exact' },
+                  round_interval: { type: :integer, nullable: true, description: 'Rounding interval in minutes, required if round_mode is custom (3)', example: 20 },
                   position_attributes: { '$ref': '#/components/schemas/PositionAttributes' }
                 }
               }

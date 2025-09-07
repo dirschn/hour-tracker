@@ -66,7 +66,7 @@ class EmploymentsController < ApplicationController
 
   def employment_params
     params.expect(employment: [
-      :position_id, :start_date, :end_date,
+      :position_id, :start_date, :end_date, :round_mode, :round_interval,
       position_attributes: [
         :id, :title, :description, :remote,
         company_attributes: [:id, :name, :description]

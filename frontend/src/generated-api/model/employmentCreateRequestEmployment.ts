@@ -14,6 +14,14 @@ export interface EmploymentCreateRequestEmployment {
     position_id?: number;
     start_date?: string;
     end_date?: string | null;
+    /**
+     * 0: exact, 1: quarter_hour, 2: half_hour, 3: custom
+     */
+    round_mode?: number;
+    /**
+     * Rounding interval in minutes, required if round_mode is custom (3)
+     */
+    round_interval?: number | null;
     position_attributes?: PositionAttributes;
 }
 

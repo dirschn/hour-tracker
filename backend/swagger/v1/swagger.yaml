@@ -463,13 +463,13 @@ components:
       properties:
         id:
           type: integer
-          example: 57
+          example: 56
         name:
           type: string
-          example: Hackett, Doyle and Feeney
+          example: Marvin, Hyatt and Miller
         description:
           type: string
-          example: Organized incremental solution
+          example: Stand-alone bi-directional ability
         created_at:
           type: string
           format: date-time
@@ -487,22 +487,22 @@ components:
           example: 1
         first_name:
           type: string
-          example: Isabell
+          example: Odis
         last_name:
           type: string
-          example: Schuster
+          example: Lubowitz
         username:
           type: string
-          example: jason.kozey
+          example: eddy_hettinger
           minLength: 3
           maxLength: 20
         email:
           type: string
           format: email
-          example: paul@conn.example
+          example: morris.hettinger@hoppe.test
         name:
           type: string
-          example: Ms. Abigail Kilback
+          example: Louvenia Tromp JD
         created_at:
           type: string
           format: date-time
@@ -520,17 +520,17 @@ components:
       properties:
         first_name:
           type: string
-          example: Wilford
+          example: Jake
         last_name:
           type: string
-          example: Grimes
+          example: Hickle
         username:
           type: string
-          example: freddy_mitchell
+          example: jewell
         email:
           type: string
           format: email
-          example: luciano_jakubowski@wisoky-hessel.example
+          example: fausto@kilback-medhurst.example
     AuthenticatedUser:
       type: object
       properties:
@@ -540,16 +540,16 @@ components:
         email:
           type: string
           format: email
-          example: jude@mitchell-hessel.example
+          example: enda@greenfelder.test
         first_name:
           type: string
-          example: Trinidad
+          example: Doug
         last_name:
           type: string
-          example: Schinner
+          example: Fisher
         username:
           type: string
-          example: renae_oconnell
+          example: christopher.gorczany
       required:
       - id
       - email
@@ -558,25 +558,40 @@ components:
       properties:
         id:
           type: integer
-          example: 17
+          example: 12
         user_id:
           type: integer
-          example: 51
+          example: 71
         position_id:
           type: integer
-          example: 95
+          example: 56
         start_date:
           type: string
           format: date
-          example: '2025-08-05'
+          example: '2025-08-09'
         end_date:
           type: string
           format: date
           nullable: true
-          example: '2025-08-21'
+          example: '2025-09-17'
         active:
           type: boolean
           example: true
+        round_mode:
+          type: string
+          enum:
+          - exact
+          - quarter_hour
+          - half_hour
+          - custom
+          description: '0: exact, 1: quarter_hour, 2: half_hour, 3: custom'
+          example: exact
+        round_interval:
+          type: integer
+          nullable: true
+          description: Rounding interval in minutes, required if round_mode is custom
+            (3)
+          example: 20
         created_at:
           type: string
           format: date-time
@@ -610,19 +625,19 @@ components:
       properties:
         id:
           type: integer
-          example: 29
+          example: 95
         title:
           type: string
-          example: Manufacturing Liaison
+          example: Corporate Real-Estate Administrator
         description:
           type: string
-          example: Universal discrete toolset
+          example: Front-line well-modulated framework
         company_id:
           type: integer
-          example: 46
+          example: 18
         remote:
           type: boolean
-          example: true
+          example: false
         created_at:
           type: string
           format: date-time
@@ -638,33 +653,33 @@ components:
       properties:
         id:
           type: integer
-          example: 20
+          example: 70
         employment_id:
           type: integer
-          example: 84
+          example: 16
         date:
           type: string
           format: date
-          example: '2025-08-05'
+          example: '2025-08-23'
         start_time:
           type: string
           format: date-time
-          example: '2025-08-08 13:52:20 -0400'
+          example: '2025-08-24 08:44:16 -0400'
         end_time:
           type: string
           format: date-time
           nullable: true
-          example: '2025-08-10 13:34:21 -0400'
+          example: '2025-08-27 01:31:57 -0400'
         description:
           type: string
-          example: Qui porro ut facilis.
+          example: Sunt qui omnis dolorum.
         notes:
           type: string
-          example: Quia atque tempora. Nihil voluptas quia. Accusantium alias voluptatibus.
+          example: Qui eos impedit. Aut accusantium qui. Quod hic minus.
         hours:
           type: number
           format: float
-          example: 7.97
+          example: 7.36
         active:
           type: boolean
           example: true
@@ -873,6 +888,16 @@ components:
               type: string
               format: date
               nullable: true
+            round_mode:
+              type: integer
+              description: '0: exact, 1: quarter_hour, 2: half_hour, 3: custom'
+              example: 1
+            round_interval:
+              type: integer
+              nullable: true
+              description: Rounding interval in minutes, required if round_mode is
+                custom (3)
+              example: 20
             position_attributes:
               "$ref": "#/components/schemas/PositionAttributes"
           anyOf:
@@ -899,6 +924,16 @@ components:
               type: string
               format: date
               nullable: true
+            round_mode:
+              type: integer
+              description: '0: exact, 1: quarter_hour, 2: half_hour, 3: custom'
+              example: 1
+            round_interval:
+              type: integer
+              nullable: true
+              description: Rounding interval in minutes, required if round_mode is
+                custom (3)
+              example: 20
             position_attributes:
               "$ref": "#/components/schemas/PositionAttributes"
       required:

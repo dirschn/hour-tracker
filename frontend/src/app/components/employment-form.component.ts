@@ -8,6 +8,7 @@ import {
   Employment,
   EmploymentCreateRequest,
   EmploymentUpdateRequest,
+  EmploymentResponse,
   Company,
   Position,
   ProfileResponseFormData
@@ -230,6 +231,45 @@ import {
                   </div>
                 </div>
 
+                <!-- Time Rounding Settings -->
+                <div class="card mb-4">
+                  <div class="card-header">
+                    <h5 class="mb-0">Time Rounding Settings</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="mb-3">
+                      <label for="roundMode" class="form-label">Rounding Mode</label>
+                      <select
+                        class="form-select"
+                        id="roundMode"
+                        formControlName="round_mode">
+                        <option value="0">Exact (No rounding)</option>
+                        <option value="1">Quarter hour (15 minutes)</option>
+                        <option value="2">Half hour (30 minutes)</option>
+                        <option value="3">Custom interval</option>
+                      </select>
+                      <small class="form-text text-muted">
+                        Choose how time entries should be rounded for this employment.
+                      </small>
+                    </div>
+
+                    <div class="mb-3" *ngIf="employmentForm.get('round_mode')?.value === '3'">
+                      <label for="roundInterval" class="form-label">Custom Rounding Interval (minutes)</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="roundInterval"
+                        formControlName="round_interval"
+                        min="1"
+                        max="60"
+                        placeholder="Enter minutes (1-60)">
+                      <small class="form-text text-muted">
+                        Specify the custom rounding interval in minutes (1-60).
+                      </small>
+                    </div>
+                  </div>
+                </div>
+
                 <!-- Error Messages -->
                 <div *ngIf="errorMessage" class="alert alert-danger mb-3">
                   <i class="bi bi-exclamation-triangle me-2"></i>
@@ -279,6 +319,21 @@ export class EmploymentFormComponent implements OnInit {
   selectedCompany: Company | null = null;
   selectedPosition: Position | null = null;
 
+  // Round mode enum mapping
+  private roundModeMapping: { [key: string]: string } = {
+    'exact': '0',
+    'quarter_hour': '1', 
+    'half_hour': '2',
+    'custom': '3'
+  };
+
+  private reverseRoundModeMapping: { [key: string]: string } = {
+    '0': 'exact',
+    '1': 'quarter_hour',
+    '2': 'half_hour', 
+    '3': 'custom'
+  };
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -293,10 +348,13 @@ export class EmploymentFormComponent implements OnInit {
     this.employmentId = this.route.snapshot.params['id'];
     this.isEditMode = !!this.employmentId;
 
-    this.loadFormData();
-
     if (this.isEditMode) {
-      this.loadEmployment();
+      // Load form data first, then employment data
+      this.loadFormData(() => {
+        this.loadEmployment();
+      });
+    } else {
+      this.loadFormData();
     }
   }
 
@@ -308,17 +366,22 @@ export class EmploymentFormComponent implements OnInit {
       companyDescription: [''],
       positionTitle: ['', Validators.required],
       positionDescription: [''],
-      isRemote: [false]
+      isRemote: [false],
+      round_mode: ['0'], // Default to exact (no rounding) as string
+      round_interval: [null]
     });
   }
 
-  private loadFormData() {
+  private loadFormData(callback?: () => void) {
     this.profilesService.profileGet().subscribe({
       next: (response: any) => {
         if (response.form_data) {
           this.formData = response.form_data;
           this.filteredCompanies = [...this.formData.companies];
           this.filteredPositions = [...this.formData.positions];
+        }
+        if (callback) {
+          callback();
         }
       },
       error: (error) => {
@@ -447,7 +510,15 @@ export class EmploymentFormComponent implements OnInit {
 
     this.isLoading = true;
     this.employmentsService.employmentsIdGet(this.employmentId).subscribe({
-      next: (employment: any) => {
+      next: (response: EmploymentResponse) => {
+        const employment = response.employment; // Access the nested employment data
+        console.log('Full response:', response);
+        console.log('Employment data:', employment);
+        console.log('Round mode from API:', employment.round_mode, typeof employment.round_mode);
+        console.log('Round interval from API:', employment.round_interval, typeof employment.round_interval);
+        
+        const roundModeValue = employment.round_mode ? this.roundModeMapping[employment.round_mode] || '0' : '0';
+        
         this.employmentForm.patchValue({
           start_date: employment.start_date,
           end_date: employment.end_date || '',
@@ -455,8 +526,13 @@ export class EmploymentFormComponent implements OnInit {
           companyDescription: employment.company?.description || '',
           positionTitle: employment.position?.title || '',
           positionDescription: employment.position?.description || '',
-          isRemote: employment.position?.remote !== undefined ? employment.position.remote : false
+          isRemote: employment.position?.remote !== undefined ? employment.position.remote : false,
+          round_mode: roundModeValue,
+          round_interval: employment.round_interval || null
         });
+
+        console.log('Converted round_mode value:', roundModeValue);
+        console.log('Form value for round_mode after patch:', this.employmentForm.get('round_mode')?.value);
 
         // Set selected company and position for editing
         if (employment.company) {
@@ -486,16 +562,21 @@ export class EmploymentFormComponent implements OnInit {
     this.errorMessage = '';
 
     const formData = this.employmentForm.value;
+    const roundModeEnum = this.reverseRoundModeMapping[formData.round_mode] || 'exact';
 
     if (this.isEditMode && this.employmentId) {
       const request: EmploymentUpdateRequest = {
         employment: this.selectedPosition ? {
           position_id: this.selectedPosition.id,
           start_date: formData.start_date,
-          end_date: formData.end_date || null
+          end_date: formData.end_date || null,
+          round_mode: roundModeEnum as any,
+          round_interval: formData.round_mode === '3' ? formData.round_interval : null
         } : {
           start_date: formData.start_date,
           end_date: formData.end_date || null,
+          round_mode: roundModeEnum as any,
+          round_interval: formData.round_mode === '3' ? formData.round_interval : null,
           position_attributes: {
             title: formData.positionTitle,
             description: formData.positionDescription,
@@ -521,10 +602,14 @@ export class EmploymentFormComponent implements OnInit {
         employment: this.selectedPosition ? {
           position_id: this.selectedPosition.id,
           start_date: formData.start_date,
-          end_date: formData.end_date || null
+          end_date: formData.end_date || null,
+          round_mode: roundModeEnum as any,
+          round_interval: formData.round_mode === '3' ? formData.round_interval : null
         } : {
           start_date: formData.start_date,
           end_date: formData.end_date || null,
+          round_mode: roundModeEnum as any,
+          round_interval: formData.round_mode === '3' ? formData.round_interval : null,
           position_attributes: {
             title: formData.positionTitle,
             description: formData.positionDescription,

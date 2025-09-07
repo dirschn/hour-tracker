@@ -18,9 +18,27 @@ export interface ProfileResponseUserAllOfEmploymentsInner {
     start_date: string;
     end_date?: string | null;
     active: boolean;
+    /**
+     * 0: exact, 1: quarter_hour, 2: half_hour, 3: custom
+     */
+    round_mode?: ProfileResponseUserAllOfEmploymentsInner.RoundModeEnum;
+    /**
+     * Rounding interval in minutes, required if round_mode is custom (3)
+     */
+    round_interval?: number | null;
     created_at?: string;
     updated_at?: string;
     position: Position;
     company: Company;
 }
+export namespace ProfileResponseUserAllOfEmploymentsInner {
+    export const RoundModeEnum = {
+        Exact: 'exact',
+        QuarterHour: 'quarter_hour',
+        HalfHour: 'half_hour',
+        Custom: 'custom'
+    } as const;
+    export type RoundModeEnum = typeof RoundModeEnum[keyof typeof RoundModeEnum];
+}
+
 
