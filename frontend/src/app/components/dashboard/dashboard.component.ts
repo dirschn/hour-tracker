@@ -383,19 +383,6 @@ export class DashboardComponent implements OnInit {
     );
   }
 
-  // Calculate hours since start_time, rounded to nearest quarter hour
-  getCurrentShiftHours(startTime: string | Date): string {
-    if (!startTime) return '0.00';
-    const start = new Date(startTime);
-    const now = new Date();
-    let diffMs = now.getTime() - start.getTime();
-    if (diffMs < 0) diffMs = 0;
-    let hours = diffMs / (1000 * 60 * 60);
-    // Round to nearest quarter hour
-    hours = Math.round(hours * 4) / 4;
-    return hours.toFixed(2);
-  }
-
   // Call the API to clock in for an employment
   clockIn(empId: number): void {
     this.clockingInEmploymentId = empId;

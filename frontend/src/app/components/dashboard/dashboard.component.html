@@ -137,13 +137,11 @@
                       >
                         <i class="bi bi-clock-fill"></i>
                         <span class="d-none d-sm-inline"
-                          >{{ getCurrentShiftHours(currentShift.start_time) }}h
+                          >{{ currentShift.hours }}h
                           active</span
                         >
                         <span class="d-sm-none"
-                          >{{
-                            getCurrentShiftHours(currentShift.start_time)
-                          }}h</span
+                          >{{ currentShift.hours }}h</span
                         >
                       </div>
                     }
@@ -193,7 +191,7 @@
                   </div>
                   <div>
                     Hours so far:
-                    {{ getCurrentShiftHours(currentShift.start_time) }}
+                    {{ currentShift.hours }}
                   </div>
 
                   <!-- Description editing section -->

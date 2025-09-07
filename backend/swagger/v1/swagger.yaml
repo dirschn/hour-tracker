@@ -463,13 +463,13 @@ components:
       properties:
         id:
           type: integer
-          example: 27
+          example: 66
         name:
           type: string
-          example: Hermann Group
+          example: Hermiston, Halvorson and Friesen
         description:
           type: string
-          example: Fundamental systemic policy
+          example: Persistent next generation local area network
         created_at:
           type: string
           format: date-time
@@ -487,22 +487,22 @@ components:
           example: 1
         first_name:
           type: string
-          example: Lewis
+          example: Christeen
         last_name:
           type: string
-          example: Hartmann
+          example: Krajcik
         username:
           type: string
-          example: krystle
+          example: wilford.zieme
           minLength: 3
           maxLength: 20
         email:
           type: string
           format: email
-          example: tyson_adams@gerlach.test
+          example: jeromy@dach.test
         name:
           type: string
-          example: Nicole Robel
+          example: Wes Rogahn
         created_at:
           type: string
           format: date-time
@@ -520,17 +520,17 @@ components:
       properties:
         first_name:
           type: string
-          example: Tana
+          example: Bo
         last_name:
           type: string
-          example: Krajcik
+          example: Hackett
         username:
           type: string
-          example: elmo
+          example: rocky.west
         email:
           type: string
           format: email
-          example: shaquita_daugherty@wuckert.example
+          example: julissa@schiller-funk.test
     AuthenticatedUser:
       type: object
       properties:
@@ -540,16 +540,16 @@ components:
         email:
           type: string
           format: email
-          example: numbers_gulgowski@buckridge.test
+          example: mayra_oberbrunner@kunde.example
         first_name:
           type: string
-          example: Alise
+          example: Thanh
         last_name:
           type: string
-          example: Kautzer
+          example: McLaughlin
         username:
           type: string
-          example: arden
+          example: shila_lehner
       required:
       - id
       - email
@@ -558,22 +558,22 @@ components:
       properties:
         id:
           type: integer
-          example: 18
+          example: 67
         user_id:
           type: integer
-          example: 11
+          example: 35
         position_id:
           type: integer
-          example: 85
+          example: 82
         start_date:
           type: string
           format: date
-          example: '2025-08-22'
+          example: '2025-09-03'
         end_date:
           type: string
           format: date
           nullable: true
-          example: '2025-10-07'
+          example: '2025-09-17'
         active:
           type: boolean
           example: true
@@ -625,16 +625,16 @@ components:
       properties:
         id:
           type: integer
-          example: 29
+          example: 12
         title:
           type: string
-          example: Marketing Specialist
+          example: Future Manufacturing Planner
         description:
           type: string
-          example: Seamless intermediate concept
+          example: Distributed mobile attitude
         company_id:
           type: integer
-          example: 42
+          example: 59
         remote:
           type: boolean
           example: false
@@ -653,33 +653,33 @@ components:
       properties:
         id:
           type: integer
-          example: 41
+          example: 32
         employment_id:
           type: integer
-          example: 23
+          example: 42
         date:
           type: string
           format: date
-          example: '2025-08-14'
+          example: '2025-08-21'
         start_time:
           type: string
           format: date-time
-          example: '2025-08-18 00:03:02 -0400'
+          example: '2025-08-14 20:16:17 -0400'
         end_time:
           type: string
           format: date-time
           nullable: true
-          example: '2025-08-20 07:02:49 -0400'
+          example: '2025-09-02 20:16:21 -0400'
         description:
           type: string
-          example: Quas quo saepe quisquam.
+          example: Magnam non in sed.
         notes:
           type: string
-          example: Eum ipsum consequuntur. Sed minus placeat. Voluptatem et error.
+          example: Accusantium qui doloremque. Et nostrum et. Quibusdam voluptas illum.
         hours:
           type: number
           format: float
-          example: 1.53
+          example: 1.23
         active:
           type: boolean
           example: false
