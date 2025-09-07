@@ -17,7 +17,7 @@ export interface EmploymentUpdateRequestEmployment {
     /**
      * 0: exact, 1: quarter_hour, 2: half_hour, 3: custom
      */
-    round_mode?: number;
+    round_mode?: string;
     /**
      * Rounding interval in minutes, required if round_mode is custom (3)
      */

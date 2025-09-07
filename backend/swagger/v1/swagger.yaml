@@ -463,13 +463,13 @@ components:
       properties:
         id:
           type: integer
-          example: 56
+          example: 27
         name:
           type: string
-          example: Marvin, Hyatt and Miller
+          example: Hermann Group
         description:
           type: string
-          example: Stand-alone bi-directional ability
+          example: Fundamental systemic policy
         created_at:
           type: string
           format: date-time
@@ -487,22 +487,22 @@ components:
           example: 1
         first_name:
           type: string
-          example: Odis
+          example: Lewis
         last_name:
           type: string
-          example: Lubowitz
+          example: Hartmann
         username:
           type: string
-          example: eddy_hettinger
+          example: krystle
           minLength: 3
           maxLength: 20
         email:
           type: string
           format: email
-          example: morris.hettinger@hoppe.test
+          example: tyson_adams@gerlach.test
         name:
           type: string
-          example: Louvenia Tromp JD
+          example: Nicole Robel
         created_at:
           type: string
           format: date-time
@@ -520,17 +520,17 @@ components:
       properties:
         first_name:
           type: string
-          example: Jake
+          example: Tana
         last_name:
           type: string
-          example: Hickle
+          example: Krajcik
         username:
           type: string
-          example: jewell
+          example: elmo
         email:
           type: string
           format: email
-          example: fausto@kilback-medhurst.example
+          example: shaquita_daugherty@wuckert.example
     AuthenticatedUser:
       type: object
       properties:
@@ -540,16 +540,16 @@ components:
         email:
           type: string
           format: email
-          example: enda@greenfelder.test
+          example: numbers_gulgowski@buckridge.test
         first_name:
           type: string
-          example: Doug
+          example: Alise
         last_name:
           type: string
-          example: Fisher
+          example: Kautzer
         username:
           type: string
-          example: christopher.gorczany
+          example: arden
       required:
       - id
       - email
@@ -558,22 +558,22 @@ components:
       properties:
         id:
           type: integer
-          example: 12
+          example: 18
         user_id:
           type: integer
-          example: 71
+          example: 11
         position_id:
           type: integer
-          example: 56
+          example: 85
         start_date:
           type: string
           format: date
-          example: '2025-08-09'
+          example: '2025-08-22'
         end_date:
           type: string
           format: date
           nullable: true
-          example: '2025-09-17'
+          example: '2025-10-07'
         active:
           type: boolean
           example: true
@@ -625,16 +625,16 @@ components:
       properties:
         id:
           type: integer
-          example: 95
+          example: 29
         title:
           type: string
-          example: Corporate Real-Estate Administrator
+          example: Marketing Specialist
         description:
           type: string
-          example: Front-line well-modulated framework
+          example: Seamless intermediate concept
         company_id:
           type: integer
-          example: 18
+          example: 42
         remote:
           type: boolean
           example: false
@@ -653,36 +653,36 @@ components:
       properties:
         id:
           type: integer
-          example: 70
+          example: 41
         employment_id:
           type: integer
-          example: 16
+          example: 23
         date:
           type: string
           format: date
-          example: '2025-08-23'
+          example: '2025-08-14'
         start_time:
           type: string
           format: date-time
-          example: '2025-08-24 08:44:16 -0400'
+          example: '2025-08-18 00:03:02 -0400'
         end_time:
           type: string
           format: date-time
           nullable: true
-          example: '2025-08-27 01:31:57 -0400'
+          example: '2025-08-20 07:02:49 -0400'
         description:
           type: string
-          example: Sunt qui omnis dolorum.
+          example: Quas quo saepe quisquam.
         notes:
           type: string
-          example: Qui eos impedit. Aut accusantium qui. Quod hic minus.
+          example: Eum ipsum consequuntur. Sed minus placeat. Voluptatem et error.
         hours:
           type: number
           format: float
-          example: 7.36
+          example: 1.53
         active:
           type: boolean
-          example: true
+          example: false
         created_at:
           type: string
           format: date-time
@@ -889,9 +889,9 @@ components:
               format: date
               nullable: true
             round_mode:
-              type: integer
+              type: string
               description: '0: exact, 1: quarter_hour, 2: half_hour, 3: custom'
-              example: 1
+              example: exact
             round_interval:
               type: integer
               nullable: true
@@ -925,9 +925,9 @@ components:
               format: date
               nullable: true
             round_mode:
-              type: integer
+              type: string
               description: '0: exact, 1: quarter_hour, 2: half_hour, 3: custom'
-              example: 1
+              example: exact
             round_interval:
               type: integer
               nullable: true
