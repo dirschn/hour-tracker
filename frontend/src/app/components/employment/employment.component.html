@@ -43,10 +43,23 @@
           <i class="bi bi-table me-2"></i>
           Weekly Summary
         </h5>
-        <button class="btn btn-sm btn-outline-secondary" (click)="copyTableToClipboard()" title="Copy table to clipboard">
-          <i class="bi bi-clipboard me-1"></i>
-          Copy
-        </button>
+        <div class="dropdown">
+          <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Copy table to clipboard">
+            <i class="bi bi-clipboard me-1"></i>
+            Copy
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#" (click)="copyTableToClipboard('markdown'); $event.preventDefault()">
+              <i class="bi bi-markdown me-2"></i>Markdown
+            </a></li>
+            <li><a class="dropdown-item" href="#" (click)="copyTableToClipboard('teams'); $event.preventDefault()">
+              <i class="bi bi-microsoft-teams me-2"></i>Teams
+            </a></li>
+            <li><a class="dropdown-item" href="#" (click)="copyTableToClipboard('plain'); $event.preventDefault()">
+              <i class="bi bi-file-text me-2"></i>Plain Text
+            </a></li>
+          </ul>
+        </div>
       </div>
       <div class="card-body">
         <!-- Date Range Selection -->

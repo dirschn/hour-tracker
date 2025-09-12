@@ -222,23 +222,53 @@ export class EmploymentComponent implements OnInit {
     return total.toFixed(2);
   }
 
-  copyTableToClipboard(): void {
+  copyTableToClipboard(format: 'markdown' | 'teams' | 'plain' = 'markdown'): void {
+    let tableText = '';
+    
+    // Collect notes for separate list
+    let notesList: string[] = [];
+
+    this.weeklyTableData.forEach((day) => {
+      // Collect notes if they exist
+      if (day.notes && day.notes.trim() && day.notes !== '-') {
+        notesList.push(day.notes.trim());
+      }
+    });
+
+    switch (format) {
+      case 'markdown':
+        tableText = this.generateMarkdownTable(notesList);
+        break;
+      case 'teams':
+        tableText = this.generateTeamsTable(notesList);
+        break;
+      case 'plain':
+        tableText = this.generatePlainTextTable(notesList);
+        break;
+    }
+
+    // Copy to clipboard
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(tableText).then(() => {
+        console.log(`Table copied to clipboard as ${format}`);
+      }).catch(err => {
+        console.error('Failed to copy table to clipboard', err);
+        this.fallbackCopyToClipboard(tableText);
+      });
+    } else {
+      this.fallbackCopyToClipboard(tableText);
+    }
+  }
+
+  private generateMarkdownTable(notesList: string[]): string {
     // Create markdown table without notes column
     let markdownTable = '| Date | Hours | Times |\n';
     markdownTable += '|------|-------|-------|\n';
-
-    // Collect notes for separate list
-    let notesList: string[] = [];
 
     this.weeklyTableData.forEach((day) => {
       const date = new Date(day.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
       const times = day.times || '-';
       markdownTable += `| ${date} | ${day.hours} | ${times} |\n`;
-
-      // Collect notes if they exist
-      if (day.notes && day.notes.trim() && day.notes !== '-') {
-        notesList.push(day.notes.trim());
-      }
     });
 
     markdownTable += `| **Total** | **${this.getTotalHours()}** | **-** |\n`;
@@ -251,17 +281,60 @@ export class EmploymentComponent implements OnInit {
       });
     }
 
-    // Copy markdown to clipboard
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(markdownTable).then(() => {
-        console.log('Table copied to clipboard as markdown');
-      }).catch(err => {
-        console.error('Failed to copy table to clipboard', err);
-        this.fallbackCopyToClipboard(markdownTable);
+    return markdownTable;
+  }
+
+  private generateTeamsTable(notesList: string[]): string {
+    // Create tab-separated values table for Teams
+    let teamsTable = 'Date\tHours\tTimes\n';
+
+    this.weeklyTableData.forEach((day) => {
+      const date = new Date(day.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      const times = day.times || '-';
+      teamsTable += `${date}\t${day.hours}\t${times}\n`;
+    });
+
+    teamsTable += `Total\t${this.getTotalHours()}\t-\n`;
+
+    // Add notes as separate lines if any exist
+    if (notesList.length > 0) {
+      teamsTable += '\nNotes:\n';
+      notesList.forEach(note => {
+        teamsTable += `• ${note}\n`;
       });
-    } else {
-      this.fallbackCopyToClipboard(markdownTable);
     }
+
+    return teamsTable;
+  }
+
+  private generatePlainTextTable(notesList: string[]): string {
+    // Create plain text table with fixed-width columns
+    const dateWidth = 12;
+    const hoursWidth = 8;
+    const timesWidth = 20;
+
+    let plainTable = '';
+    plainTable += 'Date'.padEnd(dateWidth) + 'Hours'.padEnd(hoursWidth) + 'Times'.padEnd(timesWidth) + '\n';
+    plainTable += '-'.repeat(dateWidth) + '-'.repeat(hoursWidth) + '-'.repeat(timesWidth) + '\n';
+
+    this.weeklyTableData.forEach((day) => {
+      const date = new Date(day.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      const times = day.times || '-';
+      plainTable += date.padEnd(dateWidth) + day.hours.padEnd(hoursWidth) + times.padEnd(timesWidth) + '\n';
+    });
+
+    plainTable += '-'.repeat(dateWidth) + '-'.repeat(hoursWidth) + '-'.repeat(timesWidth) + '\n';
+    plainTable += 'Total'.padEnd(dateWidth) + this.getTotalHours().padEnd(hoursWidth) + '-'.padEnd(timesWidth) + '\n';
+
+    // Add notes if any exist
+    if (notesList.length > 0) {
+      plainTable += '\nNotes:\n';
+      notesList.forEach(note => {
+        plainTable += `• ${note}\n`;
+      });
+    }
+
+    return plainTable;
   }
 
   private fallbackCopyToClipboard(text: string): void {
